@@ -1,11 +1,11 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
-from matplotlib import style, rc
-import matplotlib
-# plt.rcParams["font.weight"] = "bold"
+
 plt.rcParams["font.family"] = "sans-serif"
+
+PLOTS_DIR = '../plots'
 
 """
 Plotting aggregate measures showing that individuals as well as
@@ -49,7 +49,9 @@ def plot_aggregates(df_all):
     avg_better_than_median = [0,0,0,0]
     avg_better_than_mean = [0,0,0,0]
     avg_bonus = [0,0,0,0]
-    for pos, dots in enumerate([55, 148, 403, 1097, 1233]):
+
+    # NB: 1233 is the ox experiment
+    for dots_idx, dots in enumerate([55, 148, 403, 1097, 1233]):
         col_error_median = []
         col_error_mean = []
         median_rel_error = []
@@ -60,6 +62,9 @@ def plot_aggregates(df_all):
         for position, views in enumerate([0, 1, 3, 9]):
             df = df_all[(df_all['dots'] == dots) &
                         (df_all['views'] == views)]
+
+            # Skip the treatment combinations that don't exist
+            # (e.g. 'min'-method for dots experiments)
             if len(df) == 0:
                 continue
 
@@ -80,10 +85,8 @@ def plot_aggregates(df_all):
                                            df.dots.unique().item())/5
 
             # find the mean individual error:
-            mean_rel_error.append(MRE(df.guess.values,
-                                           df.dots.unique().item()))
-            avg_mean_rel_error[position] += MRE(df.guess.values,
-                                           df.dots.unique().item())/5
+            mean_rel_error.append(MRE(df.guess.values, df.dots.unique().item()))
+            avg_mean_rel_error[position] += MRE(df.guess.values, df.dots.unique().item())/5
 
             # find the fraction of individuals better than the median and mean:
             n_median = [1 for g in df.guess.values
@@ -100,23 +103,22 @@ def plot_aggregates(df_all):
             avg_bonus[position] += df['bonus'].sum()/len(df.guess.values)/5
 
         # plot the upper/lower row of measures for the median/mean:
-        axes[0].plot(col_error_median, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[1].plot(median_rel_error, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[2].plot(better_than_median, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[3].plot(bonus, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[4].plot(col_error_mean, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[5].plot(mean_rel_error, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
-        axes[6].plot(better_than_mean, marker='o', linestyle='-', color=colors[pos], label='d='+str(dots))
+        axes[0].plot(col_error_median, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[1].plot(median_rel_error, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[2].plot(better_than_median, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[3].plot(bonus, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[4].plot(col_error_mean, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[5].plot(mean_rel_error, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
+        axes[6].plot(better_than_mean, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
 
     # plot the averages across all d:
-    axes[0].plot(avg_col_error_median, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[1].plot(avg_median_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[2].plot(avg_better_than_median, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[3].plot(avg_bonus, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[4].plot(avg_col_error_mean, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[5].plot(avg_mean_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-    axes[6].plot(avg_better_than_mean, marker='o', linestyle='-', linewidth=3, color=colors[pos+1], label='average')
-
+    axes[0].plot(avg_col_error_median, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[1].plot(avg_median_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[2].plot(avg_better_than_median, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[3].plot(avg_bonus, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[4].plot(avg_col_error_mean, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[5].plot(avg_mean_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
+    axes[6].plot(avg_better_than_mean, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
 
     # plotting paraphernalia
     handles, labels = axes[3].get_legend_handles_labels()
@@ -144,21 +146,25 @@ def plot_aggregates(df_all):
         axes[i].tick_params(axis="both", length=0)
         axes[i].grid(True)
     plt.tight_layout()
+
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
+    output_path = os.path.join(PLOTS_DIR, 'fig3.png')
+
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    fig.savefig('../plots/Fig3.png', transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
+    fig.savefig(output_path, transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
                 bbox_inches='tight', dpi=300)
-    fig.savefig('../plots/Fig3.pdf', transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
+    fig.savefig(output_path, transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
                 bbox_inches='tight', dpi=300)
     plt.show()
 
 
-# main code
-df_all = pd.DataFrame()
+# load the data
+dataframe = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
+    dataframe = dataframe.append(pd.DataFrame(pd.read_csv(datafile)))
 
-# only look at history sessions:
-df_all = df_all[(df_all['method'] == 'history')]
-
-plot_aggregates(df_all)
+# only plot the data for the history sessions
+dataframe = dataframe[(dataframe['method'] == 'history')]
+plot_aggregates(dataframe)
