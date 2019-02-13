@@ -17,7 +17,7 @@ datafiles = [
 
 def bandwagoning(dfd, p):
     sessions = dfd.session.unique()
-    bandwagons = {}
+    bandwagon_types = {}
     for session in sessions:
         df = dfd[dfd.session == session]
         ids = df['id'].values
@@ -31,34 +31,36 @@ def bandwagoning(dfd, p):
             seen_guesses = [df[df['id'] == g]['guess'].item() for g in seen_ids]
 
             # bandwagoning: get the unique estimates and their wagon length:
-            unique_elements, counts_elements = np.unique(seen_guesses, return_counts=True)
+            unique_guesses, counts_unique_guesses = np.unique(seen_guesses, return_counts=True)
 
             # get the unique wagons:
-            unique_wagons = np.unique(counts_elements)
+            unique_wagons = np.unique(counts_unique_guesses)
             # print(unique_wagons)
 
             # register when a participant jumps on a bandwagon
-            bandwagoneer = 0
-            bandwagon_size = 0
+            length_of_bandwagon_joined = 0
             bonus = df[df['id'] == id]['bonus'].item()
-            for pos, i in enumerate(unique_elements):
-                if own_guess >= i-(i*p/100) and own_guess <= i+(i*p/100):
-                    bandwagoneer = 1
-                    bandwagon_size = counts_elements[pos]
+
+            for idx, guess in enumerate(unique_guesses):
+                if guess-(guess*p/100) <= own_guess <= guess+(guess*p/100):
+                    length_of_bandwagon_joined = counts_unique_guesses[idx]
 
             # update the bandwagon dict:
-            for key in unique_wagons:
-                (a, b, c) = bandwagons.get(key, (0,0,0))
-                a += 1
-                if key == bandwagon_size:
-                    b += bandwagoneer
-                    c += bonus  # total bonus to bandwagoneers
-                bandwagons[key] = (a, b, c)
-    return bandwagons
+            for length_of_wagon in unique_wagons:
+                (times_seen, times_joined, bonus_for_joiners) = bandwagon_types.get(length_of_wagon, (0, 0, 0))
+                times_seen += 1
+
+                if length_of_wagon == length_of_bandwagon_joined:
+                    times_joined += 1
+                    bonus_for_joiners += bonus  # total bonus to bandwagoneers
+
+                bandwagon_types[length_of_wagon] = (times_seen, times_joined, bonus_for_joiners)
+
+    return bandwagon_types
 
 
 def plot_herders(df_all):
-    fig,ax = plt.subplots(nrows=1, ncols=2, figsize=(7,5))
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(7,5))
     ax = ax.flatten()
     colors = ['#bcbddc', '#6a51a3', '#d94801']
     views = 9
@@ -79,26 +81,18 @@ def plot_herders(df_all):
             # plot bandwagoning for p = 0:
             if p == 0:
                 band = []
-                bonus = []
-                for k, v in bandwagons.items():
-                    band.append(v[1]/v[0])
-                    # if v[1] != 0:
-                    #     bonus.append(v[2]/v[1])
-                    # else:
-                    #     bonus.append(0)
+                for bandwagon_length, (times_seen, times_joined, _) in bandwagons.items():
+                    band.append(times_joined/times_seen)
+
                 ax[1].plot(band, color=colors[pos], label='d = '+str(d))
-                # ax1 = ax[1].twinx()
-                # bonus = bonus/avg_winrate
-                # print(bonus)
-                # ax1.plot(bonus, color=colors[pos], linestyle='--', label='d = '+str(d))
 
             # get the cumulative rate of herding until p_max:
-            herders = np.sum([v[1] for k, v in bandwagons.items()])
+            herders = np.sum([times_joined for bandwagon_length, (times_seen, times_joined, _) in bandwagons.items()])
             total_herders.append(herders/len(dfd))
 
             # get the win rate for d = 1233
             if d == 1233:
-                wins = np.sum([v[2] for k, v in bandwagons.items()])
+                wins = np.sum([bonus_for_joiners for (_, _, bonus_for_joiners) in bandwagons.values()])
                 win_rate.append(wins/herders)
 
         # plot the cumulative rate of herding
@@ -108,7 +102,7 @@ def plot_herders(df_all):
     rel_win_rate = win_rate/avg_winrate
     # print('relative win rate of herders:\n', rel_win_rate)
     ax0 = ax[0].twinx()
-    ax0.plot(rel_win_rate, color=colors[pos], linestyle='--', label='win rate')
+    ax0.plot(rel_win_rate, color=colors[pos], linestyle='--', label='rel. win rate')
     ax0.set_yticks([1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45])
 
     # plotting paraphernalia

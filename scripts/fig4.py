@@ -40,8 +40,8 @@ def calculate_spanning_tree(df):
     player_ids = df['id'].values
     value_nearest_guess = []  # value_nearest_guess[idx] is the value of the guess closest to guess nr. idx
     idx_of_nearest_guess = []  # idx_of_nearest_guess[idx] is the index of the guess closest to guess nr. idx
-    for player_id in player_ids:
-        own_order = df[df['id'] == player_id]['order'].item() - 1
+
+    for guess_idx, player_id in enumerate(player_ids):
         own_guess = df[df['id'] == player_id]['guess'].item()
         seen_ids = df[df['id'] == player_id]['hist'].item()
         # seen_ids is stored in otree as a string, so turn it into a list of player_ids
@@ -54,7 +54,7 @@ def calculate_spanning_tree(df):
             # Special case for the first player, who haven't seen any other guesses
             si_followed.append(0)
             value_nearest_guess.append((own_guess, own_guess))
-            idx_of_nearest_guess.append((own_order, own_order))
+            idx_of_nearest_guess.append((guess_idx, guess_idx))
             continue
         else:
             si_followed.append(max(social_influence_scores(own_guess, seen_guesses)))
@@ -73,7 +73,7 @@ def calculate_spanning_tree(df):
 
         # append tuples of nearest guesses and orders
         value_nearest_guess.append((own_guess, nearest_guess_value))
-        idx_of_nearest_guess.append((own_order, followed_player_order))
+        idx_of_nearest_guess.append((guess_idx, followed_player_order))
 
     # make a new list for the social influence score of all seen ids
     influence = []
@@ -86,7 +86,7 @@ def calculate_spanning_tree(df):
     return influence, value_nearest_guess, idx_of_nearest_guess, si_followed
 
 
-def plotting_tree(df, views, method):
+def plotting_tree(df):
     influence, value_nearest_guess, idx_of_nearest_guess, si_followed = calculate_spanning_tree(df)
     guesses = df['guess'].values
     true_number_of_dots = df['dots'].unique().item()
@@ -118,6 +118,7 @@ def plotting_tree(df, views, method):
         guess_list = guesses[:g]
         moving_average.append(np.mean(guess_list))
         moving_media.append(np.median(guess_list))
+
     plt.plot(moving_average, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[1])
     plt.plot(moving_media, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[2])
 
@@ -141,4 +142,4 @@ def plotting_tree(df, views, method):
 
 # main code
 df = pd.DataFrame(file)
-plotting_tree(df, df['views'].unique().item(), df['method'].unique().item())
+plotting_tree(df)

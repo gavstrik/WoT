@@ -59,6 +59,7 @@ def find_social_influence(df):
     si = {}
 
     ids = df['id'].values
+
     for id in ids:
         own_guess = df[df['id'] == id]['guess'].item()
         seen_ids = df[df['id'] == id]['hist'].item()
@@ -70,7 +71,7 @@ def find_social_influence(df):
 
         # update the social influence values of the seen ids:
         for pos, g in enumerate(seen_ids):
-            if not g in si:
+            if g not in si:
                 si[g] = social_influence_scores(own_guess, seen_guesses)[pos]
             else:
                 si[g] += social_influence_scores(own_guess, seen_guesses)[pos]
@@ -82,6 +83,7 @@ def find_social_influence(df):
             infl.append(si[id])
         else:
             infl.append(0)
+
     return infl
 
 
@@ -96,8 +98,6 @@ def remove_outliers_error_rate(influence_tup, true_number_of_dots):
     # lower and upper bounds
     lower = true_number_of_dots/10
     upper = max_error_rate*true_number_of_dots + true_number_of_dots
-    outliers = [i for i in influence_tup if i[0] >= lower and i[0] <= upper]
-    # remove outliers
     data = [i for i in influence_tup if i[0] >= lower and i[0] <= upper]
     return data
 
@@ -109,7 +109,7 @@ def plot_MRE(df_all):
 
     MREs = []
     MREs_i_CI = []
-    MREs_o_CI = []
+    MREs_ni_CI = []
     for session in sessions:
         df = df_all[df_all.session == session]
         true_number_of_dots = df['dots'].unique().item()
@@ -118,44 +118,45 @@ def plot_MRE(df_all):
         influence = find_social_influence(df)
 
         # make tuples of guesses and their influences
-        inf_tup = [(i, influence[pos]) for pos, i in enumerate(guesses)]
+        inf_tup = [(guess, influence[guess_idx])
+                   for guess_idx, guess in enumerate(guesses)]
 
         # remove outliers (only after influence score is calculated),
         inf_tup = remove_outliers_error_rate(inf_tup, true_number_of_dots)
 
-        # sort, split
+        # sort guesses by ascending social influence
         tup_sorted = sorted(inf_tup, key=lambda tup: tup[1])
         low, high = split_list(tup_sorted)
-        guess_influencers, _ = zip(*high)
-        guess_others, _ = zip(*low)
+        guesses_of_influencers, _ = zip(*high)
+        guesses_of_non_influencers, _ = zip(*low)
 
         # find mean relative errors and append:
-        MRE_i = MRE(true_number_of_dots, np.array(guess_influencers))
-        MRE_o = MRE(true_number_of_dots, np.array(guess_others))
-        MREs.append((MRE_i, MRE_o))
+        MRE_i = MRE(true_number_of_dots, np.array(guesses_of_influencers))
+        MRE_ni = MRE(true_number_of_dots, np.array(guesses_of_non_influencers))
+        MREs.append((MRE_i, MRE_ni))
 
         # find confidence intervals and append
-        errors_influencers = RE(true_number_of_dots, np.array(guess_influencers))
-        errors_others = RE(true_number_of_dots, np.array(guess_others))
+        errors_influencers = RE(true_number_of_dots, np.array(guesses_of_influencers))
+        errors_others = RE(true_number_of_dots, np.array(guesses_of_non_influencers))
         CI_influencers = sms.DescrStatsW(errors_influencers).tconfint_mean()
-        CI_others = sms.DescrStatsW(errors_others).tconfint_mean()
+        CI_non_influencers = sms.DescrStatsW(errors_others).tconfint_mean()
         MREs_i_CI.append(CI_influencers)
-        MREs_o_CI.append(CI_others)
+        MREs_ni_CI.append(CI_non_influencers)
 
     # unpack and define confidence intervals
     error_inf, error_ninf = zip(*MREs)
     inf_lower, inf_upper = zip(*MREs_i_CI)
     inf_lower = np.array(error_inf) - np.array(inf_lower)
     inf_upper = np.array(inf_upper) - np.array(error_inf)
-    ninf_lower, ninf_upper = zip(*MREs_o_CI)
+    ninf_lower, ninf_upper = zip(*MREs_ni_CI)
     ninf_lower = np.array(error_ninf) - np.array(ninf_lower)
     ninf_upper = np.array(ninf_upper) - np.array(error_ninf)
 
     # plot
-    fig, ax = plt.subplots(1,1)
+    fig, ax = plt.subplots(1, 1)
     x = np.arange(float(len(sessions)))
-    ax.errorbar(x, error_inf, yerr=[inf_lower,inf_upper], capsize=5, fmt='o', c=colors[1], label='high-influencers')
-    ax.errorbar(x, error_ninf, yerr=[ninf_lower,ninf_upper], capsize=5, fmt='o',c=colors[0], label='low-influencers')
+    ax.errorbar(x, error_inf, yerr=[inf_lower, inf_upper], capsize=5, fmt='o', c=colors[1], label='high-influencers')
+    ax.errorbar(x, error_ninf, yerr=[ninf_lower, ninf_upper], capsize=5, fmt='o', c=colors[0], label='low-influencers')
 
     # plotting paraphernalia
     x_axis_labels = ['55 dots\n3 views', '55 dots\n9 views',
@@ -167,12 +168,14 @@ def plot_MRE(df_all):
     plt.xticks([i for i in range(len(sessions))], x_axis_labels, rotation=90)
     ax.yaxis.set_major_formatter(FuncFormatter('{0:.0%}'.format))
     plt.ylabel('Mean relative percentage error')
-    legend = ax.legend(loc='upper left') #title='Mean estimation error', loc='upper left')
+    ax.legend(loc='upper left')
     plt.tight_layout()
+
     # Remember: save as pdf and transparent=True for Adobe Illustrator
     plt.savefig('../plots/Fig5.png', transparent=True, dpi=300)
     plt.savefig('../plots/Fig5.pdf', transparent=True, dpi=300)
     plt.show()
+
     print('average difference btw high-influencers and low-influencers =',
           np.mean(np.array(error_ninf)-np.array(error_inf)))
 

@@ -1,19 +1,20 @@
-import numpy as np
+import os
 import pandas as pd
-import statistics
-from numpy import percentile
-from fractions import Fraction
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import *
-from matplotlib.pyplot import figure
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
-from matplotlib import style
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
+plt.rcParams["font.family"] = "sans-serif"
 
+PLOTS_DIR = '../plots'
+
+
+"""
+This python script plots a spanning tree / hamilton tree from a WoT session
+"""
 
 file = pd.read_csv('../data/dots/5du4txa7_untrimmed_anonymous.csv') # dots example
+
 noise = 0.01
 
 
@@ -30,102 +31,104 @@ def find_nearest(array, value):
     # because argmin() always returns the first number in the case of multiple
     # minimum values, we are good with the code as is:
     idx = (np.abs(array - value)).argmin()
-    return (idx, array[idx])
+    return idx, array[idx]
 
 
 def calculate_spanning_tree(df):
-    si = {}  # initialize dict for the total social influence score
-    si_followed = []  # array for the social influence of the nearest precusor
-    views = df['views'].unique().item()
-    ids = df['id'].values
-    near = []  # list of tuples containing nearest estimates
-    ords = []  # list of tuples containing nearest orders
-    for id in ids:
-        own_order = df[df['id'] == id]['order'].item() - 1
-        own_guess = df[df['id'] == id]['guess'].item()
-        seen_ids = df[df['id'] == id]['hist'].item()
+    si = {}  # initialize dict for the total social influence score for each player id
+    si_followed = []  # array for the social influence of the nearest precursor by position of guess in thread
+    player_ids = df['id'].values
+    value_nearest_guess = []  # value_nearest_guess[idx] is the value of the guess closest to guess nr. idx
+    idx_of_nearest_guess = []  # idx_of_nearest_guess[idx] is the index of the guess closest to guess nr. idx
+
+    for player_id in player_ids:
+        own_order = df[df['id'] == player_id]['order'].item() - 1
+        own_guess = df[df['id'] == player_id]['guess'].item()
+        seen_ids = df[df['id'] == player_id]['hist'].item()
+
+        # seen_ids is stored in otree as a string, so turn it into a list of player_ids
         seen_ids = pd.eval(seen_ids)
-        seen_ids = [h for h in seen_ids if h in ids]
-        seen_guesses = [df[df['id'] == g]['guess'].item() for g in seen_ids]
+
+        # Disregard guess in the spanning tree if the data has been trimmed to exclude outliers
+        seen_ids = [id for id in seen_ids if id in player_ids]
+        seen_guesses = [df[df['id'] == player_id]['guess'].item() for player_id in seen_ids]
+
         if not seen_guesses:
+            # Special case for the first player, who haven't seen any other guesses
             si_followed.append(0)
-            near.append((own_guess, own_guess))
-            ords.append((own_order, own_order))
+            value_nearest_guess.append((own_guess, own_guess))
+            idx_of_nearest_guess.append((own_order, own_order))
             continue
         else:
             si_followed.append(max(social_influence_scores(own_guess, seen_guesses)))
 
         # find the nearest guess
-        nearest = find_nearest(seen_guesses, own_guess)
+        (nearest_guess_idx, nearest_guess_value) = find_nearest(seen_guesses, own_guess)
 
         # update the social influence values of the seen ids:
-        for pos, g in enumerate(seen_ids):
-            if not g in si:
-                si[g] = social_influence_scores(own_guess, seen_guesses)[pos]
+        for idx, player_id in enumerate(seen_ids):
+            if player_id not in si:
+                si[player_id] = social_influence_scores(own_guess, seen_guesses)[idx]
             else:
-                si[g] += social_influence_scores(own_guess, seen_guesses)[pos]
+                si[player_id] += social_influence_scores(own_guess, seen_guesses)[idx]
 
-        followed_player_order = df[df['id'] == seen_ids[nearest[0]]]['order'].item() -1
+        followed_player_order = df[df['id'] == seen_ids[nearest_guess_idx]]['order'].item() - 1
 
         # append tuples of nearest guesses and orders
-        near.append((own_guess, nearest[1]))
-        ords.append((own_order, followed_player_order))
+        value_nearest_guess.append((own_guess, nearest_guess_value))
+        idx_of_nearest_guess.append((own_order, followed_player_order))
 
     # make a new list for the social influence score of all seen ids
-    infl = []
-    for id in ids:
-        if id in si:
-            infl.append(si[id])
+    influence = []
+    for player_id in player_ids:
+        if player_id in si:
+            influence.append(si[player_id])
         else:
-            infl.append(0)
+            influence.append(0)
 
-    return infl, near, ords, si_followed
+    return influence, value_nearest_guess, idx_of_nearest_guess, si_followed
 
 
-def plotting_tree(df, views, method):
-    influence, near, ords, si_followed = calculate_spanning_tree(df)
-    print('LEN:', len(df), len(influence), len(near), len(ords), len(si_followed))
-    session = df['session'].unique().item()
+def plotting_tree(df):
+    influence, value_nearest_guess, idx_of_nearest_guess, si_followed = calculate_spanning_tree(df)
     guesses = df['guess'].values
-    true_number_of_dots = df['dots'].unique().item()
 
     # plot and color initializations
     plt.figure(figsize=(2, 2))
-    colmap = 'magma_r'
-    mycmap = cm = plt.get_cmap(colmap)
-    cNorm = colors.Normalize(vmin=0, vmax=max(influence))
-    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=mycmap)
-    flatui = ["#9b59b6", "#3498db", "#95a5a6", "#e74c3c", "#34495e", "#2ecc71"]
+    color_map = plt.get_cmap('magma_r')
+    c_norm = colors.Normalize(vmin=0, vmax=max(influence))
+    scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=color_map)
 
-    # plot lines btw nearest guesses, colored according to their influence
-    ids = df['id'].values
-    print('ids:', len(ids), len(guesses))
-    for pos, id in enumerate(ids):
-        colorVal = scalarMap.to_rgba(si_followed[pos])
-        plt.plot(near[pos], ords[pos], zorder=-1, linewidth=3.0, color=colorVal)
+    # plot lines between closest guesses, colored according to their influence
+    player_ids = df['id'].values
+    for player_idx, player_id in enumerate(player_ids):
+        plt.plot(
+            value_nearest_guess[player_idx],
+            idx_of_nearest_guess[player_idx],
+            zorder=-1,
+            linewidth=3.0,
+            color=scalar_map.to_rgba(si_followed[player_idx]))
 
     # plot the guesses colored with their total social influence score:
-    plt.scatter(guesses, [i for i in range(len(guesses))], s=30, c=influence, cmap=mycmap)
-
-    # add the moving average and the moving median to the plot
-    ma = []
-    me = []
-    for g in range(1, len(guesses)+1):
-        guess_list = guesses[:g]
-        ma.append(np.mean(guess_list))
-        me.append(np.median(guess_list))
-    # plt.plot(ma, [i for i in range(len(guesses))], linewidth=.5, c=flatui[5])
-    # plt.plot(me, [i for i in range(len(guesses))], linewidth=.5, c=flatui[3])
-
+    plt.scatter(guesses, [i for i in range(len(guesses))], s=20, c=influence, cmap=color_map)
     plt.xlim(100, 600)
     plt.ylim(12.5, 19.5)
+
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
+    output_path = os.path.join(PLOTS_DIR, 'fig4_excerpt.png')
+
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig('../plots/Fig4_excerpt.png', transparent=True, dpi=300)
+    plt.savefig(output_path, transparent=True, bbox_inches='tight', dpi=300)
+    plt.savefig(output_path, transparent=True, bbox_inches='tight', dpi=300)
     plt.show()
-    for i in range(13,20):
-        print(guesses[i], near[i], ords[i], influence[i], si_followed[i])
+
+    # Useful for annotating the excerpt in photoshop/illustrator etc.
+    # for i in range(13,20):
+    #    print(guesses[i], near[i], ords[i], influence[i], si_followed[i])
 
 
 # main code
 df = pd.DataFrame(file)
-plotting_tree(df, df['views'].unique().item(), df['method'].unique().item())
+plotting_tree(df)
