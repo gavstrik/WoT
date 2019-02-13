@@ -82,7 +82,8 @@ def generate_simulation_data(df_all):
         control = df_control['guess'].values
         # print('\n', d, bs.bootstrap(np.array(control), stat_func=bs_stats.mean))
 
-        for v in [3,9]:
+        for v in [3, 9]:
+            print("dots: {} views: {}".format(d, v))
             mi = []
             mo = []
             # simluate with 'simul' runs:
@@ -92,13 +93,14 @@ def generate_simulation_data(df_all):
                 histories = []
                 thread.extend(random_draws[:v])  # fill with the first v samples
                 histories.extend([random_draws[:v] for i in range(v)])  # fill with the first v histories
+
+                # simulate a thread of length tlength
                 for g in range(v, tlength):
-                    arr = []
-                    hist = thread[-v:]  # these are the previous estimates
-                    arr = np.append(hist, random_draws[g]) # add your own initial hunch
-                    estimate = np.mean(arr)
-                    thread.append(estimate)
-                    histories.append(hist)
+                    history = thread[-v:]  # these are the previous estimates
+                    own_hunch = random_draws[g]
+                    final_guess = 1 / (v + 1) * (own_hunch + sum(history))
+                    thread.append(final_guess)
+                    histories.append(history)
 
                 influence = find_social_influence(thread, histories)
 

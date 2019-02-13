@@ -17,29 +17,16 @@ datafiles = [
 
 
 def basic_stats(df1):
-    fig, axes = plt.subplots(nrows=3, ncols=2,sharex=True, figsize=(11,11))
+    fig, axes = plt.subplots(nrows=3, ncols=2,sharex=True, figsize=(11, 11))
     axes = axes.flatten()
     images = [(55, 3), (148, 9), (403, 3), (1097, 0), (1233, 0), (1233, 9)]
-    for pos, i in enumerate(images):
-        df = df1[(df1['dots'] == i[0]) & (df1['views'] == i[1])]
+    for image_idx, (d, views) in enumerate(images):
+        df = df1[(df1['dots'] == d) & (df1['views'] == views)]
         guesses = df['guess'].values
-
-        # The QQ-plot generates its own sample of the idealized distribution
-        # that we are comparing with, in this case the Gaussian distribution.
-        # The idealized samples are divided into groups (e.g. 5), called
-        # quantiles. Each data point in the sample is paired with a similar
-        # member from the idealized distribution at the same cumulative
-        # distribution. The resulting points are plotted as a scatter plot
-        # with the idealized value on the x-axis and the data sample on the
-        # y-axis. A perfect match for the distribution will be shown by a
-        # line of dots on a 45-degree angle from the bottom left of the plot
-        # to the top right. Often a line is drawn on the plot to help make
-        # this expectation clear. Deviations by the dots from the line shows
-        # a deviation from the expected distribution.
         X = np.log(guesses)
-        qqplot(X, line='s', ax = axes[pos])
-        axes[pos].set_title('d = '+str(i[0])+', v = '+str(i[1])+', N ='+str(len(guesses)))
-        axes[pos].set_xlabel('')
+        qqplot(X, line='s', ax=axes[image_idx])
+        axes[image_idx].set_title('d = '+str(d)+', v = '+str(views)+', N ='+str(len(guesses)))
+        axes[image_idx].set_xlabel('')
     plt.tight_layout()
     # Remember: save as pdf and transparent=True for Adobe Illustrator
     fig.savefig('../plots/FigS3.pdf', transparent=True, dpi=300)

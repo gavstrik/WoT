@@ -47,10 +47,10 @@ axes[-1, -1].axis('off')  # do not show the last subplot
 axes = axes.flatten()
 colors = ['#6a51a3', '#d94801']
 
-for position, d in enumerate([55,148,403,1097,1233]):
+for position, d in enumerate([55, 148, 403, 1097, 1233]):
     # define the control group
     df = df_all[df_all['dots'] == d]
-    true_medians, true_means, true_stds = means_and_medians(df)
+    true_medians, true_means, _ = means_and_medians(df)
     df_control = df[df.views == 0]
     control = df_control['guess'].values
 
@@ -59,27 +59,28 @@ for position, d in enumerate([55,148,403,1097,1233]):
     medians.append(np.median(control))
     means = []
     means.append(np.mean(control))
-    stds = []
-    stds.append(np.std(control))
-    for v in [1,3,9]:
+
+    for v in [1, 3, 9]:
         m = []
         md = []
-        sd = []
+
         for i in range(simuls):
             random_draws = random.sample(list(control), tlength)
             thread = []
             thread.extend(random_draws[:v])  # fill thread with the first v samples
+
+            # simulate a thread of length tlength
             for g in range(v, tlength):
-                arr = []
-                a = thread[-v:]  # these are the previous estimates
-                arr = np.append(a, random_draws[g]) # add your own guess
-                thread.append(np.median(arr))
+                sum_of_seen_history = sum(thread[-v:])  # these are the previous estimates
+                own_hunch = random_draws[g]
+                final_guess = 1 / (v + 1) * (own_hunch + sum_of_seen_history) # add your own guess
+                thread.append(final_guess)
+
             m.append(np.mean(thread))  # store the new number in the m-thread
             md.append(np.median(thread))  # store the new number in the md-thread
-            sd.append(np.std(thread))
+
         medians.append(np.mean(md))
         means.append(np.mean(m))
-        stds.append(np.mean(sd))
 
     axes[position].plot(medians, marker='o', linestyle='--', c=colors[1], label='simulated medians')
     axes[position].plot(true_medians, marker='o', linestyle='-', c=colors[1], label='true medians')

@@ -47,7 +47,9 @@ def better_than_sample_median(df_all):
         df = df_all[df_all.dots == d]
         participants = df.code.values
         within = 0
-        for participant in participants:
+
+
+        for participant in df.code.values:
             own_guess = df[df.code == participant]['guess'].item()
             if own_guess <= 0:
                 continue

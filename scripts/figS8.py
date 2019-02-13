@@ -99,7 +99,7 @@ def plotting_tree(df, views, method):
 
     # plot and color initializations
     plt.figure(figsize=(3,11))
-    colmap = 'plasma_r'
+    colmap = 'magma_r'
     mycmap = cm = plt.get_cmap(colmap, 10)
     cNorm = colors.Normalize(vmin=0, vmax=max(influence))
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=mycmap)
