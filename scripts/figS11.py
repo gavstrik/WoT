@@ -27,8 +27,8 @@ noise = 0.01
 simuls = 1000
 
 
-def social_influence_scores(g, guess_vector):
-    influences = 1/np.array([abs(g-h) + noise for h in guess_vector])
+def social_influence_scores(guess, seen_guesses):
+    influences = np.array([1/(abs(guess-sg) + noise) for sg in seen_guesses])
     normalizer = sum(influences)
     scores = influences/normalizer
     return scores
@@ -47,28 +47,48 @@ def split_list(sorted_list):
 
 def find_social_influence(thread, histories):
     # initialize dict for social influence
-    si = {}
+    si = dict.fromkeys(list(set(thread)), 0)
 
-    for position, t in enumerate(thread):
-        seen_guesses = histories[position]
+    for idx_in_thread, guess in enumerate(thread):
+        seen_guesses = histories[idx_in_thread]
+
+        si_score = social_influence_scores(guess, seen_guesses)
 
         # update the social influence values of the seen guesses:
-        for pos, g in enumerate(seen_guesses):
-            if not g in si:
-                si[g] = social_influence_scores(t, seen_guesses)[pos]
-            else:
-                si[g] += social_influence_scores(t, seen_guesses)[pos]
+        for idx, sg in enumerate(seen_guesses):
+            si[sg] += si_score[idx]
 
-    # make a new list for the social influence of all seen ids
-    infl = []
-    si[thread[-1]] = 0  # the last id has always social influence = 0
-    for t in thread:
-        infl.append(si[t])
+    # make a new list for the social influence of all guesses
+    # Does it? thread[-1] is a guess, so are we automatically setting a guess to have 0 influence?
+    si[thread[-1]] = 0
 
-    return infl
+    influence = np.ones(len(thread))
+
+    for idx, guess in enumerate(thread):
+        influence[idx] = si[guess]
+
+    return influence
 
 
-def generate_simulation_data(df_all):
+def simulate_thread(views, sampling_pool, thread_length):
+    random_draws = random.sample(sampling_pool, thread_length)
+    thread = []
+    histories = []
+    thread.extend(random_draws[:views])  # fill with the first v samples
+    histories.extend([random_draws[:views] for i in range(views)])  # fill with the first v histories
+
+    # simulate a thread of length thread_length
+    for g in range(views, thread_length):
+        history = thread[-views:]  # these are the previous estimates
+        own_hunch = random_draws[g]
+        final_guess = 1 / (views + 1) * (own_hunch + sum(history))
+        thread.append(final_guess)
+        histories.append(history)
+
+    return thread, histories
+
+
+def generate_and_plot(df_all):
     fig, ax = plt.subplots(1,1)
     colors = ['#d94801', '#6a51a3']
 
@@ -79,29 +99,18 @@ def generate_simulation_data(df_all):
         # define the control group
         df = df_all[df_all['dots'] == d]
         df_control = df[df.views == 0]
-        control = df_control['guess'].values
+        sampling_pool = list(df_control['guess'].values)
+
         # print('\n', d, bs.bootstrap(np.array(control), stat_func=bs_stats.mean))
 
         for v in [3, 9]:
-            print("dots: {} views: {}".format(d, v))
+            print("simulating dots: {}, views: {}".format(d, v))
             mi = []
             mo = []
+
             # simluate with 'simul' runs:
             for i in range(simuls):
-                random_draws = random.sample(list(control), tlength)
-                thread = []
-                histories = []
-                thread.extend(random_draws[:v])  # fill with the first v samples
-                histories.extend([random_draws[:v] for i in range(v)])  # fill with the first v histories
-
-                # simulate a thread of length tlength
-                for g in range(v, tlength):
-                    history = thread[-v:]  # these are the previous estimates
-                    own_hunch = random_draws[g]
-                    final_guess = 1 / (v + 1) * (own_hunch + sum(history))
-                    thread.append(final_guess)
-                    histories.append(history)
-
+                thread, histories = simulate_thread(v, sampling_pool, tlength)
                 influence = find_social_influence(thread, histories)
 
                 # make tuples of guesses and their influences
@@ -165,4 +174,4 @@ for datafile in datafiles:
     df_all = df_all.append(df)
 df_all = df_all[df_all['method'] == 'history']
 
-generate_simulation_data(df_all)
+generate_and_plot(df_all)
