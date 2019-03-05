@@ -1,170 +1,141 @@
 import os
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from matplotlib.pyplot import *
+import matplotlib.colors as colors
+import matplotlib.cm as cmx
 plt.rcParams["font.family"] = "sans-serif"
-
 PLOTS_DIR = '../plots'
 
 """
-Plotting aggregate measures showing that individuals as well as
-the collective becomes more accurate with increasing social information.
+This python script plots a spanning tree / hamilton tree from a WoT session
 """
 
-datafiles = [
-            '../data/dots/all_dots_trimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
-            ]
+file = pd.read_csv('../data/dots/all_dots_untrimmed_anonymous.csv') # dots example
+
+noise = 0.01
 
 
-# relative error
-def RE(aggregate_prediction, truth):
-    return abs(truth - aggregate_prediction)/truth
+def social_influence_scores(g, guess_vector):
+    influences = 1/np.array([abs(g-h) + noise for h in guess_vector])
+    normalizer = sum(influences)
+    scores = influences/normalizer
+    return scores
 
 
-# mean relative error
-def MRE(individual_predictions, truth):
-    return np.mean(abs(truth - individual_predictions))/truth
+# function for finding nearest guess
+def find_nearest(array, value):
+    array = np.asarray(array)
+    # because argmin() always returns the first number in the case of multiple
+    # minimum values, we are good with the code as is:
+    idx = (np.abs(array - value)).argmin()
+    return idx, array[idx]
 
 
-# median relative error
-def MdRE(individual_predictions, truth):
-    return np.median(abs(truth - individual_predictions))/truth
+def calculate_spanning_tree(df):
+    si = {}  # initialize dict for the total social influence score for each player id
+    si_followed = []  # array for the social influence of the nearest precursor by position of guess in thread
+    player_ids = df['id'].values
+    value_nearest_guess = []  # value_nearest_guess[idx] is the value of the guess closest to guess nr. idx
+    idx_of_nearest_guess = []  # idx_of_nearest_guess[idx] is the index of the guess closest to guess nr. idx
+
+    for guess_idx, player_id in enumerate(player_ids):
+        own_guess = df[df['id'] == player_id]['guess'].item()
+        seen_ids = df[df['id'] == player_id]['hist'].item()
+        # seen_ids is stored in otree as a string, so turn it into a list of player_ids
+        seen_ids = pd.eval(seen_ids)
+        # Disregard guess in the spanning tree if the data has been trimmed to exclude outliers
+        seen_ids = [id for id in seen_ids if id in player_ids]
+        seen_guesses = [df[df['id'] == player_id]['guess'].item() for player_id in seen_ids]
+
+        if not seen_guesses:
+            # Special case for the first player, who haven't seen any other guesses
+            si_followed.append(0)
+            value_nearest_guess.append((own_guess, own_guess))
+            idx_of_nearest_guess.append((guess_idx, guess_idx))
+            continue
+        else:
+            si_followed.append(max(social_influence_scores(own_guess, seen_guesses)))
+
+        # find the nearest guess
+        (nearest_guess_idx, nearest_guess_value) = find_nearest(seen_guesses, own_guess)
+
+        # update the social influence values of the seen ids:
+        for idx, player_id in enumerate(seen_ids):
+            if player_id not in si:
+                si[player_id] = social_influence_scores(own_guess, seen_guesses)[idx]
+            else:
+                si[player_id] += social_influence_scores(own_guess, seen_guesses)[idx]
+
+        followed_player_order = df[df['id'] == seen_ids[nearest_guess_idx]]['order'].item() - 1
+
+        # append tuples of nearest guesses and orders
+        value_nearest_guess.append((own_guess, nearest_guess_value))
+        idx_of_nearest_guess.append((guess_idx, followed_player_order))
+
+    # make a new list for the social influence score of all seen ids
+    influence = []
+    for player_id in player_ids:
+        if player_id in si:
+            influence.append(si[player_id])
+        else:
+            influence.append(0)
+
+    return influence, value_nearest_guess, idx_of_nearest_guess, si_followed
 
 
-def plot_aggregates(df_all):
-    fig, axes = plt.subplots(nrows=2, ncols=4,
-                             sharex=True, sharey=True,
-                             figsize=(6,6))
-    axes[-1, -1].axis('off')  # do not show the last subplot
-    axes = axes.flatten()  # needs to be flattened for iteration
-    colors = ['#bcbddc', '#9e9ac8', '#807dba', '#6a51a3', '#3f007d', '#d94801']
+def plotting_tree(df):
+    influence, value_nearest_guess, idx_of_nearest_guess, si_followed = calculate_spanning_tree(df)
+    guesses = df['guess'].values
+    true_number_of_dots = df['dots'].unique().item()
 
-    # plot aggregate measures as a function of v:
-    avg_col_error_median = [0,0,0,0]
-    avg_col_error_mean = [0,0,0,0]
-    avg_median_rel_error = [0,0,0,0]
-    avg_mean_rel_error = [0,0,0,0]
-    avg_better_than_median = [0,0,0,0]
-    avg_better_than_mean = [0,0,0,0]
-    avg_bonus = [0,0,0,0]
+    # plot and color initializations
+    plt.figure(figsize=(4, 14))
+    color_map = plt.get_cmap('magma_r')
+    c_norm = colors.Normalize(vmin=0, vmax=max(influence))
+    scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=color_map)
+    agg_colors = ["#34495e", '#6a51a3', '#d94801']
 
-    # NB: 1233 is the ox experiment
-    for dots_idx, dots in enumerate([55, 148, 403, 1097, 1233]):
-        col_error_median = []
-        col_error_mean = []
-        median_rel_error = []
-        mean_rel_error = []
-        better_than_median = []
-        better_than_mean = []
-        bonus = []
-        for position, views in enumerate([0, 1, 3, 9]):
-            df = df_all[(df_all['dots'] == dots) &
-                        (df_all['views'] == views)]
+    # plot lines between closest guesses, colored according to their influence
+    player_ids = df['id'].values
+    for player_idx, player_id in enumerate(player_ids):
+        plt.plot(
+            value_nearest_guess[player_idx],
+            idx_of_nearest_guess[player_idx],
+            zorder=-1,
+            linewidth=2.0,
+            color=scalar_map.to_rgba(si_followed[player_idx]))
 
-            # Skip the treatment combinations that don't exist
-            # (e.g. 'min'-method for dots experiments)
-            if len(df) == 0:
-                continue
+    # plot the guesses colored with their total social influence score:
+    plt.scatter(guesses, [i for i in range(len(guesses))], s=20, c=influence, cmap=color_map)
 
-            # find the collective error of the median:
-            median_error = RE(df.guess.median(), df.dots.unique().item())
-            col_error_median.append(median_error)
-            avg_col_error_median[position] += median_error/5
+    # add the moving average and the moving median to the plot
+    moving_average = []
+    moving_media = []
+    for g in range(1, len(guesses)+1):
+        guess_list = guesses[:g]
+        moving_average.append(np.mean(guess_list))
+        moving_media.append(np.median(guess_list))
 
-            # find the collective error of the mean:
-            mean_error = RE(df.guess.mean(), df.dots.unique().item())
-            col_error_mean.append(mean_error)
-            avg_col_error_mean[position] += mean_error/5
-
-            # find the median individual error:
-            median_rel_error.append(MdRE(df.guess.values,
-                                         df.dots.unique().item()))
-            avg_median_rel_error[position] += MdRE(df.guess.values,
-                                           df.dots.unique().item())/5
-
-            # find the mean individual error:
-            mean_rel_error.append(MRE(df.guess.values, df.dots.unique().item()))
-            avg_mean_rel_error[position] += MRE(df.guess.values, df.dots.unique().item())/5
-
-            # find the fraction of individuals better than the median and mean:
-            n_median = [1 for g in df.guess.values
-                        if RE(g, df.dots.unique().item()) < median_error]
-            n_mean = [1 for g in df.guess.values
-                      if RE(g, df.dots.unique().item()) < mean_error]
-            better_than_median.append(len(n_median)/len(df.guess.values))
-            better_than_mean.append(len(n_mean)/len(df.guess.values))
-            avg_better_than_median[position] += (len(n_median)/len(df.guess.values))/5
-            avg_better_than_mean[position] += (len(n_mean)/len(df.guess.values))/5
-
-            # find the fraction of participants winning the bonus:
-            bonus.append(df['bonus'].sum()/len(df.guess.values))
-            avg_bonus[position] += df['bonus'].sum()/len(df.guess.values)/5
-
-        # plot the upper/lower row of measures for the median/mean:
-        axes[0].plot(col_error_median, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[1].plot(median_rel_error, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[2].plot(better_than_median, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[3].plot(bonus, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[4].plot(col_error_mean, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[5].plot(mean_rel_error, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-        axes[6].plot(better_than_mean, marker='o', linestyle='-', color=colors[dots_idx], label='d='+str(dots))
-
-    # plot the averages across all d:
-    axes[0].plot(avg_col_error_median, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[1].plot(avg_median_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[2].plot(avg_better_than_median, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[3].plot(avg_bonus, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[4].plot(avg_col_error_mean, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[5].plot(avg_mean_rel_error, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-    axes[6].plot(avg_better_than_mean, marker='o', linestyle='-', linewidth=3, color=colors[dots_idx+1], label='average')
-
-    # plotting paraphernalia
-    handles, labels = axes[3].get_legend_handles_labels()
-    plt.figlegend(handles, labels, loc=(0.795,0.25), title='legend', ncol=1)
-    txtA = fig.text(0.195, .99, 'A', fontsize='x-large', ha='center')
-    txtB = fig.text(0.425, .99, 'B', fontsize='x-large', ha='center')
-    txtC = fig.text(0.655, .99, 'C', fontsize='x-large', ha='center')
-    txtD = fig.text(0.885, .99, 'D', fontsize='x-large', ha='center')
-    txtv = fig.text(0.54, .0, 'v', fontsize='large', ha='center')
-
-    x_axis_labels = ['0', '1', '3', '9']  # rename xticks
-    plt.xticks([i for i in range(4)], x_axis_labels)
-
-    # set y-labels
-    axes[0].set_ylabel('Collective error of median')
-    axes[1].set_ylabel('Median individual error')
-    axes[2].set_ylabel('Better than median')
-    axes[3].set_ylabel('Fraction winning a bonus')
-    axes[4].set_ylabel('Collective error of mean')
-    axes[5].set_ylabel('Mean individual error')
-    axes[6].set_ylabel('Better than mean')
-
-    # remove small ticks
-    for i in range(7):
-        axes[i].tick_params(axis="both", length=0)
-        axes[i].grid(True)
+    plt.plot(moving_average, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[1])
+    plt.plot(moving_media, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[2])
+    plt.colorbar(shrink=0.5)
+    plt.xlim(0, 1000)
+    plt.ylim(0, 460)
+    plt.axvline(x=true_number_of_dots, linewidth=1, color=agg_colors[0])
+    plt.xlabel('estimate')
     plt.tight_layout()
 
     if not os.path.exists(PLOTS_DIR):
         os.makedirs(PLOTS_DIR)
 
-    output_path = os.path.join(PLOTS_DIR, 'fig3.png')
-
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    fig.savefig(output_path, transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
-                bbox_inches='tight', dpi=300)
-    fig.savefig(output_path, transparent=True, bbox_extra_artists=(txtA,txtB,txtC,txtD,txtv),
-                bbox_inches='tight', dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.png'), transparent=True, bbox_inches='tight', dpi=400)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.pdf'), transparent=True, bbox_inches='tight', dpi=400)
     plt.show()
 
 
-# load the data
-dataframe = pd.DataFrame()
-for datafile in datafiles:
-    dataframe = dataframe.append(pd.DataFrame(pd.read_csv(datafile)))
-
-# only plot the data for the history sessions
-dataframe = dataframe[(dataframe['method'] == 'history')]
-plot_aggregates(dataframe)
+# main code
+df = pd.DataFrame(file)
+df = df[df.session == '5du4txa7']
+plotting_tree(df)
