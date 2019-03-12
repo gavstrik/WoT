@@ -16,7 +16,7 @@ PLOTS_DIR = '../plots'
 
 """
 plot the social influence of influencers and non-influencers.
-Use the untrimmed data and trim after having calculated the social
+Use the raw data and trim after having calculated the social
 influence score for each participant.
 """
 
@@ -59,7 +59,7 @@ def find_social_influence(df):
     # initialize dict for social influence
     si = {}
 
-    ids = df['id'].values
+    ids = df.id.values
 
     for id in ids:
         own_guess = df[df['id'] == id]['guess'].item()
@@ -104,49 +104,47 @@ def remove_outliers_error_rate(influence_tup, true_number_of_dots):
 
 
 def plot_MRE(df_all):
-    sessions = ['3cda8qpn', 'bvpj37io', 'ck291lk5', '2hxe3g0w', '5du4txa7',
-                'spw8qdcd', 'hhb0if6e', 'wv4xujg7', 'nuf4ogmf', 'i0x2cimn', 'uhu19909']
     colors = ['#d94801', '#6a51a3']
-
     MREs = []
     MREs_i_CI = []
     MREs_ni_CI = []
     pops = []
-    for session in sessions:
-        df = df_all[df_all.session == session]
-        true_number_of_dots = df['dots'].unique().item()
-        views = df['views'].unique().item()
-        guesses = (np.array(df['guess'].values))
-        influence = find_social_influence(df)
+    for true_number_of_dots in [55, 148, 403, 1097, 1233]:
+        for views in [3, 9]:
+            df1 = df_all[(df_all.dots == true_number_of_dots) & (df_all.views == views)]
+            sessions = df1.session.unique()
+            influence_tuples = []
+            for session in sessions:
+                df = df1[df1.session == session]
+                guesses = (np.array(df.guess.values))
+                influence = find_social_influence(df)
+                # make a long list of tuples containing guesses and their influences
+                influence_tuples.extend([(guess, influence[guess_idx]) for guess_idx, guess in enumerate(guesses)])
 
-        # make tuples of guesses and their influences
-        inf_tup = [(guess, influence[guess_idx])
-                   for guess_idx, guess in enumerate(guesses)]
+            # remove outliers (only after influence score is calculated),
+            influence_tuples = remove_outliers_error_rate(influence_tuples, true_number_of_dots)
+            pops.append(len(influence_tuples)) # count them
 
-        # remove outliers (only after influence score is calculated),
-        inf_tup = remove_outliers_error_rate(inf_tup, true_number_of_dots)
-        pops.append(len(inf_tup))
+            # sort guesses by ascending social influence
+            tup_sorted = sorted(influence_tuples, key=lambda tup: tup[1])
+            low, high = split_list(tup_sorted)
+            guesses_of_influencers, _ = zip(*high)
+            guesses_of_non_influencers, _ = zip(*low)
 
-        # sort guesses by ascending social influence
-        tup_sorted = sorted(inf_tup, key=lambda tup: tup[1])
-        low, high = split_list(tup_sorted)
-        guesses_of_influencers, _ = zip(*high)
-        guesses_of_non_influencers, _ = zip(*low)
+            # find mean relative errors and append:
+            MRE_i = MRE(true_number_of_dots, np.array(guesses_of_influencers))
+            MRE_ni = MRE(true_number_of_dots, np.array(guesses_of_non_influencers))
+            MREs.append((MRE_i, MRE_ni))
 
-        # find mean relative errors and append:
-        MRE_i = MRE(true_number_of_dots, np.array(guesses_of_influencers))
-        MRE_ni = MRE(true_number_of_dots, np.array(guesses_of_non_influencers))
-        MREs.append((MRE_i, MRE_ni))
+            # find confidence intervals of the mean relative error and append
+            errors_influencers = RE(true_number_of_dots, np.array(guesses_of_influencers))
+            errors_noninfluencers = RE(true_number_of_dots, np.array(guesses_of_non_influencers))
+            CI_influencers = sms.DescrStatsW(errors_influencers).tconfint_mean()
+            CI_noninfluencers = sms.DescrStatsW(errors_noninfluencers).tconfint_mean()
+            MREs_i_CI.append(CI_influencers)
+            MREs_ni_CI.append(CI_noninfluencers)
 
-        # find confidence intervals of the mean relative error and append
-        errors_influencers = RE(true_number_of_dots, np.array(guesses_of_influencers))
-        errors_others = RE(true_number_of_dots, np.array(guesses_of_non_influencers))
-        CI_influencers = sms.DescrStatsW(errors_influencers).tconfint_mean()
-        CI_non_influencers = sms.DescrStatsW(errors_others).tconfint_mean()
-        MREs_i_CI.append(CI_influencers)
-        MREs_ni_CI.append(CI_non_influencers)
-
-    # unpack and define confidence intervals
+    # unpack and format confidence intervals
     error_inf, error_ninf = zip(*MREs)
     inf_lower, inf_upper = zip(*MREs_i_CI)
     inf_lower = np.array(error_inf) - np.array(inf_lower)
@@ -156,8 +154,8 @@ def plot_MRE(df_all):
     ninf_upper = np.array(ninf_upper) - np.array(error_ninf)
 
     # plot
-    fig, ax = plt.subplots(1, 1, figsize=(11.4, 6))
-    x = np.arange(float(len(sessions)))
+    fig, ax = plt.subplots(1, 1, figsize=(8.7, 6))
+    x = np.arange(float(10))
     ax.errorbar(x, error_inf, yerr=[inf_lower, inf_upper], capsize=5, fmt='o',
                 elinewidth=2, markeredgewidth=2, markersize=8, c=colors[1], label='high-influencers')
     ax.errorbar(x, error_ninf, yerr=[ninf_lower, ninf_upper], capsize=5,
@@ -176,13 +174,11 @@ def plot_MRE(df_all):
                      'd=1097, v=9\n(N='+str(pops[7])+')',
                      'd=1233, v=3\n(N='+str(pops[8])+')',
                      'd=1233, v=9\n(N='+str(pops[9])+')',
-                     'd=1233, v=9\n(N='+str(pops[10])+')',
                      ]
-    plt.xticks([i for i in range(len(sessions))], x_axis_labels, fontsize='x-large', rotation=90)
-    plt.yticks([0,.2,.4,.6,.8,1], ['0 %', '20 %', '40 %', '60 %', '80 %', '100 %'], fontsize='large')
-    # ax.yaxis.set_major_formatter(FuncFormatter('{0:.0%}'.format), fontsize=12)
-    plt.ylabel('Mean relative percentage error', fontsize='x-large')
-    ax.legend(loc='upper left', prop={'size': 14})
+    plt.xticks([i for i in range(10)], x_axis_labels, fontsize='x-large', rotation=90)
+    plt.yticks([0,.2,.4,.6,.8,1], [0,.2,.4,.6,.8,1], fontsize=14)
+    plt.ylabel('Mean relative error', fontsize='xx-large')
+    ax.legend(loc='upper left', prop={'size': 16})
     plt.tight_layout()
 
     if not os.path.exists(PLOTS_DIR):
@@ -202,5 +198,6 @@ df_all = pd.DataFrame()
 for datafile in datafiles:
     df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df)
+df_all = df_all[df_all.method == 'history']
 
 plot_MRE(df_all)

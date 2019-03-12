@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from tabulate import tabulate
-from scipy.stats import kurtosis
+from scipy.stats import kurtosis, entropy
 from scipy.stats import skew as skewness
 
 """
@@ -54,6 +54,7 @@ def tabulated_stats(df1):
     skew = []
     kurt = []
     bonus = []
+    ent = []
     outliers = []
     sessions = df1['session'].unique()
     for session in sessions:
@@ -71,11 +72,11 @@ def tabulated_stats(df1):
         col_error_mean.append(np.around(collective_error_rate(np.mean(guesses), df.dots.unique().item()),2))
         col_error_median.append(np.around(collective_error_rate(np.median(guesses), df.dots.unique().item()),2))
         maes.append(np.around(mae(guesses, df.dots.unique().item()),2))
-        # mapes.append(np.around(mape(df['guess'].values, df.dots.unique().item()),2))
         skew.append(np.around(skewness(guesses),2))
         kurt.append(np.around(kurtosis(guesses),2))
         bonus.append(np.around(100*df['bonus'].sum()/len(guesses),2))
-    table['method'] = method
+        ent.append(entropy(guesses, qk=[df.dots.unique().item() for i in range(len(guesses))], base=None))
+
     table['d'] = dots
     table['v'] = views
     table['thread'] = sessions
@@ -85,16 +86,17 @@ def tabulated_stats(df1):
     table['mean'] = mean
     table['SD'] = sd
     table['CV'] = cv
-    table['err_mean'] = col_error_mean
-    table['err_med'] = col_error_median
-    # table['MAE'] = maes
-    # table['MAPE (%)'] = mapes
+    table['err-mean'] = col_error_mean
+    table['err-med'] = col_error_median
+    table['MAE'] = maes
     table['skew'] = skew
     table['kurt'] = kurt
-    table['bonus (%)'] = bonus
+    table['bonus (\%)'] = bonus
+    # table['KL'] = ent
 
-    table = table.sort_values(['d', 'method', 'v'])
-    return table
+    # table = table.sort_values(['d', 'method', 'v'])
+    table = table.sort_values(['d', 'v', 'thread'])
+    return table, np.sum(length), np.sum(outliers)
 
 
 # main code
@@ -102,6 +104,10 @@ df_all = pd.DataFrame()
 for datafile in datafiles:
     df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df)
+df_all = df_all[df_all.method == 'history']
+df_all = df_all[df_all.views != 27]
 
-print(tabulate(tabulated_stats(df_all), tablefmt="pipe", headers="keys", showindex=False))
-print('total number of data points:', len(df_all))
+table, datapoints, outliers = tabulated_stats(df_all)
+print(tabulate(table, tablefmt="latex_raw", headers="keys", showindex=False))
+print('total number of data points:', datapoints)
+print('total number of outliers:', outliers)

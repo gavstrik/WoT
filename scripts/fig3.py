@@ -11,7 +11,8 @@ PLOTS_DIR = '../plots'
 This python script plots a spanning tree / hamilton tree from a WoT session
 """
 
-file = pd.read_csv('../data/dots/all_dots_untrimmed_anonymous.csv') # dots example
+# file = pd.read_csv('../data/dots/all_dots_untrimmed_anonymous.csv') # dots example
+file = pd.read_csv('../data/ox/all_ox_untrimmed_anonymous.csv') # ox example
 
 noise = 0.01
 
@@ -90,7 +91,7 @@ def plotting_tree(df):
     true_number_of_dots = df['dots'].unique().item()
 
     # plot and color initializations
-    plt.figure(figsize=(4, 14))
+    plt.figure(figsize=(4, 12.3))
     color_map = plt.get_cmap('magma_r')
     c_norm = colors.Normalize(vmin=0, vmax=max(influence))
     scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=color_map)
@@ -120,8 +121,8 @@ def plotting_tree(df):
     plt.plot(moving_average, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[1])
     plt.plot(moving_media, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[2])
     plt.colorbar(shrink=0.5)
-    plt.xlim(0, 1000)
-    plt.ylim(0, 460)
+    plt.xlim(0, 2000)
+    #plt.ylim(0, 460)
     plt.axvline(x=true_number_of_dots, linewidth=1, color=agg_colors[0])
     plt.xlabel('estimate')
     plt.tight_layout()
@@ -130,12 +131,13 @@ def plotting_tree(df):
         os.makedirs(PLOTS_DIR)
 
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.png'), transparent=True, bbox_inches='tight', dpi=400)
-    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.pdf'), transparent=True, bbox_inches='tight', dpi=400)
+    # plt.savefig(os.path.join(PLOTS_DIR, 'fig3.png'), transparent=True, bbox_inches='tight', dpi=400)
+    # plt.savefig(os.path.join(PLOTS_DIR, 'fig3.pdf'), transparent=True, bbox_inches='tight', dpi=400)
     plt.show()
 
 
 # main code
 df = pd.DataFrame(file)
-df = df[df.session == '5du4txa7']
+# df = df[df.session == '5du4txa7']
+df = df[df.session == '44qx5qq5']
 plotting_tree(df)

@@ -1,9 +1,11 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 # plt.rcParams["font.weight"] = "bold"
 plt.rcParams["font.family"] = "sans-serif"
+PLOTS_DIR = '../plots'
 
 
 """
@@ -11,8 +13,8 @@ Plotting the probability of being better than the mean of estimates seen.
 """
 
 datafiles = [
-            '../data/dots/all_dots_trimmed_anonymous.csv',
-            '../data/ox/all_ox_trimmed_anonymous.csv',
+            '../data/dots/all_dots_untrimmed_anonymous.csv',
+            '../data/ox/all_ox_untrimmed_anonymous.csv',
             ]
 
 
@@ -33,6 +35,15 @@ def MdRE(targets, predictions):
     return np.median(abs(targets - predictions)/targets)
 
 
+# outliers with an error rate above 10 are removed
+def remove_outliers(df, true_number_of_dots):
+    max_error_rate = 10
+    lower = true_number_of_dots/10
+    upper = max_error_rate*true_number_of_dots + true_number_of_dots
+    df = df[(df.guess >= lower) & (df.guess <= upper)]
+    return df
+
+
 def better_than_sample_median(df_all):
     betterBars = []
     equalBars = []
@@ -45,6 +56,7 @@ def better_than_sample_median(df_all):
         how_much_better_than_median = []
         how_much_better_than_mean = []
         df = df_all[df_all.dots == d]
+        df = remove_outliers(df, d)
         participants = df.code.values
         within = 0
 
@@ -160,9 +172,13 @@ def better_than_sample_median(df_all):
     labels.extend(labels_lines)
     plt.legend(handles, labels, loc='upper left', bbox_to_anchor=(1, 1), ncol=1)
     plt.tight_layout()
+
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    fig.savefig('../plots/FigS4.png', transparent=True, dpi=300)
-    fig.savefig('../plots/FigS4.pdf', transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS4.png'), transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS4.pdf'), transparent=True, dpi=300)
     plt.show()
 
 

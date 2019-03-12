@@ -221,32 +221,40 @@ def plot_aggregates(df_alld):
     axes[4].plot(np.array(avg_col_error_mean)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[5].plot(np.array(avg_mean_rel_error)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[6].plot(np.array(avg_better_than_mean)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
+    print('average bonuses:', np.array(avg_bonus)/5)
 
     # plotting paraphernalia
     handles, labels = axes[3].get_legend_handles_labels()
     leg = plt.figlegend(handles, labels, loc=(0.78,0.27), prop={'size': 13})
     leg.set_title("Legend", prop = {'size':'x-large'})
-    txtA = fig.text(0.162, .99, 'A', fontsize='xx-large', ha='center')
-    txtB = fig.text(0.402, .99, 'B', fontsize='xx-large', ha='center')
-    txtC = fig.text(0.642, .99, 'C', fontsize='xx-large', ha='center')
-    txtD = fig.text(0.885, .99, 'D', fontsize='xx-large', ha='center')
-    txtv = fig.text(0.525, .0, 'v', fontsize='xx-large', ha='center')
-    x_axis_labels = ['0', '1', '3', '9']  # rename xticks
-    plt.xticks([i for i in range(4)], x_axis_labels, fontsize='x-large',)
+    txtA = fig.text(0.162, .99, 'A', fontsize='xx-large', fontweight='bold', ha='center')
+    txtB = fig.text(0.402, .99, 'B', fontsize='xx-large', fontweight='bold', ha='center')
+    txtC = fig.text(0.642, .99, 'C', fontsize='xx-large', fontweight='bold', ha='center')
+    txtD = fig.text(0.885, .99, 'D', fontsize='xx-large', fontweight='bold', ha='center')
+    txtv = fig.text(0.525, .0, 'v', fontsize='xx-large', fontweight='bold', ha='center')
+
     # set y-labels
-    axes[0].set_ylabel('Collective error of median', fontsize='x-large')
-    axes[1].set_ylabel('Median individual error', fontsize='x-large')
-    axes[2].set_ylabel('Better than median', fontsize='x-large')
-    axes[3].set_ylabel('Fraction winning a bonus', fontsize='x-large')
-    axes[4].set_ylabel('Collective error of mean', fontsize='x-large')
-    axes[5].set_ylabel('Mean individual error', fontsize='x-large')
-    axes[6].set_ylabel('Better than mean', fontsize='x-large')
+    axes[0].set_ylabel('Collective error of median', fontsize='xx-large')
+    axes[1].set_ylabel('Median individual error', fontsize='xx-large')
+    axes[2].set_ylabel('Better than median', fontsize='xx-large')
+    axes[3].set_ylabel('Fraction winning a bonus', fontsize='xx-large')
+    axes[4].set_ylabel('Collective error of mean', fontsize='xx-large')
+    axes[5].set_ylabel('Mean individual error', fontsize='xx-large')
+    axes[6].set_ylabel('Better than mean', fontsize='xx-large')
     # remove small ticks
     for i in [1,2,3,5,6]:
         axes[i].tick_params(axis="y", length=0)
     for i in range(3):
         axes[i].set_xticklabels('')
         axes[i].tick_params(axis="x", length=0)
+    # rename xticks
+    x_axis_labels = ['', '0', '1', '3', '9', '']
+    for i in range(3, 7):
+        axes[i].set_xticklabels(x_axis_labels, fontdict={'fontsize': 14})
+    # resize yticks
+    axes[0].set_yticklabels(['','0.0','0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8'], fontdict={'fontsize': 14})
+    axes[4].set_yticklabels(['','0.0','0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8'], fontdict={'fontsize': 14})
+
     plt.tight_layout()
 
     if not os.path.exists(PLOTS_DIR):

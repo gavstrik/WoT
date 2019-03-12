@@ -33,8 +33,8 @@ def plot_stats(df_all):
     colors = ['#fdae6b', '#f16913', '#d94801', '#7f2704']
 
     # global figure settings:
-    fig, axarr = plt.subplots(nrows=5, sharex=True, figsize=(8.7, 6.3))
-    plt.xlabel('log(estimate)', fontsize='x-large')
+    fig, axarr = plt.subplots(nrows=5, sharex=True, figsize=(11.4, 7))
+    plt.xlabel('log(estimate)', fontsize=18)
     # plt.rcParams.update({"yticklabel.direction" : "out"})
 
     # plot
@@ -43,20 +43,10 @@ def plot_stats(df_all):
         df_i = df_all[df_all['dots'] == true_dots]
         df_control = df_i[df_i['views'] == 0]
         control_guesses = remove_outliers(df_control.guess.values, true_dots)
-        # # convert to pounds:
-        if true_dots == 1233:
-            control_guesses = control_guesses*2.20462
         true_number_of_dots = true_dots
         for view_idx, view in enumerate(views):
             df = df_i[df_i['views'] == view]
             guesses = remove_outliers(df.guess.values, true_dots)
-
-            # convert to pounds:
-            if true_dots == 1233:
-                guesses = guesses*2.20462
-                true_number_of_dots = 2718
-            else:
-                true_number_of_dots = true_dots
 
             # calculate the p-value using the two-sided Mann-Whitney U test
             _, pvalue = mannwhitneyu(control_guesses, guesses)
@@ -91,21 +81,22 @@ def plot_stats(df_all):
         # plotting paraphernalia for the subfigure for the number of dots
         axarr[true_dots_idx].set_yticks([-0.5, 0, 1, 2, 3, 3.5])
         axarr[true_dots_idx].tick_params(axis="y", length=0)  # remove small ticks
-        axarr[true_dots_idx].set_yticklabels(lv[true_dots_idx], fontsize='x-large', ha='left')
+        axarr[true_dots_idx].set_yticklabels(lv[true_dots_idx], fontsize=14, ha='left')
         axarr[true_dots_idx].tick_params(axis='y', direction='out', pad=120)
 
         # make secondary yaxis in order to write image label
         axr = axarr[true_dots_idx].twinx()
-        axr.set_ylabel('d='+str(true_number_of_dots), fontsize='x-large')
+        axr.set_ylabel('d='+str(true_number_of_dots), fontsize=18)
         plt.yticks([])  # removing axis numbers with empty list
 
     for i in range(5):
         axarr[i].tick_params(axis="x", length=0)
         axarr[i].grid(True)
 
-    # fig.align_ylabels()
-    # axarr[0].set_xlim([3.7, 7.7])  # set x-axis dimensions
-    axarr[0].set_xlim([3.7, 8.5])  # set x-axis dimensions
+    axarr[4].set_xticklabels(['','4.0','4.5','5.0','5.5','6.0','6.5','7.0','7.5',''], fontdict={'fontsize': 14})
+
+
+    axarr[0].set_xlim([3.7, 7.8])  # set x-axis dimensions
     plt.tight_layout()
 
     # Remember: save as pdf and transparent=True for Adobe Illustrator

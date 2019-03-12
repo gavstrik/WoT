@@ -1,8 +1,10 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 plt.rcParams["font.family"] = "sans-serif"
+PLOTS_DIR = '../plots'
 
 
 """
@@ -58,8 +60,14 @@ def histograms(df):
     plt.xlabel('error rate btw. estimate and sample mean/median')
     plt.ylabel('fraction of participants')
     plt.tight_layout()
+
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig('../plots/FigS5.pdf', transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS5.png'), transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS5.pdf'), transparent=True, dpi=300)
+
     plt.show()
 
 
@@ -70,5 +78,6 @@ for datafile in datafiles:
     df_all = df_all.append(df)
 df_all = df_all[df_all.method == 'history']
 df_all = df_all[df_all.views != 0]
+df_all = df_all[df_all.views != 27]
 
 histograms(df_all)
