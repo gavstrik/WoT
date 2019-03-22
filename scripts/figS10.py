@@ -1,111 +1,110 @@
+import os
 import numpy as np
 import pandas as pd
+from scipy.stats import mannwhitneyu
 import matplotlib.pyplot as plt
-import random
-import matplotlib
-# plt.rcParams["font.weight"] = "bold"
-plt.rcParams["font.family"] = "sans-serif"
 
+plt.rcParams["font.family"] = "sans-serif"
+PLOTS_DIR = '../plots'
 
 """
-here we simulate the model: subjects have a 'hunch'
-(taken from the control treatment), see v previous guesses, take the mean
-of all numbers and report it as their estimate.
+This python script plotting summary statistics for
+the file-condition.
 """
 
 datafiles = [
-            '../data/dots/all_dots_trimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
             ]
 
-tlength = 400
-simuls = 1000
-random.seed(4)
 
-def means_and_medians(df_t):
-    sessions = df_t['session'].unique()
-    true_medians = []
-    true_means = []
-    true_stds = []
-    for v in [0,1,3,9]:
-        true_medians.append(df_t[df_t.views == v]['guess'].median())
-        true_means.append(df_t[df_t.views == v]['guess'].mean())
-        true_stds.append(df_t[df_t.views == v]['guess'].std())
-    return true_medians, true_means, true_stds
+# outliers with an error rate above 10 are removed
+def remove_outliers(data, true_number_of_dots):
+    max_error_rate = 10
+    lower = true_number_of_dots/10
+    upper = max_error_rate*true_number_of_dots + true_number_of_dots
+    newdata = [i for i in data if i >= lower and i <= upper]
+    return np.array(newdata)
 
 
-# main code
+def plot_stats(df_all):
+    colors = ['#fdae6b', '#f16913', '#d94801', '#7f2704']
+
+    # global figure settings:
+    fig, axarr = plt.subplots(nrows=1, figsize=(11.4,2.5))
+    plt.xlabel('log(estimate)', fontsize=18)
+
+    # plot
+    lv = []
+    lv.append('')
+    df_control = df_all[df_all.v == 0]
+    control_guesses = remove_outliers(df_control.guess.values, 1097)
+    true_number_of_dots = 1097
+    for view_idx, m in enumerate([(0, 'history'), (9, 'file'), (9, 'history')]):
+        df = df_all[(df_all.v == m[0]) & (df_all.method == m[1])]
+        guesses = remove_outliers(df.guess.values, true_number_of_dots)
+        if m == (9, 'file'):
+            g = remove_outliers(df.guess.values, true_number_of_dots)
+
+        # calculate the p-value using the two-sided Mann-Whitney U test
+        _, pvalue = mannwhitneyu(control_guesses, guesses)
+        if 0.01 < pvalue <= 0.05:
+            lv.append(str(m[1])+', v='+str(m[0])+' (N='+str(len(guesses))+')*')
+        elif 0.001 < pvalue <= 0.01:
+            lv.append(str(m[1])+', v='+str(m[0])+' (N='+str(len(guesses))+')**')
+        elif pvalue <= 0.001:
+            lv.append(str(m[1])+', v='+str(m[0])+' (N='+str(len(guesses))+')***')
+        else:
+            lv.append(str(m[1])+', v='+str(m[0])+' (N='+str(len(guesses))+')')
+        print(m[0], m[1], pvalue)
+        if m == (9, 'history'):
+            print('comparing file with history:', mannwhitneyu(guesses, g))
+
+        # calculate quartiles and deciles
+        quan_min = np.log(np.quantile(guesses, 0.25))
+        quan_max = np.log(np.quantile(guesses, 0.75))
+        dec_min = np.log(np.quantile(guesses, 0.1))
+        dec_max = np.log(np.quantile(guesses, 0.9))
+
+        # plot the thread stats for the given number of views
+        axarr.plot(np.log(np.median(guesses)),
+                             [view_idx], 'o', markersize=9, c=colors[view_idx])
+        axarr.plot(np.log(np.mean(guesses)),
+                             [view_idx], 'v', markersize=7, c=colors[view_idx])
+        axarr.hlines(y=view_idx, xmin=quan_min, xmax=quan_max,
+                               linewidth=4, color=colors[view_idx])
+        axarr.hlines(y=view_idx, xmin=dec_min, xmax=dec_max,
+                               linewidth=2, color=colors[view_idx])
+
+    # plotting paraphernalia for the subfigure for the number of dots
+    axarr.set_yticks([-0.5, 0, 1, 2, 2.5])
+    axarr.tick_params(axis="y", length=0)  # remove small ticks
+    axarr.set_yticklabels(lv, fontsize=14, ha='left')
+    axarr.tick_params(axis='y', direction='out', pad=175)
+    axarr.axvline(x=np.log(true_number_of_dots),
+                               linewidth=2, color='#34495e')
+    axr = axarr.twinx()
+    axr.set_ylabel('d='+str(true_number_of_dots), fontsize=18)
+    plt.yticks([])  # removing axis numbers with empty list
+    axarr.tick_params(axis="x", length=0)
+    axarr.grid(True)
+    axarr.set_xticklabels(['','5.5','6.0','6.5','7.0','7.5','8',''], fontdict={'fontsize': 14})
+    axarr.set_xlim([5.5, 8])  # set x-axis dimensions
+    plt.tight_layout()
+
+    # Remember: save as pdf and transparent=True for Adobe Illustrator
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS10.png'), transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS10.pdf'), transparent=True, dpi=300)
+    plt.show()
+
+
+# load the data
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
-df_all = df_all[df_all['method'] == 'history']
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
+df_all = df_all[(df_all.session == '699h8rze') | (df_all.session == 'hal5jdl0') | (df_all.session == 'wv4xujg7')]
 
-
-fig, axes = plt.subplots(nrows=2, ncols=3, sharex=True, figsize=(11,6))
-axes[-1, -1].axis('off')  # do not show the last subplot
-axes = axes.flatten()
-colors = ['#6a51a3', '#d94801']
-
-for position, d in enumerate([55, 148, 403, 1097, 1233]):
-    # define the control group
-    df = df_all[df_all['dots'] == d]
-    true_medians, true_means, _ = means_and_medians(df)
-    df_control = df[df.views == 0]
-    control = df_control['guess'].values
-
-    # simluate with many runs
-    medians = []
-    medians.append(np.median(control))
-    means = []
-    means.append(np.mean(control))
-
-    for v in [1, 3, 9]:
-        m = []
-        md = []
-
-        for i in range(simuls):
-            random_draws = random.sample(list(control), tlength)
-            thread = []
-            thread.extend(random_draws[:v])  # fill thread with the first v samples
-
-            # simulate a thread of length tlength
-            for g in range(v, tlength):
-                sum_of_seen_history = sum(thread[-v:])  # these are the previous estimates
-                own_hunch = random_draws[g]
-                final_guess = 1 / (v + 1) * (own_hunch + sum_of_seen_history) # add your own guess
-                thread.append(final_guess)
-
-            m.append(np.mean(thread))  # store the new number in the m-thread
-            md.append(np.median(thread))  # store the new number in the md-thread
-
-        medians.append(np.mean(md))
-        means.append(np.mean(m))
-
-    axes[position].plot(medians, marker='o', linestyle='--', c=colors[1], label='simulated medians')
-    axes[position].plot(true_medians, marker='o', linestyle='-', c=colors[1], label='true medians')
-    axes[position].plot(means, marker='o', linestyle='--', c=colors[0], label='simulated means')
-    axes[position].plot(true_means, marker='o', linestyle='-', c=colors[0], label='true means')
-
-# plotting paraphernalia
-handles, labels = axes[0].get_legend_handles_labels()
-plt.figlegend(handles, labels, loc=(0.72,0.27), title='legend', fontsize='large', ncol=1)
-plt.tick_params(axis="x", length=0)  # remove the small ticks
-x_axis_labels = ['0', '1', '3', '9']  # rename xticks
-plt.xticks([i for i in range(4)], x_axis_labels)
-
-# remove small ticks
-for i in range(5):
-    axes[i].tick_params(axis="x", length=0)
-
-axes[0].set_title('d = 55', fontsize='large', fontweight='bold')
-axes[1].set_title('d = 148', fontsize='large', fontweight='bold')
-axes[2].set_title('d = 403', fontsize='large', fontweight='bold')
-axes[3].set_title('d = 1097', fontsize='large', fontweight='bold')
-axes[4].set_title('d = 1233', fontsize='large', fontweight='bold')
-txtv = fig.text(0.54, .0, 'v', fontsize='x-large', ha='center')
-plt.tight_layout()
-# Remember: save as pdf and transparent=True for Adobe Illustrator
-fig.savefig('../plots/FigS10.png', transparent=True, bbox_extra_artists=(txtv,),
-            bbox_inches='tight', dpi=300)
-plt.show()
+plot_stats(df_all)

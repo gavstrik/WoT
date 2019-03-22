@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
-# plt.rcParams["font.weight"] = "bold"
+
 plt.rcParams["font.family"] = "sans-serif"
 PLOTS_DIR = '../plots'
 
@@ -13,8 +13,8 @@ Plotting the probability of being better than the mean of estimates seen.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 
 
@@ -55,7 +55,7 @@ def better_than_sample_median(df_all):
         better_than_mean = []
         how_much_better_than_median = []
         how_much_better_than_mean = []
-        df = df_all[df_all.dots == d]
+        df = df_all[df_all.d == d]
         df = remove_outliers(df, d)
         participants = df.code.values
         within = 0
@@ -185,9 +185,9 @@ def better_than_sample_median(df_all):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.read_csv(datafile)
-    df_all = df_all.append(df)
-
+    df = pd.read_excel(datafile)
+    df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
-df_all = df_all[df_all.views != 0]
+
+df_all = df_all[df_all.v != 0]
 better_than_sample_median(df_all)

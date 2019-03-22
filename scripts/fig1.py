@@ -13,8 +13,8 @@ the WoT-experiments on Amazon Mechanical Turk.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 
 
@@ -33,19 +33,19 @@ def plot_stats(df_all):
     colors = ['#fdae6b', '#f16913', '#d94801', '#7f2704']
 
     # global figure settings:
-    fig, axarr = plt.subplots(nrows=5, sharex=True, figsize=(11.4, 7))
+    fig, axarr = plt.subplots(nrows=5, sharex=True, figsize=(11.4, 8))
     plt.xlabel('log(estimate)', fontsize=18)
     # plt.rcParams.update({"yticklabel.direction" : "out"})
 
     # plot
     lv = [[''] for i in range(5)]
     for true_dots_idx, true_dots in enumerate(dots):
-        df_i = df_all[df_all['dots'] == true_dots]
-        df_control = df_i[df_i['views'] == 0]
+        df_i = df_all[df_all.d == true_dots]
+        df_control = df_i[df_i.v == 0]
         control_guesses = remove_outliers(df_control.guess.values, true_dots)
         true_number_of_dots = true_dots
         for view_idx, view in enumerate(views):
-            df = df_i[df_i['views'] == view]
+            df = df_i[df_i.v == view]
             guesses = remove_outliers(df.guess.values, true_dots)
 
             # calculate the p-value using the two-sided Mann-Whitney U test
@@ -111,9 +111,8 @@ def plot_stats(df_all):
 # load the data
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
-
-# only plot the data for the history sessions
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
+
 plot_stats(df_all)

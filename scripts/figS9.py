@@ -1,21 +1,32 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import *
-import matplotlib.colors as colors
-import matplotlib.cm as cmx
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
+import random
+from scipy import stats
+import statsmodels.stats.api as sms
+from matplotlib.ticker import FuncFormatter
 import matplotlib
 # plt.rcParams["font.weight"] = "bold"
 plt.rcParams["font.family"] = "sans-serif"
+PLOTS_DIR = '../plots'
 
 """
-This python script plots a spanning tree / hamilton tree from a WoT session
+model simulation + calculation of social influence score:
+subjects have an initial "hunch" (taken from the control treatment),
+see v previous guesses, take the mean of all numbers and report it as
+their estimate.
 """
 
-file = pd.read_csv('../data/ox/14v9gvem_untrimmed_anonymous.csv')
+datafiles = [
+            '../data/dots/all_dots_trimmed_anonymous.csv',
+            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            ]
+
+random.seed(4)
+tlength = 400
 noise = 0.01
+simuls = 1000
 
 
 def social_influence_scores(g, guess_vector):
@@ -25,119 +36,140 @@ def social_influence_scores(g, guess_vector):
     return scores
 
 
-# function for finding nearest guess
-def find_nearest(array, value):
-    array = np.asarray(array)
-    # because argmin() always returns the first number in the case of multiple
-    # minimum values, we are good with the code as is:
-    idx = (np.abs(array - value)).argmin()
-    return (idx, array[idx])
+# mean relative error
+def MRE(targets, predictions):
+    predictions = np.array(predictions)
+    return np.mean(abs((targets - predictions)/targets))
 
 
-def calculate_spanning_tree(df):
-    si = {}  # initialize dict for the total social influence score
-    si_followed = []  # array for the social influence of the nearest precusor
-    views = df['views'].unique().item()
-    ids = df['id'].values
-    near = []  # list of tuples containing nearest estimates
-    ords = []  # list of tuples containing nearest orders
-    for id in ids:
-        own_order = df[df['id'] == id].index.item()
-        own_guess = df[df['id'] == id]['guess'].item()
-        seen_ids = df[df['id'] == id]['hist'].item()
-        seen_ids = pd.eval(seen_ids)
-        seen_ids = [h for h in seen_ids if h in ids]
-        seen_guesses = [df[df['id'] == g]['guess'].item() for g in seen_ids]
-        if not seen_guesses:
-            si_followed.append(0)
-            near.append((own_guess, own_guess))
-            ords.append((own_order, own_order))
-            continue
-        else:
-            si_followed.append(max(social_influence_scores(own_guess, seen_guesses)))
+def split_list(sorted_list):
+    half = int(len(sorted_list)/2)
+    return sorted_list[:half], sorted_list[half:]
 
-        # find the nearest guess
-        nearest = find_nearest(seen_guesses, own_guess)
 
-        # update the social influence values of the seen ids:
-        for pos, g in enumerate(seen_ids):
+def find_social_influence(thread, histories):
+    # initialize dict for social influence
+    si = {}
+
+    for position, t in enumerate(thread):
+        seen_guesses = histories[position]
+
+        # update the social influence values of the seen guesses:
+        for pos, g in enumerate(seen_guesses):
             if not g in si:
-                si[g] = social_influence_scores(own_guess, seen_guesses)[pos]
+                si[g] = social_influence_scores(t, seen_guesses)[pos]
             else:
-                si[g] += social_influence_scores(own_guess, seen_guesses)[pos]
+                si[g] += social_influence_scores(t, seen_guesses)[pos]
 
-        followed_player_order = df[df['id'] == seen_ids[nearest[0]]].index.item()
-
-        # append tuples of nearest guesses and orders
-        near.append((own_guess, nearest[1]))
-        ords.append((own_order, followed_player_order))
-    # print(ords)
-
-    # make a new list for the social influence score of all seen ids
+    # make a new list for the social influence of all seen ids
     infl = []
-    for id in ids:
-        if id in si:
-            infl.append(si[id])
-        else:
-            infl.append(0)
+    si[thread[-1]] = 0  # the last id has always social influence = 0
+    for t in thread:
+        infl.append(si[t])
 
-    return infl, near, ords, si_followed
+    return infl
 
 
-def NonLinCdict(steps, hexcol_array):
-    cdict = {'red': (), 'green': (), 'blue': ()}
-    for s, hexcol in zip(steps, hexcol_array):
-        rgb =matplotlib.colors.hex2color(hexcol)
-        cdict['red'] = cdict['red'] + ((s, rgb[0], rgb[0]),)
-        cdict['green'] = cdict['green'] + ((s, rgb[1], rgb[1]),)
-        cdict['blue'] = cdict['blue'] + ((s, rgb[2], rgb[2]),)
-    return cdict
+def generate_simulation_data(df_all):
+    fig, ax = plt.subplots(1,1)
+    colors = ['#d94801', '#6a51a3']
+
+    MREs = []
+    MREs_i_CI = []
+    MREs_o_CI = []
+    for position, d in enumerate([55,148,403,1097,1233]):
+        # define the control group
+        df = df_all[df_all['dots'] == d]
+        df_control = df[df.views == 0]
+        control = df_control['guess'].values
+        # print('\n', d, bs.bootstrap(np.array(control), stat_func=bs_stats.mean))
+
+        for v in [3, 9]:
+            print("dots: {} views: {}".format(d, v))
+            mi = []
+            mo = []
+            # simluate with 'simul' runs:
+            for i in range(simuls):
+                random_draws = random.sample(list(control), tlength)
+                thread = []
+                histories = []
+                thread.extend(random_draws[:v])  # fill with the first v samples
+                histories.extend([random_draws[:v] for i in range(v)])  # fill with the first v histories
+
+                # simulate a thread of length tlength
+                for g in range(v, tlength):
+                    history = thread[-v:]  # these are the previous estimates
+                    own_hunch = random_draws[g]
+                    final_guess = 1 / (v + 1) * (own_hunch + sum(history))
+                    thread.append(final_guess)
+                    histories.append(history)
+
+                influence = find_social_influence(thread, histories)
+
+                # make tuples of guesses and their influences
+                inf_tup = [(i, influence[pos]) for pos, i in enumerate(thread)]
+
+                # sort, split, find mean relative errors, and append:
+                tup_sorted = sorted(inf_tup, key=lambda tup: tup[1])
+                low, high = split_list(tup_sorted)
+                guess_influencers, _ = zip(*high)
+                guess_others, _ = zip(*low)
+                MRE_i = MRE(d, np.array(guess_influencers))
+                MRE_o = MRE(d, np.array(guess_others))
+                mi.append(MRE_i)
+                mo.append(MRE_o)
 
 
-def plotting_tree(df, views, method):
-    influence, near, ords, si_followed = calculate_spanning_tree(df)
-    # print('LEN:', len(df), len(influence), len(near), len(ords), len(si_followed))
-    session = df['session'].unique().item()
-    guesses = df['guess'].values
-    true_number_of_dots = df['dots'].unique().item()
-    agg_colors = ["#34495e",'#6a51a3', '#d94801']
+            # after simul repetitions, find mean values and append:
+            mean_mi, mean_mo = np.mean(mi), np.mean(mo)
+            MREs.append((mean_mi, mean_mo))
 
-    # plot and color initializations
-    plt.figure(figsize=(5,11))
-    colmap = 'Set1_r'
-    mycmap = cm = plt.get_cmap(colmap)
-    cNorm = colors.Normalize(vmin=0, vmax=max(influence))
-    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=mycmap)
+            # after simul repetitions, find the 97,5 % percentile and
+            # the 2,5 % percentile of mi and mo, which define confidence
+            # intervals around the mean (mean_mi and mean_mo):
+            MREs_i_CI.append((np.percentile(mi,2.5), np.percentile(mi,97.5)))
+            MREs_o_CI.append((np.percentile(mo,2.5), np.percentile(mo,97.5)))
 
-    # plot lines btw nearest guesses, colored according to their influence
-    ids = df['id'].values
-    for pos, id in enumerate(ids):
-        colorVal = scalarMap.to_rgba(si_followed[pos])
-        plt.plot(near[pos], ords[pos], zorder=-1, linewidth=3.0, color=colorVal)
+    # unpack values related to high-influencers
+    error_inf, _ = zip(*MREs)
+    inf_lower, inf_upper = zip(*MREs_i_CI)
 
-    # plot the guesses colored with their total social influence score:
-    plt.scatter(guesses, [i for i in range(len(guesses))], s=20, c=influence, cmap=mycmap)
+    # unpack values related to low-influencers
+    _, error_ninf = zip(*MREs)
+    ninf_lower, ninf_upper = zip(*MREs_o_CI)
 
-    # add the moving average and the moving median to the plot
-    ma = []
-    me = []
-    for g in range(1, len(guesses)+1):
-        guess_list = guesses[:g]
-        ma.append(np.mean(guess_list))
-        me.append(np.median(guess_list))
-    plt.plot(ma, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[1])
-    plt.plot(me, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[2])
+    # plot
+    x = np.arange(10.0)
+    ax.errorbar(x, error_inf, yerr=[inf_lower,inf_upper], capsize=5, fmt='o', c=colors[1], label='influencers')
+    ax.errorbar(x, error_ninf, yerr=[ninf_lower,ninf_upper], capsize=5, fmt='o',c=colors[0], label='non-influencers')
 
-    plt.colorbar(shrink=0.4)
-    plt.xlim(0, 10000)
-    plt.axvline(x=true_number_of_dots, linewidth=.5, color=agg_colors[0])
-    plt.xlabel('estimate')
+    x_axis_labels = ['55 dots\n3 views', '55 dots\n9 views',
+                     '148 dots\n3 views', '148 dots\n9 views',
+                     '403 dots\n3 views', '403 dots\n9 views',
+                     '1097 dots\n3 views', '1097 dots\n9 views',
+                     '1233 kilo\n3 views', '1233 kilo\n9 views']
+    plt.xticks([i for i in range(10)], x_axis_labels, rotation=90)
+    ax.yaxis.set_major_formatter(FuncFormatter('{0:.0%}'.format))
+    plt.ylabel('Mean relative percentage error')
+    legend = ax.legend(title='Simulation results', loc='upper left')
     plt.tight_layout()
-    # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig('../plots/FigS9.png', transparent=True, dpi=300)
-    plt.show()
 
+    if not os.path.exists(PLOTS_DIR):
+        os.makedirs(PLOTS_DIR)
+
+    # Remember: save as pdf and transparent=True for Adobe Illustrator
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS9.png'), transparent=True, bbox_inches='tight', dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'figS9.pdf'), transparent=True, bbox_inches='tight', dpi=300)
+
+    plt.show()
+    print('average difference btw influencers and non-influencers =',
+          np.mean(np.array(error_ninf)-np.array(error_inf)))
 
 # main code
-df = pd.DataFrame(file)
-plotting_tree(df, df['views'].unique().item(), df['method'].unique().item())
+df_all = pd.DataFrame()
+for datafile in datafiles:
+    df = pd.DataFrame(pd.read_csv(datafile))
+    df_all = df_all.append(df)
+df_all = df_all[df_all.method == 'history']
+
+generate_simulation_data(df_all)

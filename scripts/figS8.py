@@ -1,139 +1,126 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import *
-import matplotlib.colors as colors
-import matplotlib.cm as cmx
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
+import random
+import matplotlib
+# plt.rcParams["font.weight"] = "bold"
+plt.rcParams["font.family"] = "sans-serif"
+PLOTS_DIR = '../plots'
+
 
 """
-This python script plots a spanning tree / hamilton tree from a WoT session
+here we simulate the model: subjects have a 'hunch'
+(taken from the control treatment), see v previous guesses, take the mean
+of all numbers and report it as their estimate.
 """
 
-file = pd.read_csv('../data/dots/wv4xujg7_untrimmed_anonymous.csv')
-noise = 0.01
+datafiles = [
+            '../data/dots.xls',
+            '../data/ox.xls',
+            ]
+
+tlength = 400
+simuls = 1000
+random.seed(4)
+
+# outliers with an error rate above 10 are removed
+def remove_outliers(data, true_number_of_dots):
+    max_error_rate = 10
+    lower = true_number_of_dots/10
+    upper = max_error_rate*true_number_of_dots + true_number_of_dots
+    newdata = [i for i in data if i >= lower and i <= upper]
+    return np.array(newdata)
 
 
-def social_influence_scores(g, guess_vector):
-    influences = 1/np.array([abs(g-h) + noise for h in guess_vector])
-    normalizer = sum(influences)
-    scores = influences/normalizer
-    return scores
+def means_and_medians(df_t):
+    sessions = df_t.session.unique()
+    true_medians = []
+    true_means = []
+    true_stds = []
+    for v in [0,1,3,9]:
+        data = remove_outliers(df_t[df_t.v == v]['guess'], df_t.d.unique().item())
+        true_medians.append(np.median(data))
+        true_means.append(np.mean(data))
+        true_stds.append(np.std(data))
+    return true_medians, true_means, true_stds
 
 
-# function for finding nearest guess
-def find_nearest(array, value):
-    array = np.asarray(array)
-    # because argmin() always returns the first number in the case of multiple
-    # minimum values, we are good with the code as is:
-    idx = (np.abs(array - value)).argmin()
-    return (idx, array[idx])
+# start here:
+df_all = pd.DataFrame()
+for datafile in datafiles:
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
+df_all = df_all[df_all.method == 'history']
 
+fig, axes = plt.subplots(nrows=2, ncols=3, sharex=True, figsize=(11,6))
+axes[-1, -1].axis('off')  # do not show the last subplot
+axes = axes.flatten()
+colors = ['#6a51a3', '#d94801']
 
-def calculate_spanning_tree(df):
-    si = {}  # initialize dict for the total social influence score
-    si_followed = []  # array for the social influence of the nearest precusor
-    views = df['views'].unique().item()
-    ids = df['id'].values
-    near = []  # list of tuples containing nearest estimates
-    ords = []  # list of tuples containing nearest orders
-    for id in ids:
-        own_order = df[df['id'] == id].index.item()
-        own_guess = df[df['id'] == id]['guess'].item()
-        seen_ids = df[df['id'] == id]['hist'].item()
-        seen_ids = pd.eval(seen_ids)
-        seen_ids = [h for h in seen_ids if h in ids]
-        seen_guesses = [df[df['id'] == g]['guess'].item() for g in seen_ids]
-        if not seen_guesses:
-            si_followed.append(0)
-            near.append((own_guess, own_guess))
-            ords.append((own_order, own_order))
-            continue
-        else:
-            si_followed.append(max(social_influence_scores(own_guess, seen_guesses)))
+for position, d in enumerate([55, 148, 403, 1097, 1233]):
+    # define the control group
+    df = df_all[df_all['d'] == d]
+    true_medians, true_means, _ = means_and_medians(df)
+    df_control = df[df.v == 0]
+    control = remove_outliers(df_control.guess.values, d)
 
-        # find the nearest guess
-        nearest = find_nearest(seen_guesses, own_guess)
+    # simluate with many runs
+    medians = []
+    medians.append(np.median(control))
+    means = []
+    means.append(np.mean(control))
 
-        # update the social influence values of the seen ids:
-        for pos, g in enumerate(seen_ids):
-            if not g in si:
-                si[g] = social_influence_scores(own_guess, seen_guesses)[pos]
-            else:
-                si[g] += social_influence_scores(own_guess, seen_guesses)[pos]
+    for v in [1, 3, 9]:
+        m = []
+        md = []
 
-        followed_player_order = df[df['id'] == seen_ids[nearest[0]]].index.item()
+        for i in range(simuls):
+            random_draws = random.sample(list(control), tlength)
+            thread = []
+            thread.extend(random_draws[:v])  # fill thread with the first v samples
 
-        # append tuples of nearest guesses and orders
-        near.append((own_guess, nearest[1]))
-        ords.append((own_order, followed_player_order))
+            # simulate a thread of length tlength
+            for g in range(v, tlength):
+                sum_of_seen_history = sum(thread[-v:])  # these are the previous estimates
+                own_hunch = random_draws[g]
+                final_guess = 1 / (v + 1) * (own_hunch + sum_of_seen_history) # add your own guess
+                thread.append(final_guess)
 
-    # make a new list for the social influence score of all seen ids
-    infl = []
-    for id in ids:
-        if id in si:
-            infl.append(si[id])
-        else:
-            infl.append(0)
+            m.append(np.mean(thread))  # store the new number in the m-thread
+            md.append(np.median(thread))  # store the new number in the md-thread
 
-    return infl, near, ords, si_followed
+        medians.append(np.mean(md))
+        means.append(np.mean(m))
 
+    axes[position].plot(medians, marker='o', linestyle='--', c=colors[1], label='simulated medians')
+    axes[position].plot(true_medians, marker='o', linestyle='-', c=colors[1], label='true medians')
+    axes[position].plot(means, marker='o', linestyle='--', c=colors[0], label='simulated means')
+    axes[position].plot(true_means, marker='o', linestyle='-', c=colors[0], label='true means')
 
-def NonLinCdict(steps, hexcol_array):
-    cdict = {'red': (), 'green': (), 'blue': ()}
-    for s, hexcol in zip(steps, hexcol_array):
-        rgb =matplotlib.colors.hex2color(hexcol)
-        cdict['red'] = cdict['red'] + ((s, rgb[0], rgb[0]),)
-        cdict['green'] = cdict['green'] + ((s, rgb[1], rgb[1]),)
-        cdict['blue'] = cdict['blue'] + ((s, rgb[2], rgb[2]),)
-    return cdict
+# plotting paraphernalia
+handles, labels = axes[0].get_legend_handles_labels()
+plt.figlegend(handles, labels, loc=(0.72,0.27), title='legend', fontsize='large', ncol=1)
+plt.tick_params(axis="x", length=0)  # remove the small ticks
+x_axis_labels = ['0', '1', '3', '9']  # rename xticks
+plt.xticks([i for i in range(4)], x_axis_labels)
 
+# remove small ticks
+for i in range(5):
+    axes[i].tick_params(axis="x", length=0)
 
-def plotting_tree(df, views, method):
-    influence, near, ords, si_followed = calculate_spanning_tree(df)
-    session = df['session'].unique().item()
-    guesses = df['guess'].values
-    true_number_of_dots = df['dots'].unique().item()
-    agg_colors = ["#34495e",'#6a51a3', '#d94801']
+axes[0].set_title('d = 55', fontsize='large', fontweight='bold')
+axes[1].set_title('d = 148', fontsize='large', fontweight='bold')
+axes[2].set_title('d = 403', fontsize='large', fontweight='bold')
+axes[3].set_title('d = 1097', fontsize='large', fontweight='bold')
+axes[4].set_title('d = 1233', fontsize='large', fontweight='bold')
+txtv = fig.text(0.54, .0, 'v', fontsize='x-large', ha='center')
+plt.tight_layout()
 
-    # plot and color initializations
-    plt.figure(figsize=(3,11))
-    colmap = 'magma_r'
-    mycmap = cm = plt.get_cmap(colmap, 10)
-    cNorm = colors.Normalize(vmin=0, vmax=max(influence))
-    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=mycmap)
+if not os.path.exists(PLOTS_DIR):
+    os.makedirs(PLOTS_DIR)
 
-    # plot lines btw nearest guesses, colored according to their influence
-    ids = df['id'].values
-    for pos, id in enumerate(ids):
-        colorVal = scalarMap.to_rgba(si_followed[pos])
-        plt.plot(near[pos], ords[pos], zorder=-1, linewidth=3.0, color=colorVal)
-
-    # plot the guesses colored with their total social influence score:
-    plt.scatter(guesses, [i for i in range(len(guesses))], s=20, c=influence, cmap=mycmap)
-
-    # add the moving average and the moving median to the plot
-    ma = []
-    me = []
-    for g in range(1, len(guesses)+1):
-        guess_list = guesses[:g]
-        ma.append(np.mean(guess_list))
-        me.append(np.median(guess_list))
-    plt.plot(ma, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[1])
-    plt.plot(me, [i for i in range(len(guesses))], linewidth=.5, c=agg_colors[2])
-
-    plt.colorbar(shrink=0.4)
-    plt.xlim(0, 3000)
-
-    plt.axvline(x=true_number_of_dots, linewidth=.5, color=agg_colors[0])
-    plt.xlabel('estimate')
-    plt.tight_layout()
-    # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig('../plots/FigS8.pdf', transparent=True, dpi=300)
-    plt.show()
-
-
-# main code
-df = pd.DataFrame(file)
-plotting_tree(df, df['views'].unique().item(), df['method'].unique().item())
+# Remember: save as pdf and transparent=True for Adobe Illustrator
+plt.savefig(os.path.join(PLOTS_DIR, 'figS8.png'), transparent=True, bbox_inches='tight', dpi=300)
+plt.savefig(os.path.join(PLOTS_DIR, 'figS8.pdf'), transparent=True, bbox_inches='tight', dpi=300)
+plt.show()

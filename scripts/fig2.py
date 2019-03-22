@@ -15,8 +15,8 @@ the collective becomes more accurate with increasing social information.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 
 
@@ -94,10 +94,10 @@ def plot_aggregates(df_alld):
         better_than_mean_CIs = []
         bonus = []
         bonus_CIs = []
-        df_all = df_alld[df_alld.dots == dots]
+        df_all = df_alld[df_alld.d == dots]
         N = 0
         for position, views in enumerate([0, 1, 3, 9]):
-            df = df_all[df_all.views == views]
+            df = df_all[df_all.v == views]
             untrimmed_guesses = df.guess.values
             guesses = remove_outliers(untrimmed_guesses, dots)
             N += len(guesses)
@@ -217,7 +217,7 @@ def plot_aggregates(df_alld):
     axes[0].plot(np.array(avg_col_error_median)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[1].plot(np.array(avg_median_rel_error)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[2].plot(np.array(avg_better_than_median)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
-    axes[3].plot(np.array(avg_bonus)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average'+' (N='+str(BigN)+')')
+    axes[3].plot(np.array(avg_bonus)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[4].plot(np.array(avg_col_error_mean)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[5].plot(np.array(avg_mean_rel_error)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
     axes[6].plot(np.array(avg_better_than_mean)/5, zorder=6, marker='o', linestyle='-', linewidth=3, markersize=8, color=colors[dots_idx+1], label='average')
@@ -225,8 +225,8 @@ def plot_aggregates(df_alld):
 
     # plotting paraphernalia
     handles, labels = axes[3].get_legend_handles_labels()
-    leg = plt.figlegend(handles, labels, loc=(0.78,0.27), prop={'size': 13})
-    leg.set_title("Legend", prop = {'size':'x-large'})
+    leg = plt.figlegend(handles, labels, loc=(0.77,0.3), prop={'size': 13})
+    # leg.set_title("Legend", prop = {'size':'x-large'})
     txtA = fig.text(0.162, .99, 'A', fontsize='xx-large', fontweight='bold', ha='center')
     txtB = fig.text(0.402, .99, 'B', fontsize='xx-large', fontweight='bold', ha='center')
     txtC = fig.text(0.642, .99, 'C', fontsize='xx-large', fontweight='bold', ha='center')
@@ -273,8 +273,7 @@ def plot_aggregates(df_alld):
 # load the data
 dataframe = pd.DataFrame()
 for datafile in datafiles:
-    dataframe = dataframe.append(pd.DataFrame(pd.read_csv(datafile)))
+    dataframe = dataframe.append(pd.DataFrame(pd.read_excel(datafile)), sort=True)
+dataframe = dataframe[dataframe.method == 'history']
 
-# only plot the data for the history sessions
-dataframe = dataframe[(dataframe['method'] == 'history')]
 plot_aggregates(dataframe)

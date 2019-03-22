@@ -11,9 +11,7 @@ PLOTS_DIR = '../plots'
 This python script plots a spanning tree / hamilton tree from a WoT session
 """
 
-# file = pd.read_csv('../data/dots/all_dots_untrimmed_anonymous.csv') # dots example
-file = pd.read_csv('../data/ox/all_ox_untrimmed_anonymous.csv') # ox example
-
+file = pd.read_excel('../data/dots.xls')
 noise = 0.01
 
 
@@ -36,7 +34,7 @@ def find_nearest(array, value):
 def calculate_spanning_tree(df):
     si = {}  # initialize dict for the total social influence score for each player id
     si_followed = []  # array for the social influence of the nearest precursor by position of guess in thread
-    player_ids = df['id'].values
+    player_ids = df.id.values
     value_nearest_guess = []  # value_nearest_guess[idx] is the value of the guess closest to guess nr. idx
     idx_of_nearest_guess = []  # idx_of_nearest_guess[idx] is the index of the guess closest to guess nr. idx
 
@@ -87,24 +85,23 @@ def calculate_spanning_tree(df):
 
 def plotting_tree(df):
     influence, value_nearest_guess, idx_of_nearest_guess, si_followed = calculate_spanning_tree(df)
-    guesses = df['guess'].values
-    true_number_of_dots = df['dots'].unique().item()
+    guesses = df.guess.values
+    true_number_of_dots = df['d'].unique().item()
 
     # plot and color initializations
-    plt.figure(figsize=(4, 12.3))
+    plt.figure(figsize=(4, 12))
     color_map = plt.get_cmap('magma_r')
     c_norm = colors.Normalize(vmin=0, vmax=max(influence))
     scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=color_map)
     agg_colors = ["#34495e", '#6a51a3', '#d94801']
 
     # plot lines between closest guesses, colored according to their influence
-    player_ids = df['id'].values
+    player_ids = df.id.values
     for player_idx, player_id in enumerate(player_ids):
         plt.plot(
             value_nearest_guess[player_idx],
             idx_of_nearest_guess[player_idx],
-            zorder=-1,
-            linewidth=2.0,
+            zorder=-1, linewidth=2.0,
             color=scalar_map.to_rgba(si_followed[player_idx]))
 
     # plot the guesses colored with their total social influence score:
@@ -120,9 +117,8 @@ def plotting_tree(df):
 
     plt.plot(moving_average, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[1])
     plt.plot(moving_media, [i for i in range(len(guesses))], linewidth=1, c=agg_colors[2])
-    plt.colorbar(shrink=0.5)
-    plt.xlim(0, 2000)
-    #plt.ylim(0, 460)
+    plt.colorbar()
+    plt.xlim(0, 1000)
     plt.axvline(x=true_number_of_dots, linewidth=1, color=agg_colors[0])
     plt.xlabel('estimate')
     plt.tight_layout()
@@ -131,13 +127,12 @@ def plotting_tree(df):
         os.makedirs(PLOTS_DIR)
 
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    # plt.savefig(os.path.join(PLOTS_DIR, 'fig3.png'), transparent=True, bbox_inches='tight', dpi=400)
-    # plt.savefig(os.path.join(PLOTS_DIR, 'fig3.pdf'), transparent=True, bbox_inches='tight', dpi=400)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.png'), transparent=True, bbox_inches='tight', dpi=400)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig3.pdf'), transparent=True, bbox_inches='tight', dpi=400)
     plt.show()
 
 
 # main code
 df = pd.DataFrame(file)
-# df = df[df.session == '5du4txa7']
-df = df[df.session == '44qx5qq5']
+df = df[df.session == '5du4txa7'] 
 plotting_tree(df)

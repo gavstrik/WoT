@@ -8,14 +8,14 @@ PLOTS_DIR = '../plots'
 
 
 """
-Histogram of the differences between individual estimates and sample
+Histogram of the differences in error between individual estimates and sample
 means/medians showing that most estimates are close to the mean and
 the median of the sample seen.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 
 
@@ -39,7 +39,10 @@ def histograms(df):
         if not seen_ids:
             continue
 
-        seen_codes = [df[(df.session == session) & (df.id == g)]['code'].item() for g in seen_ids]
+        try:
+            seen_codes = [df[(df.session == session) & (df.id == g)]['code'].item() for g in seen_ids]
+        except:
+            continue
         seen_guesses = [df[(df.code == g) & (df.session == session)]['guess'].item() for g in seen_codes]
         mean_diff.append(error_rate(own_guess, np.mean(seen_guesses)))
         median_diff.append(error_rate(own_guess, np.median(seen_guesses)))
@@ -74,10 +77,10 @@ def histograms(df):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
+df_all = df_all[df_all.v != 0]
+df_all = df_all[df_all.v != 27]
 df_all = df_all[df_all.method == 'history']
-df_all = df_all[df_all.views != 0]
-df_all = df_all[df_all.views != 27]
 
 histograms(df_all)

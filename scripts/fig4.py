@@ -21,8 +21,8 @@ influence score for each participant.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 noise = 0.01
 
@@ -111,15 +111,17 @@ def plot_MRE(df_all):
     pops = []
     for true_number_of_dots in [55, 148, 403, 1097, 1233]:
         for views in [3, 9]:
-            df1 = df_all[(df_all.dots == true_number_of_dots) & (df_all.views == views)]
+            df1 = df_all[(df_all.d == true_number_of_dots) & (df_all.v == views)]
             sessions = df1.session.unique()
             influence_tuples = []
+            # influence_accuracy = []
             for session in sessions:
                 df = df1[df1.session == session]
-                guesses = (np.array(df.guess.values))
+                guesses = np.array(df.guess.values)
                 influence = find_social_influence(df)
                 # make a long list of tuples containing guesses and their influences
                 influence_tuples.extend([(guess, influence[guess_idx]) for guess_idx, guess in enumerate(guesses)])
+                # influence_accuracy.extend([(influence[guess_idx], RE(true_number_of_dots, guess)) for guess_idx, guess in enumerate(guesses)])
 
             # remove outliers (only after influence score is calculated),
             influence_tuples = remove_outliers_error_rate(influence_tuples, true_number_of_dots)
@@ -143,6 +145,11 @@ def plot_MRE(df_all):
             CI_noninfluencers = sms.DescrStatsW(errors_noninfluencers).tconfint_mean()
             MREs_i_CI.append(CI_influencers)
             MREs_ni_CI.append(CI_noninfluencers)
+
+            # plt.scatter(*zip(*influence_accuracy), label='d='+str(true_number_of_dots)+', v='+str(views))
+            # plt.ylim(0, 1)
+            # plt.legend()
+            # plt.show()
 
     # unpack and format confidence intervals
     error_inf, error_ninf = zip(*MREs)
@@ -177,7 +184,7 @@ def plot_MRE(df_all):
                      ]
     plt.xticks([i for i in range(10)], x_axis_labels, fontsize='x-large', rotation=90)
     plt.yticks([0,.2,.4,.6,.8,1], [0,.2,.4,.6,.8,1], fontsize=14)
-    plt.ylabel('Mean relative error', fontsize='xx-large')
+    plt.ylabel('Mean relative error', fontsize=18)
     ax.legend(loc='upper left', prop={'size': 16})
     plt.tight_layout()
 
@@ -185,19 +192,21 @@ def plot_MRE(df_all):
         os.makedirs(PLOTS_DIR)
 
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    plt.savefig(os.path.join(PLOTS_DIR, 'fig4.png'), transparent=True, dpi=300)
-    plt.savefig(os.path.join(PLOTS_DIR, 'fig4.pdf'), transparent=True, dpi=300)
+    # plt.savefig(os.path.join(PLOTS_DIR, 'fig4.png'), transparent=True, dpi=300)
+    # plt.savefig(os.path.join(PLOTS_DIR, 'fig4.pdf'), transparent=True, dpi=300)
     plt.show()
+
+
 
     print('average difference btw high-influencers and low-influencers =',
           np.mean(np.array(error_ninf)-np.array(error_inf)))
 
 
-# main code
+# start here:
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 
 plot_MRE(df_all)

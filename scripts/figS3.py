@@ -4,7 +4,7 @@ import pandas as pd
 from statsmodels.graphics.gofplots import qqplot
 import matplotlib.pyplot as plt
 import matplotlib
-# plt.rcParams["font.weight"] = "bold"
+
 plt.rcParams["font.family"] = "sans-serif"
 PLOTS_DIR = '../plots'
 
@@ -13,8 +13,8 @@ QQ-plots.
 """
 
 datafiles = [
-            '../data/dots/all_dots_untrimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.xls',
+            '../data/ox.xls',
             ]
 
 
@@ -32,7 +32,7 @@ def basic_stats(df1):
     axes = axes.flatten()
     images = [(55, 3), (148, 9), (403, 3), (1097, 0), (1233, 0), (1233, 9)]
     for image_idx, (d, views) in enumerate(images):
-        df = df1[(df1['dots'] == d) & (df1['views'] == views)]
+        df = df1[(df1.d == d) & (df1.v == views)]
         guesses = remove_outliers(df.guess.values, d)
         X = np.log(guesses)
         qqplot(X, line='s', ax=axes[image_idx])
@@ -51,8 +51,8 @@ def basic_stats(df1):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_csv(datafile))
-    df_all = df_all.append(df)
-df_all = df_all[df_all['method'] == 'history']
+    df = pd.DataFrame(pd.read_excel(datafile))
+    df_all = df_all.append(df, sort=True)
+df_all = df_all[df_all.method == 'history']
 
 basic_stats(df_all)
