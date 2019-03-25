@@ -9,11 +9,11 @@ PLOTS_DIR = '../plots'
 
 """
 This python script plotting summary statistics for
-the file-condition.
+the file-condition and comparing to the normal v=9 condition
 """
 
 datafiles = [
-            '../data/dots.xls',
+            '../data/dots.csv',
             ]
 
 
@@ -103,7 +103,7 @@ def plot_stats(df_all):
 # load the data
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 df_all = df_all[(df_all.session == '699h8rze') | (df_all.session == 'hal5jdl0') | (df_all.session == 'wv4xujg7')]
 

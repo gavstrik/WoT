@@ -8,12 +8,12 @@ plt.rcParams["font.family"] = "sans-serif"
 PLOTS_DIR = '../plots'
 
 """
-This python script plots a spanning tree / hamilton tree from a WoT session
+This python script plots a spanning trees / hamilton trees
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 noise = 0.01
@@ -153,7 +153,7 @@ def plotting_tree(df_all):
 # start here
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 
 # choose the threads:

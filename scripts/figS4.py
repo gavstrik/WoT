@@ -13,8 +13,8 @@ Plotting the probability of being better than the mean of estimates seen.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -44,7 +44,7 @@ def remove_outliers(df, true_number_of_dots):
     return df
 
 
-def better_than_sample_median(df_all):
+def better_than_sample_mean(df_all):
     betterBars = []
     equalBars = []
     worseBars = []
@@ -185,9 +185,9 @@ def better_than_sample_median(df_all):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.read_excel(datafile)
+    df = pd.read_csv(datafile)
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 
 df_all = df_all[df_all.v != 0]
-better_than_sample_median(df_all)
+better_than_sample_mean(df_all)

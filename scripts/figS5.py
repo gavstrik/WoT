@@ -14,8 +14,8 @@ the median of the sample seen.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -77,7 +77,7 @@ def histograms(df):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.v != 0]
 df_all = df_all[df_all.v != 27]

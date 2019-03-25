@@ -15,8 +15,8 @@ the collective becomes more accurate with increasing social information.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -273,7 +273,7 @@ def plot_aggregates(df_alld):
 # load the data
 dataframe = pd.DataFrame()
 for datafile in datafiles:
-    dataframe = dataframe.append(pd.DataFrame(pd.read_excel(datafile)), sort=True)
+    dataframe = dataframe.append(pd.DataFrame(pd.read_csv(datafile)), sort=True)
 dataframe = dataframe[dataframe.method == 'history']
 
 plot_aggregates(dataframe)

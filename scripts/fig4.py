@@ -21,8 +21,8 @@ influence score for each participant.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 noise = 0.01
 
@@ -192,8 +192,8 @@ def plot_MRE(df_all):
         os.makedirs(PLOTS_DIR)
 
     # Remember: save as pdf and transparent=True for Adobe Illustrator
-    # plt.savefig(os.path.join(PLOTS_DIR, 'fig4.png'), transparent=True, dpi=300)
-    # plt.savefig(os.path.join(PLOTS_DIR, 'fig4.pdf'), transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig4.png'), transparent=True, dpi=300)
+    plt.savefig(os.path.join(PLOTS_DIR, 'fig4.pdf'), transparent=True, dpi=300)
     plt.show()
 
 
@@ -205,7 +205,7 @@ def plot_MRE(df_all):
 # start here:
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 

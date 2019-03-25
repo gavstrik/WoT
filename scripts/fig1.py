@@ -13,8 +13,8 @@ the WoT-experiments on Amazon Mechanical Turk.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -111,7 +111,7 @@ def plot_stats(df_all):
 # load the data
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 

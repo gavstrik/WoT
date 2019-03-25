@@ -6,13 +6,13 @@ from scipy.stats import skew as skewness
 
 """
 Pretty printing the most important stats.
-Usage: copy output into markdown file.
+Usage: copy output into latex file.
 """
 
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -98,7 +98,7 @@ def tabulated_stats(df1):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df)
 
 table, datapoints, outliers = tabulated_stats(df_all)

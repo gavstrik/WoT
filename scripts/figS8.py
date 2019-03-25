@@ -16,8 +16,8 @@ of all numbers and report it as their estimate.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 tlength = 400
@@ -49,7 +49,7 @@ def means_and_medians(df_t):
 # start here:
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.DataFrame(pd.read_excel(datafile))
+    df = pd.DataFrame(pd.read_csv(datafile))
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 

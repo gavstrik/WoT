@@ -12,8 +12,8 @@ Plotting herding and bandwagoning.
 """
 
 datafiles = [
-            '../data/dots.xls',
-            '../data/ox.xls',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 
@@ -195,7 +195,7 @@ def plot_herders(df_all):
 # main code
 df_all = pd.DataFrame()
 for datafile in datafiles:
-    df = pd.read_excel(datafile)
+    df = pd.read_csv(datafile)
     df_all = df_all.append(df, sort=True)
 df_all = df_all[df_all.method == 'history']
 

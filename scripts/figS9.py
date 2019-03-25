@@ -19,8 +19,8 @@ their estimate.
 """
 
 datafiles = [
-            '../data/dots/all_dots_trimmed_anonymous.csv',
-            '../data/ox/all_ox_untrimmed_anonymous.csv',
+            '../data/dots.csv',
+            '../data/ox.csv',
             ]
 
 random.seed(4)
@@ -45,6 +45,15 @@ def MRE(targets, predictions):
 def split_list(sorted_list):
     half = int(len(sorted_list)/2)
     return sorted_list[:half], sorted_list[half:]
+
+
+# outliers with an error rate above 10 are removed
+def remove_outliers(data, true_number_of_dots):
+    max_error_rate = 10
+    lower = true_number_of_dots/10
+    upper = max_error_rate*true_number_of_dots + true_number_of_dots
+    newdata = [i for i in data if i >= lower and i <= upper]
+    return np.array(newdata)
 
 
 def find_social_influence(thread, histories):
@@ -79,13 +88,11 @@ def generate_simulation_data(df_all):
     MREs_o_CI = []
     for position, d in enumerate([55,148,403,1097,1233]):
         # define the control group
-        df = df_all[df_all['dots'] == d]
-        df_control = df[df.views == 0]
-        control = df_control['guess'].values
-        # print('\n', d, bs.bootstrap(np.array(control), stat_func=bs_stats.mean))
+        df = df_all[df_all.d == d]
+        df_control = df[df.v == 0]
+        control = remove_outliers(df_control.guess.values, d)
 
         for v in [3, 9]:
-            print("dots: {} views: {}".format(d, v))
             mi = []
             mo = []
             # simluate with 'simul' runs:

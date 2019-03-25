@@ -11,7 +11,7 @@ PLOTS_DIR = '../plots'
 This python script plots a spanning tree / hamilton tree from a WoT session
 """
 
-file = pd.read_excel('../data/dots.xls')
+file = pd.read_csv('../data/dots.csv')
 noise = 0.01
 
 
@@ -134,5 +134,5 @@ def plotting_tree(df):
 
 # main code
 df = pd.DataFrame(file)
-df = df[df.session == '5du4txa7'] 
+df = df[df.session == '5du4txa7']
 plotting_tree(df)
