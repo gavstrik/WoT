@@ -80,6 +80,7 @@ def plot_herders(df_all):
         total_herders_CI = []
         for p in range(p_max + 1):
             bandwagons = bandwagoning(dfd, p)
+            # print(bandwagons)
 
             # plot bandwagoning for p = 0:
             if p == 0:
