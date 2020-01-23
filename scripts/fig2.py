@@ -225,7 +225,7 @@ def plot_aggregates(df_alld):
 
     # plotting paraphernalia
     handles, labels = axes[3].get_legend_handles_labels()
-    leg = plt.figlegend(handles, labels, loc=(0.77,0.3), prop={'size': 13})
+    leg = plt.figlegend(handles, labels, bbox_to_anchor=(1.1, 1.05), prop={'size': 13})
     # leg.set_title("Legend", prop = {'size':'x-large'})
     txtA = fig.text(0.162, .99, 'A', fontsize='xx-large', fontweight='bold', ha='center')
     txtB = fig.text(0.402, .99, 'B', fontsize='xx-large', fontweight='bold', ha='center')
