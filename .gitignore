@@ -1,6 +1,7 @@
+/RawData
 /plots
-/scripts/make_datafiles_dots.py
-/scripts/make_datafiles_ox.py
+/Refs
+/.ipynb_checkpoints
 /latex/*.aux
 /latex/*.glo
 /latex/*.idx
