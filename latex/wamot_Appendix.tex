@@ -58,21 +58,11 @@ For all reported aggregate measures, outliers are removed if they have an error 
 
 
 \subsection*{Analysis of thread medians}
-
-
 \subsection*{QQ plots for median analysis}
 "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
 
 
-
-
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-
 \subsection*{GMM model}
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-
-
-
 In order to cope with the heavy tails present in the data a Gaussian Mixture Model (GMM) was used to model the effects of social influence. This model class utilizes multiple states to ultimately obtain a gaussian mixture distribution for each observation. Let $X=\{1,\dots,k\}$ denote the state variable and $Y$ the observation. Then, conditional on $X=s, s=1,\dots,k$, $Y$ follows a normal distribution
 \begin{align*}
 	Y|(X=s)  \sim \mathcal{N} (\mu_s,\sigma^2_s), s=1,\dots,k,
@@ -107,28 +97,26 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 	\caption{Jayles question 1: What is the population of Tokyo and its agglomeration? True answer: 38,000,000.}\label{fig: Jayles question 1}
 \end{figure}
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+
 
 \begin{figure}[htbp]
 	\centering\includegraphics[width=.5\textwidth]{../plots/jayles2.pdf}
 	\caption{Jayles question 2: What is the population of Shanghai and its agglomeration? True answer: 25,000,000.}\label{fig: Jayles question 2}
 \end{figure}
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
 
 \begin{figure}[htbp]
 	\centering\includegraphics[width=.5\textwidth]{../plots/jayles8.pdf}
 	\caption{Jayles question 8: How many books does the American Congress library hold? True answer: 23,000,000.}\label{fig: Jayles question 8}
 \end{figure}
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
 
 \begin{figure}[htbp]
 	\centering\includegraphics[width=.5\textwidth]{../plots/jayles10.pdf}
 	\caption{Jayles question 10: How many cell phones are sold in France every year? True answer: 22,000,000.}\label{fig: Jayles question 10}
 \end{figure}
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+
 
 \begin{figure}[htbp]
 	\centering\includegraphics[width=.5\textwidth]{../plots/jayles23.pdf}
@@ -138,9 +126,7 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 
 \subsubsection{Jayles data, including pre-estimates}
 %In order to validate conclusions on the use of social information without knowing the personal opinions, the final estimates where plottet against the pre-estimates $y_i^0$, mapping the individual colors of the $\beta_w$ scale. Hence, in Figure \ref{fig: Jayles estimate vs pre-estimate} the colors correspond to the $\beta_w$ value of the individual observation, but plotted against the pre-estimate instead of the social information. Furthermore, weighted regression lines were added, using the $\delta_{ij}, i=1,\dots,n, j=1,\dots,k$ weights estimated from the previous analysis. These are 
- 
-%In order to validate conclusions on the use of social information without knowing the personal opinions, here the results are given  
- %the data from  \citep{jayles2017social} using the pre-estimates $y^0_i, i=1,\dots, n$ of the participants, before being given any social information. In this analysis model included both social information $x_i$ and pre-estimates $y_i^0$ as explanatory, without interaction, and thus the final estimate is weighed along these two axes.
+
 
 "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
 
@@ -169,8 +155,6 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 	\caption{Pre-estimates $y_i^0$ against final estimates $y_i$, with weighted regression lines. Colors are identical to the previous figures, and refer to the $\beta_w$ estimate. The regression lines are colored according to the same scheme, using their estimates slopes.}\label{fig: Jayles estimate vs pre-estimate}
 \end{figure}
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
 
 \begin{figure}[htbp]
 	\centering
@@ -198,32 +182,11 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 \end{figure}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %%% Each figure should be on its own page
 \begin{figure}
 \centering
-\includegraphics[width=.8\textwidth]{C:/Users/hjl161/Documents/Papers/WoT_github/images/FigS1.png}
-\caption{Screendump of the choice-page in the ox-experiments with $v=3$. On image: The ox Hansi and his owner Mogens. Photo Credits: Klaus Holsting.}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{C:/Users/hjl161/Documents/Papers/WoT_github/images/FigS2.png}
-\caption{Screendump of the choice-page in the dot-experiment with $d=403$ and $v=9$.}
+\includegraphics[width=.8\textwidth]{C:/Users/hjl161/Documents/Papers/WoT_github/Screenshots/FigS2.png}
+\caption{Screenshot of the choice-page iwith $d=403$ and $v=9$.}
 \end{figure}
 
 
@@ -257,12 +220,6 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 
 
 
-
-
-
-
-
-
 \begin{table}\centering
 \caption{Data Table of all threads. Legend: $d \in \{55, 148, 403, 1097\}$; $v$ = view count; method: \'history\'-threads show the preceding estimates as they have been recorded in the thread; N = thread length; median = median of thread; mean = mean of thread; SD = standard deviation; CV = coefficient of variation; skew = skewness; kurt = kurtosis; bonus = percentage of estimates within 10 \% of the true value, $d$.}
 
@@ -270,39 +227,39 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 \hline
  method   &    d &   v & thread   &   N &   median &     mean &       SD &    CV &   skew &   kurt &   bonus (\%) \\
 \hline
- history  &   55 &   0 & fscmakcz & 464 &     55   &  2360.57 & 42038.6  & 17.81 &  21.01 & 445.08 &        60.13 \\
- history  &   55 &   1 & hs6bovtz & 477 &     57   &  1682.13 & 29381.7  & 17.47 &  21.18 & 453.74 &        55.35 \\
- history  &   55 &   3 & 3cda8qpn & 405 &     56   &  8320.59 & 73524.4  &  8.84 &   9.59 &  93.58 &        62.47 \\
- history  &   55 &   9 & bvpj37io & 476 &     56   &  1239.85 & 25435.5  & 20.51 &  21.74 & 470.87 &        54.83 \\
- history  &  148 &   0 & dwnjf9mb & 464 &    140   &  1349.14 & 12891    &  9.55 &  12.83 & 172.18 &        21.34 \\
- history  &  148 &   1 & ehaxc7lu & 435 &    150   &  2250.86 & 27802.5  & 12.35 &  15.66 & 261.32 &        24.83 \\
- history  &  148 &   3 & ck291lk5 & 466 &    147.5 &  2523.51 & 38071.3  & 15.09 &  20.42 & 427.38 &        22.53 \\
- history  &  148 &   9 & 2hxe3g0w & 473 &    153   &  3182.51 & 38085.7  & 11.97 &  13.85 & 196.79 &        24.1  \\
+ history  &   55 &   0 & fscmakcz & 464 &     55   &  2360.57 & 42038.6  & 17.81 &  21.01 & 445.08 &        60.99 \\
+ history  &   55 &   1 & hs6bovtz & 477 &     57   &  1682.13 & 29381.7  & 17.47 &  21.18 & 453.74 &        57.02 \\
+ history  &   55 &   3 & 3cda8qpn & 405 &     56   &  8320.59 & 73524.4  &  8.84 &   9.59 &  93.58 &        66.91 \\
+ history  &   55 &   9 & bvpj37io & 476 &     56   &  1239.85 & 25435.5  & 20.51 &  21.74 & 470.87 &        56.09 \\
+ history  &  148 &   0 & dwnjf9mb & 464 &    140   &  1349.14 & 12891    &  9.55 &  12.83 & 172.18 &        22.41 \\
+ history  &  148 &   1 & ehaxc7lu & 435 &    150   &  2250.86 & 27802.5  & 12.35 &  15.66 & 261.32 &        25.75 \\
+ history  &  148 &   3 & ck291lk5 & 466 &    147.5 &  2523.51 & 38071.3  & 15.09 &  20.42 & 427.38 &        23.18 \\
+ history  &  148 &   9 & 2hxe3g0w & 473 &    153   &  3182.51 & 38085.7  & 11.97 &  13.85 & 196.79 &        24.52 \\
  history  &  403 &   0 & hqx0v7t5 & 473 &    300   &  4816.02 & 49624.9  & 10.3  &  14.16 & 220.03 &         7.82 \\
- history  &  403 &   1 & 9bbkjlye & 469 &    320   &  2791.59 & 31667.6  & 11.34 &  15.23 & 248.43 &         7.89 \\
- history  &  403 &   3 & 5du4txa7 & 455 &    350   &  2430    & 29944.3  & 12.32 &  15.25 & 233.19 &        11.21 \\
- history  &  403 &   9 & spw8qdcd & 470 &    400   &  3035.65 & 36078.8  & 11.89 &  15.32 & 235.27 &        10.21 \\
+ history  &  403 &   1 & 9bbkjlye & 469 &    320   &  2791.59 & 31667.6  & 11.34 &  15.23 & 248.43 &         8.1  \\
+ history  &  403 &   3 & 5du4txa7 & 455 &    350   &  2430    & 29944.3  & 12.32 &  15.25 & 233.19 &        11.65 \\
+ history  &  403 &   9 & spw8qdcd & 470 &    400   &  3035.65 & 36078.8  & 11.89 &  15.32 & 235.27 &        10.43 \\
  history  & 1097 &   0 & hal5jdl0 & 423 &    657   &  8855.13 & 76379.1  &  8.63 &  11.46 & 138.21 &         9.69 \\
+ history  & 1097 &   1 & huyygtho & 461 &    750   &  2924.95 & 25012.2  &  8.55 &  17.91 & 344.84 &         9.76 \\
  history  & 1097 &   1 & z0rvh02v & 473 &    650   &  8091.24 & 68728.9  &  8.49 &  11.74 & 144.62 &         8.67 \\
- history  & 1097 &   1 & huyygtho & 461 &    750   &  2924.95 & 25012.2  &  8.55 &  17.91 & 344.84 &         9.11 \\
- history  & 1097 &   3 & hhb0if6e & 470 &    812.5 &  4811.97 & 53329.9  & 11.08 &  15.61 & 259.91 &        20.43 \\
- history  & 1097 &   9 & wv4xujg7 & 460 &    999   &  2748    & 31206.8  & 11.36 &  21.24 & 451.09 &        13.48 \\
- max      &   55 &   1 & aebicytb & 384 &     57   &    68.7  &    35.77 &  0.52 &   2.82 &   8.76 &        51.04 \\
- max      &   55 &   3 & 094p61xp & 340 &     60   &   101.05 &   413.25 &  4.09 &  18    & 326.23 &        41.18 \\
- max      &   55 &   9 & 8c80yyxl & 418 &     60   &    75.03 &    45.69 &  0.61 &   4.72 &  34.23 &        50.72 \\
- max      &  148 &   1 & 78wuly7l & 317 &    152   &   271.06 &   323.75 &  1.19 &   3.84 &  19.06 &        14.51 \\
+ history  & 1097 &   3 & hhb0if6e & 470 &    812.5 &  4811.97 & 53329.9  & 11.08 &  15.61 & 259.91 &        20.64 \\
+ history  & 1097 &   9 & wv4xujg7 & 460 &    999   &  2748    & 31206.8  & 11.36 &  21.24 & 451.09 &        13.7  \\
+ max      &   55 &   1 & aebicytb & 384 &     57   &    68.7  &    35.77 &  0.52 &   2.82 &   8.76 &        54.17 \\
+ max      &   55 &   3 & 094p61xp & 340 &     60   &   101.05 &   413.25 &  4.09 &  18    & 326.23 &        43.82 \\
+ max      &   55 &   9 & 8c80yyxl & 418 &     60   &    75.03 &    45.69 &  0.61 &   4.72 &  34.23 &        51.44 \\
+ max      &  148 &   1 & 78wuly7l & 317 &    152   &   271.06 &   323.75 &  1.19 &   3.84 &  19.06 &        17.03 \\
  max      &  148 &   3 & u2sxnl2p & 418 &    220   &   366.6  &   596    &  1.63 &  11.6  & 179.79 &         9.57 \\
- max      &  148 &   9 & mf57hnwb & 412 &    210   &   266.74 &   168.39 &  0.63 &   1.08 &   0.2  &        11.89 \\
- max      &  403 &   1 & 6c4s02ki &  16 &     90   &   452.5  &   614.18 &  1.36 &   2.26 &   4.85 &         0    \\
+ max      &  148 &   9 & mf57hnwb & 412 &    210   &   266.74 &   168.39 &  0.63 &   1.08 &   0.2  &        12.38 \\
  max      &  403 &   1 & 1r17post &  25 &    400   &   549    &   402.64 &  0.73 &   1.83 &   4.14 &         4    \\
+ max      &  403 &   1 & 6c4s02ki &  16 &     90   &   452.5  &   614.18 &  1.36 &   2.26 &   4.85 &         0    \\
  max      &  403 &   1 & e8vv9575 &  64 &    600   &   734.38 &   506.71 &  0.69 &   0.48 &  -1    &         6.25 \\
- max      &  403 &   3 & ua2230ux & 315 &    600   &  3215.08 &  9635.18 &  3    &   4.84 &  22.79 &         7.94 \\
- max      &  403 &   9 & 1xyev3dj & 422 &    887.5 &  4758.88 & 25397.5  &  5.34 &  17.68 & 339.78 &         7.82 \\
+ max      &  403 &   3 & ua2230ux & 315 &    600   &  3215.08 &  9635.18 &  3    &   4.84 &  22.79 &         8.25 \\
+ max      &  403 &   9 & 1xyev3dj & 422 &    887.5 &  4758.88 & 25397.5  &  5.34 &  17.68 & 339.78 &         8.29 \\
  max      & 1097 &   1 & 7yqp8bxc & 116 &    800   &  5463.93 & 15517.2  &  2.84 &   4.21 &  16.95 &         8.62 \\
  max      & 1097 &   1 & q5brhgnz &  76 &   1062.5 &  3310.3  &  4690.72 &  1.42 &   2.13 &   4.19 &         5.26 \\
  max      & 1097 &   3 & 2x6km84z & 117 &   2500   &  7593.38 &  9341.25 &  1.23 &   1.29 &   0.35 &        13.68 \\
- max      & 1097 &   3 & ud5vo371 &  78 &   2950   &  5167.06 & 12588.5  &  2.44 &   7.43 &  58.71 &         2.56 \\
- max      & 1097 &   9 & lh7wb36v & 416 &   3410   & 13024.2  & 38664.1  &  2.97 &  11.9  & 183.47 &         7.93 \\
+ max      & 1097 &   3 & ud5vo371 &  78 &   2950   &  5167.06 & 12588.5  &  2.44 &   7.43 &  58.71 &         3.85 \\
+ max      & 1097 &   9 & lh7wb36v & 416 &   3410   & 13024.2  & 38664.1  &  2.97 &  11.9  & 183.47 &         8.17 \\
 \hline
  &&&& 11.748 &&&&&&& \\
 \bottomrule
@@ -315,9 +272,7 @@ Questions 1, 2 were of very similar type, referring to population sizes of two m
 %%% Add this line AFTER all your figures and tables
 \FloatBarrier
 
-\dataset{dots.csv}{Anonymized data set of all dots-experiments. Parameters: task = type of experiment; d = number of dots in image; v = number of visible preceding estimates; session = thread name; code = unique identifier of participant; id = participant id in thread; order = order in which participants enter the queue; hist = list of preceding id's having made an estimate; guess = estimate by participant; bonus = payoff in dollars if estimate was within 10\% of d.}
-
-\dataset{ox.csv}{Anonymized data set of all ox-experiments. Parameters: task = type of experiment; d = weight of the ox (in kilo); v = number of visible preceding estimates; session = thread name; code = unique identifier of participant; id = participant id in thread; order = order in which participants enter the queue; hist = list of preceding id's having made an estimate; guess = estimate by participant; pound = 1 if estimate was made in lb, 0 if estimate was made in kg; bonus = payoff in dollars if estimate was within 10\% of d.}
+\dataset{dots.csv}{Anonymized data set of all dots-experiments. Parameters: task = type of experiment; $d$ = number of dots in image; $v$ = number of visible preceding estimates; session = thread name; decision order = order in which participants enter the queue; hist = list of guesses seen by participant; guess = estimate by participant}
 
 \bibliography{wamot}
 %\bibliographystyle{naturemag}

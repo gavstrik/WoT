@@ -2,6 +2,7 @@
 /plots
 /Refs
 /.ipynb_checkpoints
+/Python/.ipynb_checkpoints
 /latex/*.aux
 /latex/*.glo
 /latex/*.idx

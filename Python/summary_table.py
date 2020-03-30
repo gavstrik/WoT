@@ -30,7 +30,6 @@ def tabulated_stats(df1):
     kurt = []
     bonus = []
     sessions = df1['session'].unique()
-    N_hist = N_max = 0
     turkerdict = {k:0 for k in df1.hashed_turker.unique()}
 
     for session in sessions:
@@ -53,11 +52,6 @@ def tabulated_stats(df1):
             if (d - d/10) <= g <= (d + d/10):
                 tmp += 1
         bonus.append(np.around(100*tmp/len(guesses),2))
-
-        if df.method.unique().item() == 'history':
-            N_hist += len(df.guess.values)
-        else:
-            N_max += len(df.guess.values)
 
         for turker in df.hashed_turker.unique():
             turkerdict[turker] += 1
@@ -84,7 +78,7 @@ def tabulated_stats(df1):
     table['bonus (\%)'] = bonus
 
     table = table.sort_values(['method', 'd', 'v'])
-    return table, np.sum(N), N_hist, N_max
+    return table
 
 
 # main code
@@ -92,10 +86,19 @@ df_all = pd.DataFrame()
 for datafile in datafiles:
     df = pd.DataFrame(pd.read_excel(datafile))
     df_all = df_all.append(df)
-table, datapoints, N_hist, N_max = tabulated_stats(df_all)
 
-print('total number of data points:', datapoints)
-print('total number of data points in history threads:', N_hist)
-print('total number of data points in manipulated threads:', N_max)
-print('unique turkers in total:', len(df_all.hashed_turker.unique()))
+print('total number of data points/turkers:',
+                len(df_all), len(df_all.hashed_turker.unique()))
+print('total number of data points/turkers in history threads:',
+                len(df_all[df.method == 'history']),
+                len(df_all[df.method == 'history']['hashed_turker'].unique()))
+print('total number of data points/turkers in manipulated threads:',
+                len(df_all[df.method == 'max']),
+                len(df_all[df.method == 'max']['hashed_turker'].unique()))
+print('total number of data points/turkers in control threads:',
+                len(df_all[df.v == 0]),
+                len(df_all[df.v == 0]['hashed_turker'].unique()))
+
+
+table = tabulated_stats(df_all)
 print(tabulate(table, tablefmt="latex_raw", headers="keys", showindex=False))
