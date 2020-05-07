@@ -90,8 +90,8 @@ for datafile in datafiles:
 print('total number of data points/turkers:',
                 len(df_all), len(df_all.hashed_turker.unique()))
 print('total number of data points/turkers in history threads:',
-                len(df_all[df.method == 'history']),
-                len(df_all[df.method == 'history']['hashed_turker'].unique()))
+                len(df_all[(df.method == 'history') & (df.v != 0)]),
+                len(df_all[(df.method == 'history') & (df.v != 0)]['hashed_turker'].unique()))
 print('total number of data points/turkers in manipulated threads:',
                 len(df_all[df.method == 'max']),
                 len(df_all[df.method == 'max']['hashed_turker'].unique()))
