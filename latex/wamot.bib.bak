@@ -843,4 +843,37 @@
   publisher = {American Association for the Advancement of Science},
 }
 
+@Article{devriendt2018literature,
+  author    = {Devriendt, Floris and Moldovan, Darie and Verbeke, Wouter},
+  title     = {A literature survey and experimental evaluation of the state-of-the-art in uplift modeling: A stepping stone toward the development of prescriptive analytics},
+  journal   = {Big data},
+  year      = {2018},
+  volume    = {6},
+  number    = {1},
+  pages     = {13--41},
+  publisher = {Mary Ann Liebert, Inc. 140 Huguenot Street, 3rd Floor New Rochelle, NY 10801 USA},
+}
+
+@Article{nadeau1993new,
+  author    = {Nadeau, Richard and Cloutier, Edouard and Guay, J-H},
+  title     = {New evidence about the existence of a bandwagon effect in the opinion formation process},
+  journal   = {International Political Science Review},
+  year      = {1993},
+  volume    = {14},
+  number    = {2},
+  pages     = {203--213},
+  publisher = {Sage Publications Sage CA: Thousand Oaks, CA},
+}
+
+@Article{lee2018understanding,
+  author    = {Lee, Sangwon and Ha, Taehyun and Lee, Daeho and Kim, Jang Hyun},
+  title     = {Understanding the majority opinion formation process in online environments: An exploratory approach to Facebook},
+  journal   = {Information Processing \& Management},
+  year      = {2018},
+  volume    = {54},
+  number    = {6},
+  pages     = {1115--1128},
+  publisher = {Elsevier},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
