@@ -143,7 +143,7 @@ A GMM was fitted to all threads after removing estimates below the 2.5\% and abo
 	\centering
 	\begin{subfigure}{.44\linewidth}
 		\centering
-		\includegraphics[width=1\linewidth]{C:/Users/hjl161/Documents/Conferences/2020/ci2020/abstract/ci-2018-latex/images/h10971.pdf}
+		\includegraphics[width=1\linewidth]{h10971.pdf}
 		%\includegraphics[width=1\linewidth]{/thread_history_1097_1.pdf}
 		%\includegraphics[width=.48\linewidth]{info_history_1097_1.pdf}
 		\caption{\footnotesize History thread with $d=1097$ and $v=1$}
@@ -151,7 +151,7 @@ A GMM was fitted to all threads after removing estimates below the 2.5\% and abo
 	\end{subfigure}
 	\begin{subfigure}{.44\linewidth}
 		\centering
-		\includegraphics[width=1\linewidth]{C:/Users/hjl161/Documents/Conferences/2020/ci2020/abstract/ci-2018-latex/images/m10979.pdf}
+		\includegraphics[width=1\linewidth]{m10979.pdf}
 		%\includegraphics[width=1\linewidth]{thread_max_1097_9.pdf}
 		%\includegraphics[width=.48\linewidth]{info_max_1097_9.pdf}
 		%\includegraphics[width=.48\linewidth]{beta_max_1097_9.pdf}
@@ -717,6 +717,25 @@ is the estimated influence of social information which we denote the \emph{persu
   \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{e12329}
   (\bibinfo{year}{2017}).
 
+
+
+
+\bibitem{hastie2009}
+\bibinfo{author}{Hastie, T.}, \bibinfo{author}{Tibshirani, R.} \& \bibinfo{author}{Friedman, J.}
+\newblock \bibinfo{title}{The Elements of Statistical Learning, Second Edition}.
+  \bibinfo{organization}{Springer}, (\bibinfo{year}{2009}).
+
+
+\bibitem{visser2010}
+\bibinfo{author}{Visser, I.} \& \bibinfo{author}{Speekenbrink, M.}
+\newblock \bibinfo{title}{ depmixS4: An R
+  Package for Hidden Markov Models.}
+  \bibinfo{organization}{Journal of Statistical
+  Software, 36(7), 1-21.}, (\bibinfo{year}{2010}).
+
+
+
+
 \end{thebibliography}
 
 \subsection*{Acknowledgments}  \small (blinded)%The experiments were implemented by Robin Engelhardt and Mikkel Birkegaard Andersen. Server infrastructure and devops was handled by Mikkel Birkegaard Andersen. The authors wish to thank Philipp Chapkovski for help with the cascade design, Rasmus Rendsvig for modeling discussions, Ulrik Nash and Peter Norman Sørensen for their comments on an earlier draft of this paper, and bertrand Jayles and Guy Theraulaz for sharing their data with us. This research was approved by the Institutional Review Board at the University of Copenhagen and included informed consent by all participants in the study. The authors gratefully acknowledge the support provided by The Carlsberg Foundation under grant number CF 15-0212.
@@ -773,22 +792,22 @@ The medians were modeled as a linear normal models for the history and manipulat
 \begin{align*}
 	\mu_{dv} = \alpha_v+\beta_v\log(d), \quad d=55, 148, 403, 1097, \enskip v=0,1,3,9 .
 \end{align*}
-Hence, the number of views is treated as categorical, since there were clearly an effect of different views, but it was hard to quantify the relationship between different number of views. The ($\log$) number of visible dots was modeled as a quantitative variable, since the distance between $\log(d)$ were deemed suitable scores for this variable. This was also chosen to lower the number of variables in the model, due to the low number of observations (medians) available. 
+The number of views was treated as categorical, since there were clearly an effect of different views, but it was hard to quantify the relationship between different number of views. The ($\log$) number of visible dots was modeled as a quantitative variable, since the distance between $\log(d)$ were deemed suitable scores for this variable, especially since the number of dots were chosen as $e^{\delta}, \delta=4,5,6,7$ rounded to nearest integer. The quantitative nature of $d$ was also chosen to lower the number of variables in the model, due to the low number of observations (medians) available. 
 
-The models were assessed by quantile-quantile (QQ) and residual plots, as shown in Figure~\ref{fig: qq plots median}. Although some deviation is present, with the available number of observations we do not discard the models based on these plots. The low number of observations in turn implies wide confidence bands as a result, hence conclusions from the models can be viewed as conservative. 
+The models were assessed by quantile-quantile (QQ) and residual plots, as shown in Figure~\ref{fig: qq plots median}. Although some deviation is present, with the available number of observations we do not discard the models based on these plots. The low number of observations also implies wide confidence bands, hence conclusions from the models can be viewed as conservative. 
 
 \subsection*{GMM model for social influence}
-A Gaussian Mixture Model (GMM) was used model to cope with the heavy tails present in the data. The GMM employs a fixed number of states to fit a weighted sum of gaussian distributions for each observation, hence the \emph{mixture} labeling.
+A Gaussian Mixture Model (GMM) was used model to cope with the heavy tails and skewness present in the data. The GMM employs a fixed number of states to fit a weighted sum of gaussian distributions to each observation, hence the \emph{mixture} labeling.
 
-Let $X=\{1,\dots,k\}$ denote the state variable and $Y$ the observation. Then, conditional on $X=j, j=1,\dots,k$, $Y$ follows a normal distribution
+Let $X_i=\{1,\dots,k\}$ denote the state variable and $Y_i$ the observation for participant $i=1,\dots,n$. Then, conditional on $X_i=j, j=1,\dots,k$, $Y_i$ follows a normal distribution
 \begin{align*}
-	Y|(X=j)  \sim \mathcal{N} (\mu_j,\sigma^2_j), j=1,\dots,k,
+	Y_i|(X_i=j)  \sim \mathcal{N} (\mu_j,\sigma^2_j), j=1,\dots,k,
 \end{align*}
-hence the unconditional distribution of $Y$ is obtained by integrating (i.e. summing since $X$ is discrete) over $X$
+hence the unconditional distribution of $Y_i$ is obtained by integrating (i.e. summing since $X_i$ is discrete) over $X_i$
 \begin{align*}
-	P(Y) = \sum_{j=1}^k P(X=j)P(Y|X=j).
+	P(Y_i) = \sum_{j=1}^k P(X_i=j)P(Y_i|X_i=j).
 \end{align*}
-Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $M_i$, if $v>0$. Furthermore, if $v>1$, then $Y_i$ influences $M_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provide is the previous views).
+Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $S_i$, if $v>0$. Furthermore, if $v>0$, then $Y_i$ influences $S_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provided is the previous views).
 %Fig. \ref{fig: GMM dependencies} shows a graphical presentation of the model (with preceding views available).
 %\begin{figure}[!h]
 %\centering
@@ -822,21 +841,23 @@ Thus, given $k$ independent states and using $\delta_{ij} = P(X_i=j)$, then $Y_i
 \end{array}
 \quad i=1,\dots,n \label{eq: weighted Gaussian parameters}
 \end{align}
-where the mean $\mu_j$ is modeled with social information $m_i$ as
+where the mean $\mu_j$ is modeled with social information $s_i$ as
 \begin{align}
-	\mu_j = \alpha_j+\beta_j m_i, \quad i=1,\dots,n, j=1,\dots,k.
+	\mu_j = \alpha_j+\beta_j s_i, \quad i=1,\dots,n, j=1,\dots,k.
 \end{align}
-Note that $\mu^w_i$ and $\sigma^w_i$ refer to the weighted estimates, unique to each observation $y_i, i=1, \dots, n$. This implies, that the effect of social information thus becomes a weighted sum of $\beta_j$ estimates
+Note that $\mu^w_i$ and $\sigma^w_i$ refer to the weighted estimates, unique to each observation $y_i, i=1, \dots, n$. This implies, that the effect of social information becomes a weighted sum of $\beta_j$ estimates
 \begin{align}
 	\beta^w_i = \sum_{j=1}^k \delta_{ij} \beta_{j}, \quad i=1,\dots, n. \label{eq: weighted beta}
 \end{align}
-Similarly for the $\alpha^w$ parameter modeling the accompanying intercept.
+Similarly for the $\alpha_i^w$ parameter, modeling the accompanying intercept.
 
-It should be emphasized that the weighted $\alpha^w,\beta^w$ are unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same effects. For the GMM this can be interpreted as each participant is modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general axes. 
+It should be emphasized that the weighted $\alpha_i^w,\beta_i^w$ are unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same effects. For the GMM this can be interpreted as each participant is modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general dimensions. 
 
-For each model, the number of states were set to $k=2,3,4,5$ and the model with the lowest Bayesian Information Criteria (BIC) was chosen as the preferable one. The BIC was used rather than the more usual Akaikes Information Criteria (AIC), since the BIC penalized the number of parameters more heavily. The aim was to settle with a decent model fit, with fewer parameters to avoid overfitting. Using objective criteria to choose a number of states/clusters is often prone to simply let this number increase (ref: Tibshirani, Elements of Statistical Learning section 14.3.11) and as such the AIC yielded much larger $k$ values ($k \gg 5$), practically implying that $k=5$ for all models, due to us capping this parameter at this value. 
+For each model, the number of states were set to $k=2,3,4,5$ and the model with the lowest Bayesian Information Criteria (BIC) was chosen as the preferable one. The BIC was used rather than the more usual Akaikes Information Criteria (AIC), since the BIC penalized the number of parameters more heavily. The aim was to settle with a decent model fit, with fewer parameters to avoid overfitting. Using objective criteria to choose a number of states/clusters is often prone to simply increase $k$ continuously \cite{hastie2009} and as such the AIC yielded much larger $k$ values ($k \gg 5$), practically implying that $k=5$ for all models, due to us capping this parameter at this value. This effect was not seen for the BIC measure for $2\leq k \leq 5$, further supporting this choice of objective measure.
+% Tibshirani, Elements of Statistical Learning section 14.3.11
 
-In our case AIC: $6k-2\ln(L)$ or BIC: $3k\ln(n)-2\ln(L)$ (note that both criteria are scaled with $3k$ parameters for $k$ states), to pick a suitable number of states. Here BIC penalizes the number of parameters weighted by the ($\log$) number of states as $3k$, corresponding to $(\delta_i,\mu_i,\sigma^2_i)$ for each state, whereas AIC only penalizes by a factor 2.
+In our case AIC: $6k-2\ln(L)$ and BIC: $3k\ln(n)-2\ln(L)$, where $L$ refers to the likelihood value. Note that both criteria are scaled with $3k$ parameters for $k$ states. The BIC penalizes the number of parameters weighted by the ($\log$) number of observations $n$, 
+as $3k$, corresponding to $(\delta_i,\mu_i,\sigma^2_i)$ for each state, whereas AIC only penalizes by a factor 2.
 
 The goodness of fit for the GMM was assessed by calculating standardized residuals
 \begin{align}
@@ -844,22 +865,22 @@ The goodness of fit for the GMM was assessed by calculating standardized residua
 \end{align}
 and assessing the empirical distribution of $\hat{\varepsilon}_i, i=1,\dots,n$ against a standard $\mathcal{N}(0,1)$ distribution.
 
-After removing the 5\% most extreme observations, i.e. estimates below the 2.5\% and above the 97.5\% thresholds, Fig. \ref{fig: QQ plots AMT} shows the QQ-plots of the fitted models. Fig. \ref{fig: weighted beta distributions} shows the estimated $\hat{\beta}^w$ distributions, with 95\% confidence bounds provided by the models. Fig. \ref{fig: threads with social info and colored by beta weights} shows the observed threads, colored by the individual $\hat{\beta}^w$ values and the available social information. Fig. \ref{fig: social info vs estimates} show the observed estimates against the available social information, again colored by their individual $\hat{\beta}^w$ values.
+After removing the 5\% most extreme observations, i.e. estimates below the 2.5\% and above the 97.5\% thresholds, Fig. \ref{fig: QQ plots AMT} shows the QQ-plots of the fitted models. Fig. \ref{fig: weighted beta distributions} shows the estimated $\hat{\beta}^w$ distributions, with 95\% confidence bounds provided by the models. Fig. \ref{fig: threads with social info and colored by beta weights} shows the observed threads, colored by the individual $\hat{\beta}^w$ values, and the available social information. Fig. \ref{fig: social info vs estimates} shows the observed estimates against the available social information, again colored by their individual $\hat{\beta}^w$ values.
 
 \subsection*{Modeled values}
-The observations in the model were transformed to achieve a better fit. The estimates were normalized (with the relevant number of dots) and then $\log$-transformed. Hence for an observed guess $g_i$ on $d$ dots with $v$ previous estimates available, then 
+The observations in the model were transformed to achieve a better fit. The estimates were standardized with the relevant number of dots and then $\log$-transformed. Hence for an observed guess $g_i$ on $d$ dots 
 \begin{align*}
 	y_i = \log(g_i/d), \quad i=1,\dots,n.
 \end{align*}
-The available social information, $m_i$, available for participant $i$ in a given thread was modeled as an aggregated value of the available previous estimates. If we let $z_{i,\{1,\dots,v\}}$ denote these $v$, then for the un-manipulated threads $z^h_{i, \{1,\dots,v\}} = \{e_{i-1},\dots,e_{i-v}\}$ and for the manipulated threads $z^m_{i, \{1,\dots,v\}} = \{e^*_{(1)},\dots,e^*_{(v)} | e^*_j=e_j, j<i\}$, where $e^*_{(1)}\geq e^*_{(2)}\geq\dots\geq e^*_{(v)}\geq e^*_{(l)}, v<l\leq j<i$ denote the (decreasingly) ordered estimates $e^*_j$ among $e_1,\dots,e_j$. The superscripts $h,m$ refer to the type of information available, either historical ($h$) or manipulated ($m$). Hence, the historical information are the preceding $v$ estimates, whereas the manipulated information are the $v$ largest estimates among all preceding estimates. \\
-Following \citep{jayles2017social} the aggregation of these estimates was a geometric mean. However, contrary to \citep{jayles2017social}, the actual actual estimates were available to the participants, hence in this context $m_i$ becomes a proxy for the available social information. Letting $z_{ij}$ denote the $j$'th visible estimate for the $i$'th participant in either type of threads, then
+The available social information, $s_i$, available for participant $i$ in a given thread was modeled as an aggregated value of the available previous estimates. If we let $z_{i,\{1,\dots,v\}}$ denote these $v$, then for the un-manipulated threads $z^h_{i, \{1,\dots,v\}} = \{e_{i-1},\dots,e_{i-v}\}$ and for the manipulated threads $z^m_{i, \{1,\dots,v\}} = \{e^*_{(1)},\dots,e^*_{(v)} | e^*_j=e_j, j<i\}$, where $e^*_{(1)}\geq e^*_{(2)}\geq\dots\geq e^*_{(v)}\geq e^*_{(l)}$ denote the (decreasingly) ordered estimates $e^*_j$ among $e_1,\dots,e_j$, for $v<l\leq j<i$. The superscripts $h,m$ refer to the type of information available, either historical ($h$) or manipulated ($m$). Hence, the historical information are the preceding $v$ estimates, whereas the manipulated information are the $v$ largest estimates among all preceding estimates. \\
+Following \citep{jayles2017social} the aggregation of these estimates was a geometric mean. However, contrary to \citep{jayles2017social}, the actual actual estimates were available to the participants, hence in this context $s_i$ becomes a proxy for the available social information. Letting $z_{ij}$ denote the $j$'th visible estimate for the $i$'th participant in either type of threads, then
 \begin{align*}
-	m_i = \log\left(\frac{\prod_{j=1}^v z_{ij}^{w_j}}{d}\right) %= \sum_{j=1}^v w_j \log(g^\text{pre}_j)-\log(d) 
+	s_i = \log\left(\frac{\prod_{j=1}^v z_{ij}^{w_j}}{d}\right) %= \sum_{j=1}^v w_j \log(g^\text{pre}_j)-\log(d) 
 	= \sum_{j=1}^v w_j \log\left(\frac{z_{ij}}{d}\right),
 \end{align*}
-where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled values (log-normalized estimates) are aggregated as a simple weighted mean. The weights $w_j, j=1,\dots,v$ were determined from density estimates based on the control threads of $v=0$. Hence, for $d$ dots, a density was estimated from the $v=0$ thread and then used as a proxy for how individuals in a thread with $v>0$ would estimate without any info. Using this, an individual in a thread with $v>1$ is then assumed to assess the available previous estimates based on this density. Hence, extreme estimates are naturally filtered and a participants information is thus almost exclusively weighted among sensible estimates. Practically this implied that estimates well within boundaries considered extreme where almost equally weighted, however extreme inputs, either by deliberate efforts to mislead the thread or otherwise just to be considered nuisances were weighted almost at 0, yielding a more reasonable aggregated social information input $m_i$. For manipulated threads, or threads with $v=1$, the social information available can be extreme guesses. In the latter, this is simply what a participant have seen and will thus be discarded by the model fitting a low $\beta^w$ value for this participant (assuming that the current participant submits a realistic estimate and not taking the extreme info into account). In the case of manipulated threads, due to the removal of most extreme estimates to filter out deliberate extremities, the social information available can be higher than the cutoff limit of the 97.5\% quantile. However, as in the case of $v=1$, this will simply be the available information that a participant can follow or disregard. The model will thus fit a suitable $\beta^w$ value based on the current participants use of the info available. The pair $(y_i,m_i), i=1,\dots,n$ were then used in the GMM framework, see Fig. \ref{fig: GMM dependencies}.
+where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled values (log-normalized estimates) are aggregated as a simple weighted mean. The weights $w_j, j=1,\dots,v$ were determined from density estimates based on the control threads of $v=0$. Hence, for $d$ dots, a density was estimated from the $v=0$ thread and then used as a proxy for how individuals in a thread with $v>0$ would estimate without any social information. Using this, an individual in a thread with $v>1$ is then assumed to assess the available previous estimates based on this density. This way extreme estimates are naturally filtered and a participants information is therefore almost exclusively weighted among sensible estimates. Practically this implied that estimates well within boundaries considered extreme, were almost equally weighted, however extreme inputs, either by deliberate efforts to mislead the thread or otherwise just to be considered nuisances were weighted almost at 0, yielding a more reasonable aggregated social information input $s_i$. For manipulated threads, or threads with $v=1$, the social information available show these extreme guesses. Since this is simply what a participant have seen and will thus be discarded by the parameter estimation, fitting a low $\beta^w$ value for this participant (assuming that the current participant submits a realistic estimate and not taking the extreme info into account). In the case of manipulated threads, due to the removal of most extreme estimates to filter out deliberate extremities, the social information available can be higher than the cutoff limit of the 97.5\% quantile. However, as in the case of $v=1$, this will simply be the available information that a participant can follow or disregard. The model will thus fit a suitable $\beta^w$ value based on the current participants use of the info available. The pair $(y_i,s_i), i=1,\dots,n$ were then used in the GMM framework, see Fig. \ref{fig:model}.
 
-The R (ref: R Core team) package \texttt{depmixS4} was used to fit models, using an EM algorithm to maximize the log-likelihood function of the model. 
+The R package \texttt{depmixS4} \cite{visser2010} was used to fit the model, using an EM algorithm to maximize the log-likelihood function of the model. 
 
 \section*{Supplementary Data Analysis}
 \subsection*{Summary Statistics}
