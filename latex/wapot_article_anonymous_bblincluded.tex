@@ -52,7 +52,7 @@ connection/.style={thick, dotted},
     \begin{abstract}
 \noindent
 %Social decision-making is increasingly relying on digitized aggregates of people’s opinions and judgments. These aggregates are frequently maintained as threads, i.e. as sequences of posts on a website. While it has been shown that knowledge of thread aggregates can distort decision-making, it is unknown how seeing preceding posts in a thread may alter individual judgment and collective accuracy. We investigate experimentally the accuracy of threads in which people make magnitude estimations of varying difficulty while seeing a varying number of previous estimates. We find a significant increase in collective accuracy in difficult threads when the social information is pristine and  high levels social information in pristine threads, while collective accuracy declines quickly in manipulated threads. Using gaussian mixture models we assign a persuadability score to each participant, and show that persuadability generally increases with task difficulty and with the amount of social information. In the case of strong manipulation, we may see a split between a minority of persuadables and a majority of skeptics.
-Online discussion threads are important means for individual decision-making as well as for aggregating collective judgments, e.g. the 'wisdom of crowds’. Empirical investigations of the wisdom of crowds are currently ambivalent about the role played by social information. While some findings suggest that social information undermines crowd accuracy due to correlated judgment errors, others show that accuracy improves. We investigate experimentally the accuracy of threads in which people make magnitude estimates of varying difficulty while seeing a varying number of previous estimates. We demonstrate that, for difficult tasks, seeing preceding estimates in a thread aids the wisdom of crowds. If, however, threads are filtered so that people only see extreme estimates, wisdom quickly turns into folly. Using a gaussian mixture model we assign a persuadability score to each participant and show that persuadability increases with task difficulty and with the amount of social information. In filtered threads, we see an increasing gap between highly persuadable participants and skeptics.
+Online discussion threads are important means for individual decision-making and for aggregating collective judgments, e.g. the 'wisdom of crowds’. Empirical investigations of the wisdom of crowds are currently ambivalent about the role played by social information. While some findings suggest that social information undermines crowd accuracy due to correlated judgment errors, others show that accuracy improves. We investigate experimentally the accuracy of threads in which participants make magnitude estimates of varying difficulty while seeing a varying number of previous estimates. We demonstrate that, for difficult tasks, seeing preceding estimates in a thread aids the wisdom of crowds. If, however, participants only see the most extreme estimates, wisdom quickly turns into folly. Using a Gaussian Mixture Model we assign a persuadability score to each participant and show that persuadability increases with task difficulty and with the amount of social information. In filtered threads, we see an increasing gap between highly persuadable participants and skeptics.
 \\
 \end{abstract}
   \end{@twocolumnfalse}
@@ -70,44 +70,10 @@ Collective estimates of a diverse group of people can outperform the majority of
 Observational data of decision-making processes is acutely sensitive to the social context in which people find themselves. Thus, researchers find it difficult to separate observational data into its social and individual components. How may we know how much weight an individual puts on her own ‘independent’ estimate relative to the weight put on the estimates by others? Randomized experimental studies have attempted to solve this problem by first letting participants make a magnitude estimate of an object without social information (\textit{ex ante}), and subsequently ask them to revise their estimate after having received information about other people’s estimates of that very object (\textit{ex post}) \cite{becker2017network, jayles2017social, lorenz2011social, sniezek1995cueing, mavrodiev2013quantifying}. This setup %double elicitation paradigm
 presumes that people change their mind because of the social information they receive. Other studies, however, have shown that people routinely change their mind all by themselves, and that it may be more correct to assume an `inner crowd' in the sense that people sample randomly from a probability distribution in their own mind \cite{vul2008measuring, herzog2009wisdom, herzog2014harnessing}. Such a psychological mechanism - and perhaps others such as hedging strategies due to anticipated regrets \cite{bell1982regret}, and/or disappointments \cite{loomes1986disappointment} - make it difficult to differentiate between `inner' samples and `outer' influences. It is therefore desirable to develop an alternative framework that is able infer the extend of individual bias and social influence from a single estimation task.
 
-We propose to use a probabilistic gaussian mixture model (GMM) as it has properties that are highly valuable in crowd aggregation research. First, a GMM is comprised of several Gaussians which fit well to the right-skewed and heavy-tailed distributions emerging from free response elicitations. Second, a GMM associates a measure to each data point, describing the influence of social information on that particular participant without any prior knowledge about that participant. Finally, as a statistical model, a GMM provides confidence bounds to the estimates, which further adds a measure of model uncertainty.
+We propose to use a probabilistic Gaussian Mixture Model (GMM) as it has properties that are highly valuable in crowd aggregation research. First, a GMM is comprised of several Gaussians which fit well to the right-skewed and heavy-tailed distributions emerging from free response elicitations. Second, a GMM associates a measure to each data point, describing the influence of social information on that particular participant without any prior knowledge about that participant. Finally, as a statistical model, a GMM provides confidence bounds to the estimates, which further adds a measure of model uncertainty.
 
-We also propose the experimental mechanism of dot-guessing games \cite{horton2010dot}, where participants guess the number of dots in an image. While dot estimations have been used previously in numerosity experiments \cite{minturn1951effect, indow1977scaling, krueger1982single} they have only recently been proposed as useful ‘model organisms’ for crowd aggregation research \cite{horton2010dot, ugander2015wisdom} due to their advantages in terms of cultural neutrality, resistance to expertise and/or prior knowledge, and their qualities as captchas \cite{von2008recaptcha}. In addition, dot estimation tasks are easy to implement and easy to understand. Most importantly, they have an objective solution and are tunable, allowing for nearly-continuous difficulty levels and performance measures.
 
-%\section*{Experimental Design}
-We collected a total of 11,748 estimates from 6,196 unique participants on Amazon Mechanical Turk. 5,990 estimates were collected from participants placed in 12 different threads where they successively estimated the number of dots, $d \in \{55,148,403,1097\}$, in an image, while seeing the $v \in \{1,3,9\}$ \textit{preceding} estimates (historical threads). Another 3,934 estimates were collected from participants who were placed in 12 other threads and shown the same images while seeing the $v \in \{1,3,9\}$ \textit{highest} estimates made so far (manipulated threads). Finally, 1.824 estimates were collected from participants who were shown the same images, but with $v=0$, corresponding to control conditions for each $d$ containing no social information. 
-
-We interpret the number of dots, $d$, as the \textit{task difficulty}, while the number of visible previous estimates, $v$, is interpreted as the \textit{degree of social information}. Participants were placed randomly in one of the 28 threads ($2 \times 3 \times 4$ + 4 controls)  and made their estimate one after another. In order to keep the estimates in a somewhat realistic range, participants could not submit numbers below 10 and above 1.000.000. No participant who had seen a certain image would be able to participate in another thread containing the same image again. In addition to a participation fee and a variable waiting fee, all participants in all threads received a bonus of \$1 if their estimate was within 10\% of the true value. See the Methods section and the Supplementary Information for additional information about the experimental design.
-
-%\section*{Methods}
-Free response elecitation of absolute values is known to create right-skewed distributions with long tails, which inflate the means. While it is still debated which measure is best suited to aggregate such data \cite{kao2018counteracting}, we follow the lead of Galton \cite{galton1907vox} and focus on the median as it is easy to interpret, robust against outliers, and best expresses the opinion of the crowd in the sense that the majority deems every other estimate as too high or too low. For the statistical analysis of thread aggregates, we therefore compare the log-ratio of thread medians, $y_{dv}=\log(M_{(d,v)}/d)$, using a linear normal model to quantify differences between threads in terms of $\log(d)$ and $v$, the latter as a categorical variable. 
-
-\begin{figure}[!h]
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=5pt,auto,node distance=2.2cm, thick,main  
-node/.style={circle,fill=gray!25,draw,font=\sffamily\bfseries, minimum size=1.25cm}]
-	\node[main node] (x1) {$X_{i}$};
-	%\node[main node] (x2) [right of=x1] {$X_{i+1}$};
-	\node[main node] (y1) [below of=x1] {$Y_{i}$};
-	%\node[main node] (y2) [below of=x2] {$Y_{i+1}$};
-	\node[main node] (m1) [below of=y1] {$S_{i}$};
-	\node[main node] (m2) [right of=m1] {$S_{i+1}$};
-	\path[every node/.style={font=\sffamily\small}]
-    		%(m1) edge [dashed, bend right=30] (m2) 
-    		(m1) edge [dashed] (m2) edge [dashed] (y1)
-		%(m2) edge [dashed] (y2)
-		(y1) edge [dashed] (m2) 
-		(x1) edge (y1)
-		%(x2) edge (y2)
-  		;
-	\end{tikzpicture}
-	\caption{\footnotesize Gaussian Mixture Model dependencies with the observed estimate $Y_i$ by participant $i$, the latent state variable $X_i$, and the social information $S_i$ when consisting of preceding estimates. Dashed lines are connections that depend on the number of views $v$. When $v=0$, $S_i$ is omitted from the model, when $v=1$ then $S_i\to Y_i$ and $Y_i\to S_{i+1}$. For $v>1$ then $S_i\to S_{i+1}$ is added.}
-\label{fig:model}
-\end{figure}
-
-The effects of social information on individual descision-making are analysed using a probabilistic gaussian mixture model on the log-ratio of individual estimates $Y_i$ with the weighted geometric mean of the social information as the explanatory variable $S_i$. Model dependecies are shown in Figure~\ref{fig:model}. The model assigns a \textit{persuadability score}, $\beta^w$, to each participant, which is high when people are highly influenced by the social information they can see, and small when people are not influenced, or when they are skeptical about the information (see Methods for details). 
-
-\begin{figure*}[t]
+\begin{figure*}[h]
 \centering
 	\begin{subfigure}[t]{.46\linewidth}
 		\centering
@@ -126,17 +92,21 @@ The effects of social information on individual descision-making are analysed us
 \end{figure*}
 
 
+We also propose the experimental mechanism of dot-guessing games \cite{horton2010dot}, where participants guess the number of dots in an image. While dot estimations have been used previously in numerosity experiments \cite{minturn1951effect, indow1977scaling, krueger1982single} they have only recently been proposed as useful ‘model organisms’ for crowd aggregation research \cite{horton2010dot, ugander2015wisdom} due to their advantages in terms of cultural neutrality, resistance to expertise and/or prior knowledge, and their qualities as captchas \cite{von2008recaptcha}. In addition, dot estimation tasks are easy to implement and easy to understand. Most importantly, they have an objective solution and are tunable, allowing for nearly-continuous difficulty levels and performance measures.
+
+
+
+%\section*{Experimental Design}
+We collected a total of 11,748 estimates from 6,196 unique participants on Amazon Mechanical Turk. 5,990 estimates were collected from participants placed in 12 different threads where they successively estimated the number of dots, $d \in \{55,148,403,1097\}$, in an image, while seeing the $v \in \{1,3,9\}$ \textit{preceding} estimates (historical threads). Another 3,934 estimates were collected from participants who were placed in 12 other threads and shown the same images while seeing the $v \in \{1,3,9\}$ \textit{highest} estimates made so far (manipulated threads). Finally, 1.824 estimates were collected from participants who were shown the same images, but with $v=0$, corresponding to control conditions for each $d$ containing no social information. 
+
+We interpret the number of dots, $d$, as the \textit{task difficulty}, while the number of visible previous estimates, $v$, is interpreted as the \textit{degree of social information}. Participants were placed randomly in one of the 28 threads ($2 \times 3 \times 4$ + 4 controls)  and made their estimate one after another. In order to keep the estimates in a somewhat realistic range, participants could not submit numbers below 10 and above 1.000.000. No participant who had seen a certain image would be able to participate in another thread containing the same image again. In addition to a participation fee and a variable waiting fee, all participants in all threads received a bonus of \$1 if their estimate was within 10\% of the true value. See the Methods section and the Supplementary Information for additional information about the experimental design.
+
+%\section*{Methods}
+Free response elecitation of absolute values is known to create right-skewed distributions with long tails, which inflate the means. While it is still debated which measure is best suited to aggregate such data \cite{kao2018counteracting}, we follow the lead of Galton \cite{galton1907vox} and focus on the median as it is easy to interpret, robust against outliers, and best expresses the opinion of the crowd in the sense that the majority deems every other estimate as too high or too low. For the statistical analysis of thread aggregates, we therefore compare the log-ratio of thread medians, $y_{dv}=\log(M_{(d,v)}/d)$, using a linear normal model to quantify differences between threads in terms of $\log(d)$ and $v$, the latter as a categorical variable. The effects of social information on individual descision-making are analysed using a GMM on the log-ratio of individual estimates $Y_i$ with the weighted geometric mean of the social information as the explanatory variable. %Model dependecies are shown in Figure~\ref{fig:model}. 
+The model assigns a \textit{persuadability score}, $\beta^w$, to each participant, which is high when people are highly influenced by the social information they can see, and small when people are not influenced, or when they are skeptical about the information (see Methods for details). 
+
 \subsection*{Results}
-In accordance with previous findings, participants do well in tasks without social information, especially when estimating small numbers. For higher difficulties estimates vary widely and biases become substantial \cite{indow1977scaling, izard2008calibrating, krueger1982single, krueger1984perceived, kao2018counteracting}. The median tends to underestimate the true value and the mean tends to overestimate the true value. %Summary statistics of all 28 treatments can be inspected graphically and in table format in the supplementary information (SI).
-%\subsection*{Analysis of thread performance}
-The relationship between the observed median log-ratio $y_{dv}$ and the number of dots $d$ are found suitable, according to quantile-quantile plots (see SI-text), when modeling $y_{dv}$ against $\log{d}$. We thus quantify the overall differences between threads in terms of the log-ratio of their medians, $y_{dv}=\log(M_{(d,v)}/d)$, as a function of $\log(d)$ and $v$. Historical and manipulated threads are modelled separately to allow for differing error variances.
-
-Figure \ref{fig: median confidence bounds - historic} shows that the collective performance of historical threads declines significantly with increasing task difficulty $d$, but improves when the social information is substantial. In contrast to \cite{lorenz2011social, king2011true, minson2012cost} and in concert with \cite{gurccay2015power, becker2017network, jayles2017social, farrell2011social} these findings support the claim that crowds indeed may become wise under (pristine) social influence. It should be noted, however, that the overlapping confidence intervals reveal where thread performances are comparable. Thus, the negative effects of task difficulty and the positive effects of social information are only discernible in situations where people have hard problems to solve and at the same time have social information in abundance. In fact, the median estimate of historical threads with $v=9$ is `wise' in the sense of being statistically indistinguishable from the true value for all $d$. In manipulated threads, Fig.\ref{fig: median confidence bounds - manipulated}, the manipulation results in a large positive bias for $v=3,9$ which increases with $d$, implying that when a task becomes more demanding, the amount of (filtered) social information has a highly detrimental impact on thread performance. For $v=1$ there is still a small negative trend, implying that the manipulation is not very effective. This resonates well with the findings in \cite{jayles2017social} which shows that providing a moderate amount of incorrect information may counterbalance underestimation bias and improve collective performance. 
-
-%\subsection*{Analysis of Persuadability} 
-A GMM is fitted to all threads after removing estimates below the 2.5\% and above the 97.5\% quantiles. For each model, standardized residuals are evaluated visually using quantile-quantile plots against a standard normal $\mathcal{N}(0,1)$, see SI-text. These plots reveal that models using $k=2,3,4$ states fit the data quite well, with only a few models displaying a less adequate fit.
-
-\begin{figure*}[!h]
+\begin{figure*}[h]
 	\centering
 	\begin{subfigure}{.44\linewidth}
 		\centering
@@ -151,7 +121,6 @@ A GMM is fitted to all threads after removing estimates below the 2.5\% and abov
 	\begin{subfigure}{.44\linewidth}
 		\centering
 		%\includegraphics[width=1\linewidth]{m10979.pdf}
-		
 		\includegraphics[width=1\linewidth]{threads/thread_max_1097_9.pdf}
 		\includegraphics[width=.48\linewidth]{info/info_max_1097_9.pdf}
 		\includegraphics[width=.48\linewidth]{betas/beta_max_1097_9.pdf}
@@ -163,51 +132,221 @@ A GMM is fitted to all threads after removing estimates below the 2.5\% and abov
 		\includegraphics[width=1.08\linewidth]{betascale_vertical.pdf}
 		\caption{\footnotesize $\beta^w$ scale.}
 	\end{subfigure}
-	\caption{\footnotesize The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
+	\caption{\footnotesize \textbf{GMM results:} The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
 \label{fig: social influence}
 \end{figure*}
 
-In Fig. \ref{fig: social influence} two exemplary threads show how the model framework can reveal interesting features of the data (more threads are analyzed in the SI-text). Each thread is presented by three figures. The top figures show the log-ratio of estimates as the thread evolves over time with the weighted geometric mean of the social information shown by a dotted line. Each estimate has an associated color, given by the persuadability score $\beta^w$, which measures the influence of social information on each participant. A high value ($\beta^w>0.6$) in drak green and blue colors implies a large social influence effect, a low value ($\beta^w\approx 0$) in red implies a small or no effect, and a medium value ($\beta^w \approx 0.4$) in brown and light green colors suggests a compromise between the two extremes. The RGB color scale (right) is the same for all threads and plots. The bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently people use their social information: The more they align with the identity line, the more they tend to follow the social information. 
+In accordance with previous findings, participants do well in tasks without social information, especially when estimating small numbers. For higher difficulties estimates vary widely and biases become substantial \cite{indow1977scaling, izard2008calibrating, krueger1982single, krueger1984perceived, kao2018counteracting}. The median tends to underestimate the true value and the mean tends to overestimate the true value. %Summary statistics of all 28 treatments can be inspected graphically and in table format in the supplementary information (SI).
+
+\subsubsection*{Analysis of thread performance}
+The relationship between the observed median log-ratio $y_{dv}$ and the number of dots $d$ are found suitable, according to quantile-quantile plots (see SI-text), when modeling $y_{dv}$ against $\log{d}$. We thus quantify the overall differences between threads in terms of the log-ratio of their medians, $y_{dv}=\log(M_{(d,v)}/d)$, as a function of $\log(d)$ and $v$. Historical and manipulated threads are modelled separately to allow for differing error variances.
+
+Figure \ref{fig: median confidence bounds - historic} shows that the collective performance of historical threads declines significantly with increasing task difficulty $d$, but improves with the amount of social information. In contrast to \cite{lorenz2011social, king2011true, minson2012cost} and in concert with \cite{gurccay2015power, becker2017network, jayles2017social, farrell2011social} these findings support the claim that crowds indeed may become wise under (pristine) social influence. It should be noted, however, that the overlapping confidence intervals reveal where thread performances are comparable. Thus, the negative effects of task difficulty and the positive effects of social information are only discernible in situations where people have hard problems to solve and at the same time have social information in abundance. In fact, the median estimate of historical threads with $v=9$ is `wise' in the sense of being statistically indistinguishable from the true value for all $d$. 
+
+In manipulated threads, Fig.\ref{fig: median confidence bounds - manipulated}, the manipulation results in a large positive bias for $v=3,9$ which increases with $d$, implying that when a task becomes more demanding, the amount of (filtered) social information has a highly detrimental impact on thread performance. For $v=1$ there is still a small negative trend, implying that the manipulation is not very effective. This resonates well with the findings in \cite{jayles2017social} which shows that providing a moderate amount of incorrect information may counterbalance underestimation bias and improve collective performance. 
+
+\subsubsection*{Analysis of Persuadability} 
+% A GMM is fitted to all threads after removing estimates below the 2.5\% and above the 97.5\% quantiles. For each model, standardized residuals are evaluated visually using quantile-quantile plots against a standard normal $\mathcal{N}(0,1)$, see Supplementary Information. These plots reveal that models using $k=2,3,4$ states fit the data quite well, with only a few models displaying a less adequate fit.  (repetition from Methods)
+
+In Fig. \ref{fig: social influence} two exemplary threads show how the GMM model framework can reveal interesting features of the data. Each thread is presented by three figures. The top figures show the log-ratio of estimates as the thread evolves over time with the weighted geometric mean of the social information shown by a dotted line. Each estimate has an associated color, given by the persuadability score $\beta^w$, which measures the influence of social information on each participant. A high value ($\beta^w>0.6$) in drak green and blue colors implies a large social influence effect, a low value ($\beta^w\approx 0$) in red implies a small or no effect, and a medium value ($\beta^w \approx 0.4$) in brown and light green colors suggests a compromise between the two extremes. The RGB color scale (right) is the same for all threads and plots. The bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently people use their social information: The more they align with the identity line, the more they tend to follow the social information. 
 
 The bottom right plots show the cumulative distribution of the persuadability scores with 95\% confidence intervals derived from the fitted model. They clearly show how people may be categorized into those ‘sleeping dogs’ or ‘lost causes’ \cite{devriendt2018literature} in red that do not take other peoples estimates into account, the `persuadables' that tend to follow others, and a large group of green `compromisers', who try to strike a balance between what they see others have guessed, and what they believe themselves. Of course, such labels are only proximate. Given a participant has a personal estimate much in line with the social information seen, this participant may be labelled as a persuadable or as a compromiser, when in fact this is only partially true. In general, however, the distributions are remarkable stable across threads, which suggests that people indeed may be partitioned into such overlapping response types.
 
-%\subsubsection*{A closer look at manipulated threads}
-What becomes abundantly clear when examining the results from the GMMs, is a sharp contrast between how people act in pristine historical threads, and how people act in manipulated threads. When task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread. But as soon as the amount of social information increases, more people tend to follow – or at least to compromise (see supplementary data analysis in the SI-text). This indicates that there is a bandwagon effect at work \cite{bikhchandani1992theory, nadeau1993new, lee2018understanding}, making it more likely for people to follow others, the more people have done so already. 
+\subsubsection*{Thread dynamics}
+\begin{figure*}
+	\centering
+	\begin{subfigure}{.49\linewidth}
+		\subcaptionbox{History thread with $d=55$, $v=1$.}
+		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
 
-If $d$ is increased as well, the number of persuadables increases. This general pattern of correlations between high $(d,v)$ and persuadability continues, and in the thread with the highest difficulty and highest visibility, Figure~\ref{fig: h=max d=1097, v=9}, we see huge errors in a majority of estimates. In the beginning, the manipulation may not be as pronounced, and participants go along for quite a while. However, as the thread evolves, the red group of skeptics increases, and a prototypical polarization emerges between enthusiastic persuadables on the one side and compromisers/skeptics on the other. This split is also visible in the transistional `kink' in the $\beta^w$-distribution around the 65\% quantile in the bottom right plot of Figure~\ref{fig: h=max d=1097, v=9}. It shows that at least 30\% of the participants in this thread are medium to strongly influenced by the filtered information given to them.
+		\subcaptionbox{History thread with $d=55$, $v=3$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
+		
+		\subcaptionbox{History thread with $d=148$, $v=3$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
+		
+		\subcaptionbox{History thread with $d=403$, $v=9$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}	\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
+		
+		\subcaptionbox{History thread with $d=1097$, $v=9$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
+		
+		%\caption{ History threads with with increasing $d$ and $v$}
+		
+		\vspace{10px}
+		\hspace{10px}
+		\center History threads
+		
+		\label{fig:supp hist}
+	\end{subfigure}
+	\begin{subfigure}{.49\linewidth}
+		\subcaptionbox{Manipulated thread with $d=55$, $v=1$.}
+		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
 
-\subsection*{Conclusion}
-Returing to the initial question of whether social information helps or damages crowd wisdom, our answer is yes. Social information in online estimation threads does help when people have difficult questions to answer and when the information available to them is pristine and therefore representative. However, if the social information is filtered and not representative of the thread population, it becomes manipulative and may fool a substantial proportion of people, which, of course, interferes with any aspiration to harness the powers of collective intelligence. 
+		\subcaptionbox{Manipulated thread with $d=55$, $v=3$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
+		
+		\subcaptionbox{Manipulated thread with $d=148$, $v=3$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
+		
+		\subcaptionbox{Manipulated thread with $d=403$, $v=9$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
+		
+		\subcaptionbox{Manipulated thread with $d=1097$, $v=9$.}		
+		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
 
-Moving from the aggregate to the individual level, we find that people can be assigned a persuadability score by using a Gaussian mixture model. Persuadability generally increases with task difficulty and with the amount of social information provided. In the case of strong manipulation, we may see a split between a minority of persuadables and a majority of compromisers and skeptics. 
+		%\caption{ Manipulated threads with with increasing $d$ and $v$}
+		\vspace{10px}
+		\hspace{10px}
+		\center Manipulated threads
 
-We do not know how much these influencing effects are transferable to other domains. However, due to the general nature of dot estimations, we suspect the effects to be substantial in other settings as well, and also for other questions – especially for those that are more emotional, subjective and political in nature. In computational social science and decision-making research,  there is an acute need to further investigate the types of ‘disturbances’ in online threads and crowds, such as filters, rankings, likes, and recommendations, as well as the types of reaction to those disturbances. To the end of designing future collective intelligence systems, one needs to be vigilant about the way social information is gathered and framed. Crowd knowledge and thread wisdom is fragile, and can only be maintained with strong controls upon the way it is cultivated and recovered.
+		\label{fig:supp max}
+	\end{subfigure}
+	
+	\includegraphics[width=.5\linewidth]{betascale_horizontal}
+
+	
+	\caption{\footnotesize \textbf{Thread comparison:} Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$. 
+	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
+\label{fig:more}
+\end{figure*}
+
+What becomes abundantly clear when examining the results from the GMMs, is a sharp contrast between how people act in pristine historical threads, and how people act in manipulated, filtered threads. This is shown in Figure~\ref{fig:more}, where we compare typical historical threads (left) with their corresponding manipulated treatments (right). When task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread (Figure~\ref{fig:more}a,f). But as soon as the amount of social information increases (Figure~\ref{fig:more}b,g), more people tend to follow – or at least to compromise. This indicates that there is a bandwagon effect at work \cite{bikhchandani1992theory, nadeau1993new, lee2018understanding}, making it more likely for people to follow others, the more people have done so already. 
+
+%If $d$ is increased as well (Figure~\ref{more}c,h), the number of persuadables increases. This general pattern of correlations between high $(d,v)$ and persuadability continues, and in the thread with the highest difficulty and highest visibility (Figure~\ref{more}e,j), we see huge errors in a majority of estimates. In the beginning, the manipulation may not be as pronounced, and participants go along for quite a while. However, as the thread evolves, the red group of skeptics increases, and a prototypical polarization emerges between enthusiastic persuadables on the one side and compromisers/skeptics on the other. This split is also visible in the transistional `kink' in the $\beta^w$-distribution around the 65\% quantile in the bottom right plot of Figure~\ref{fig: h=max d=1097, v=9}. It shows that at least 30\% of the participants in this thread are medium to strongly influenced by the filtered information given to them.
+
+If we increase the difficulty of the task from $d=55$ to $d=148$ and keep $v$ constant at $v=3$, as shown in the third row of Figure~\ref{fig:more}, the dynamics between the historical thread on the left diverges strongly from the dynamics of the manipulated thread on the right. While the majority of participants in the historical thread are easier to persuade (green colors), people in the manipulated thread become more diverse and slowly start to split bewteen those, who are highly persuadable (blue) and those who are not (red). Increasing difficulty even further to $d=403$, and also increasing the amout of social information to $v=9$, as shown in the fourth row of Figure~\ref{fig:more}, makes this split in behaviour even more visible. For $d=1097$ and $v=9$, as shown in the bottom row, the difference is very clear: In the historical thread, a large majority of participants are medium to strongly influenced, having a persuadability score around $.5$, probably because most of the social information they see is regarded as more or less reasonable. However, as can be seen in the $\beta^w$-distribution, there is a high uncertainty in the scores, because we only model the weighted geometric mean of the nine preceding estimates, while people presumably are much more diverse in the way they process these estimates. 
+
+
+%In the following, we dive deeper into the results from the GMM's. In the main text we established that when task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread. But as soon as $v$ increases, more people tend to follow – or at least compromise on what the see other participants have estimated, and what they believe themselves. 
+
+%In Figure~\ref{fig:more} . In the top row we have threads with $d=55$ and $v=1$. Both shown only in red colors, indicating that participants are not influenced by the single other estimate they can see, probably because it is easy for people to see that the actual number of dots in the image is in the range of 50-60. The next row shows the historical and manipulated threads with $d=55$ and $v=3$. Even though the task difficulty is held constant, green colors appear, implying that more people tend to follow – or at least to compromise – upon their own estimates. %This shows that there is a bandwagon effect at work, making it more likely for people to follow others the more people have done so already. 
+
+\subsection*{Discussion}
+Returning to the initial question of whether social information helps crowd wisdom, or whether it does more harm than good, our answer is both. Social information in online estimation threads does help when people have difficult questions to answer and when the information available to them is pristine and therefore representative. However, if the social information is filtered and not representative of the thread population, it becomes manipulative and may fool a substantial proportion of people, which, of course, interferes with any aspiration to harness the powers of collective intelligence. 
+
+Moving from the aggregate to the individual level, we find that people can be assigned a persuadability score by using a Gaussian Mixture Model. Persuadability generally increases with task difficulty and with the amount of social information provided. In the case of strong manipulation, we may see a split between a minority of persuadables and a majority of compromisers and skeptics. We do not know how much these influencing effects are transferable to other domains. However, due to the general nature of dot estimations, we suspect the effects to be substantial in other settings as well, and also for other questions – especially for those that are more emotional, subjective and political in nature. In computational social science and decision-making research,  there is an acute need to further investigate the types of ‘disturbances’ in online threads and crowds, such as filters, rankings, likes, and recommendations, as well as the types of reaction to those disturbances. To the end of designing future collective intelligence systems, one needs to be vigilant about the way social information is gathered and framed. Crowd knowledge and thread wisdom is fragile, and can only be maintained with strong controls upon the way it is cultivated and recovered.
 
 \subsection*{Methods}\scriptsize
 \subsubsection*{Experimental design and data collection} 
 All experiments were coded in otree 2.1 \cite{chen2016otree}. The code itself is designed along the same lines as the classical information cascade experiments by Anderson and Holt \cite{anderson1997information}. A participant makes an estimate, and the next one receives the information about the estimate of the previous participant(s). %Thus, the main technical issue is that only one person at a time can make a decision while others wait. As soon as a participant finishes and leaves the choice page, the next participant enters while all subsequent participants still have to wait. 
-We obtained a total of 11.748 estimates from 6.196 unique participants. Any dot-image was only seen once by a participant, i.e. we had a total of 3.157 participants seeing only one image, 1.259 participants seeing two images, 1.047 participants seeing three images, and 733 participants seeing all four images (either in the unmanipulated or manipulated conditions and with $v \in \{0, 1, 3, 9\}$). After providing informed consent, participants waited in a ‘waiting room’ until the ‘choice room’ became available. When entering the choice room participants could see an image $d$ together with $v \in \{0,1,3,9\}$ previous estimates. After making an estimate, participants were thanked and paid a participation fee of \$0.10 and bonus of \$1 if their estimate was within 10\% of the true number. The average time used was less than two minutes, see SI-text for screenshot and detailed descriptions.
+We obtained a total of 11.748 estimates from 6.196 unique participants. Any dot-image was only seen once by a participant, i.e. we had a total of 3.157 participants seeing only one image, 1.259 participants seeing two images, 1.047 participants seeing three images, and 733 participants seeing all four images (either in the unmanipulated or manipulated conditions and with $v \in \{0, 1, 3, 9\}$). After providing informed consent, participants waited in a ‘waiting room’ until the ‘choice room’ became available. When entering the choice room participants could see an image $d$ together with $v \in \{0,1,3,9\}$ previous estimates. After making an estimate, participants were thanked and paid a participation fee of \$0.10 and bonus of \$1 if their estimate was within 10\% of the true number. The average time used was less than two minutes, see SI-text for screenshot and detailed design descriptions.
 
-\subsubsection*{Analysis of thread medians} For the observed medians $M_{dv}, d\in \{55,148,403,1097\}, v \in \{0,1,3,9\}$ the log ratios $y_{dv} = \log (M_{dv}/d)$ were modeled using a linear normal model. For a given thread, $\log{d}$ was used as a quantitative variable whereas $v$ was used as a categorical factor. Hence, $y_{dv} = \alpha_v+\beta_v\log{d}+\varepsilon_{dv}$, $\varepsilon_{dv} \sim \mathcal{N}(0,\sigma^2)$. Models were fitted separately to historical and manipulated threads to allow for different variance estimates $\hat{\sigma}^2$ between these groups. Goodness of fit was assessed by quantile-quantile (QQ) plots of the residuals (see SI-text).
+\subsubsection*{Analysis of thread medians} For the observed medians $M_{dv}, d\in \{55,148,403,1097\}, v \in \{0,1,3,9\}$ the log ratios $y_{dv} = \log (M_{dv}/d)$ were modeled using a linear normal model. For a given thread, $\log{d}$ was used as a quantitative variable whereas $v$ was used as a categorical factor. Hence, the model structure for the medians is $\mu_{dv} = \alpha_v+\beta_v\log{d}$. Models were fitted separately to historical and manipulated threads to allow for different variance estimates $\hat{\sigma}^2$ between these groups. Goodness of fit was assessed by quantile-quantile (QQ) plots of the residuals (see SI-text, Figure~\ref{fig: qq plots median}). Although some deviation is present, with the available number of observations we do not discard the models based on these plots. The low number of observations also implies wide confidence bands, hence conclusions from the models can be viewed as conservative. 
 
-\subsubsection*{Analysis of social influence}
-The influence of social information was analyzed using a Gaussian Mixture Model (GMM) for each individual thread. The flexibility of these models allow for heavier tails and skewness present in the in the data. Individual estimates $e_i$ are transformed as the log-ratio relative to the true number of dots in order to compare threads of differing difficulty. Therefore, 
+%\section*{Statistical methods}
+%\subsection*{Analysis of thread medians}
+%The medians were modeled as a linear normal models for the history and manipulated series separately, where the mean in each case was specified as
+%\begin{align*}
+%	\mu_{dv} = \alpha_v+\beta_v\log(d), \quad d=55, 148, 403, 1097, \enskip v=0,1,3,9 .
+%\end{align*}
+%The number of views was treated as categorical, since there were clearly an effect of different views, but it was hard to quantify the relationship between different number of views. The ($\log$) number of visible dots was modeled as a quantitative variable, since the distance between $\log(d)$ were deemed suitable scores for this variable, especially since the number of dots were chosen as $e^{\delta}, \delta=4,5,6,7$ rounded to nearest integer. The quantitative nature of $d$ was also chosen to lower the number of variables in the model, due to the low number of observations (medians) available. 
+%
+%The models were assessed by quantile-quantile (QQ) and residual plots, as shown in Figure~\ref{fig: qq plots median}. Although some deviation is present, with the available number of observations we do not discard the models based on these plots. The low number of observations also implies wide confidence bands, hence conclusions from the models can be viewed as conservative. 
+
+\subsubsection*{GMM model for social influence}
+A Gaussian Mixture Model (GMM) was used to cope with the heavy tails and skewness present in the data. The GMM employs a fixed number of states to fit a weighted sum of Gaussian distributions to each observation, hence the \emph{mixture} labeling.
+
+Let $X_i=\{1,\dots,k\}$ denote the state variable and $Y_i$ the observation for participant $i=1,\dots,n$. Then, conditional on $X_i=j, j=1,\dots,k$, $Y_i$ follows a normal distribution
+\begin{align*}
+	Y_i|(X_i=j)  \sim \mathcal{N} (\mu_j,\sigma^2_j), j=1,\dots,k,
+\end{align*}
+hence the unconditional distribution of $Y_i$ is obtained by integrating (i.e. summing since $X_i$ is discrete) over $X_i$
+\begin{align*}
+	P(Y_i) = \sum_{j=1}^k P(X_i=j)P(Y_i|X_i=j).
+\end{align*}
+Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $S_i$, if $v>0$. Furthermore, if $v>0$, then $Y_i$ influences $S_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provided is the previous views). Fig. \ref{fig:model} shows a graphical presentation of the model (with preceding views available).
+
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=5pt,auto,node distance=2.2cm, thick,main  
+node/.style={circle,fill=gray!25,draw,font=\sffamily\bfseries, minimum size=1cm}]
+	\node[main node] (x1) {$X_{i}$};
+	%\node[main node] (x2) [right of=x1] {$X_{i+1}$};
+	\node[main node] (y1) [below of=x1] {$Y_{i}$};
+	%\node[main node] (y2) [below of=x2] {$Y_{i+1}$};
+	\node[main node] (m1) [below of=y1] {$S_{i}$};
+	\node[main node] (m2) [right of=m1] {$S_{i+1}$};
+	\path[every node/.style={font=\sffamily\small}]
+    		%(m1) edge [dashed, bend right=30] (m2) 
+    		(m1) edge [dashed] (m2) edge [dashed] (y1)
+		%(m2) edge [dashed] (y2)
+		(y1) edge [dashed] (m2) 
+		(x1) edge (y1)
+		%(x2) edge (y2)
+  		;
+	\end{tikzpicture}
+	\\
+	%\caption{
+	\justify \tiny Figure 4: Gaussian Mixture Model dependencies with the observed estimate $Y_i$ by participant $i$, the latent state variable $X_i$, and the social information $S_i$ when consisting of preceding estimates. Dashed lines are connections that depend on the number of views $v$. When $v=0$, $S_i$ is omitted from the model, when $v=1$ then $S_i\to Y_i$ and $Y_i\to S_{i+1}$. For $v>1$ then $S_i\to S_{i+1}$ is added.%}
+\label{fig:model}
+\end{figure}
+
+Thus, given $k$ independent states and using $\delta_{ij} = P(X_i=j)$, then $Y_i$ is normally distributed with parameters
 \begin{align}
-	y_i = \log(e_i/d), i=1,\dots,n. \label{eq: y values for gmm}
+\begin{array}{l}
+	\mu^w_i = \sum_{j=1}^k \delta_{ij} \mu_j \\
+	(\sigma^w_i)^2 = \sum_{j=1}^k \left(\delta_{ij} \sigma_j\right)^2
+\end{array}
+\quad i=1,\dots,n \label{eq: weighted Gaussian parameters}
 \end{align}
-The social influence variable $s_i, i=1,\dots, n$ was calculated as a weighted geometric mean of previous estimates, with the weighting derived from density estimates of the control groups with $v=0$. The geometric mean follows the idea of \citep{jayles2017social} where the authors argue that a multiplicative aggregation is more inline with human behavior. The relative social information was also log-transformed analogously with Eq. \ref{eq: y values for gmm}.  For a GMM with $k$ states, each state model then becomes
+where the mean $\mu_j$ is modeled with social information $s_i$ as
 \begin{align}
-	\mu_j = \alpha_j+\beta_j s_i \quad, i=1,\dots,n, j=1, \dots,k. \label{eq: mean models}
+	\mu_j = \alpha_j+\beta_j s_i, \quad i=1,\dots,n, j=1,\dots,k.
 \end{align}
-The number of states, $k$, was chosen by the associated Bayesian Information Criteria (BIC), but was capped at $k=5$. For each observation $y_i$, each state is assigned a weight $\delta_{ij}$, such that the $i$'th mean is a weighted sum
+Note that $\mu^w_i$ and $\sigma^w_i$ refer to the weighted estimates, unique to each observation $y_i, i=1, \dots, n$. This implies, that the effect of social information becomes a weighted sum of $\beta_j$ estimates
 \begin{align}
-	\mu^w_i = \sum_{j=1}^k\delta_{ij}\mu_j = \sum_{j=1}^k\delta_{ij}(\alpha_j +\beta_j s_i),
+	\beta^w_i = \sum_{j=1}^k \delta_{ij} \beta_{j}, \quad i=1,\dots, n. \label{eq: weighted beta}
 \end{align}
-where 
+Similarly for the $\alpha_i^w$ parameter, modeling the accompanying intercept.
+
+It should be emphasized that the weighted $\alpha_i^w,\beta_i^w$ are unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same effects. For the GMM this can be interpreted as each participant is modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general dimensions. 
+
+For each model, the number of states were set to $k=2,3,4,5$ and the model with the lowest Bayesian Information Criteria (BIC) was chosen as the preferable one. The BIC was used rather than the more usual Akaikes Information Criteria (AIC), since the BIC penalized the number of parameters more heavily. The aim was to settle with a decent model fit, with fewer parameters to avoid overfitting. Using objective criteria to choose a number of states/clusters is often prone to simply increase $k$ continuously \cite{hastie2009} and as such the AIC yielded much larger $k$ values ($k \gg 5$), practically implying that $k=5$ for all models, due to us capping this parameter at this value. This effect was not seen for the BIC measure for $2\leq k \leq 5$, further supporting this choice of objective measure.
+% Tibshirani, Elements of Statistical Learning section 14.3.11
+
+In our case AIC: $6k-2\ln(L)$ and BIC: $3k\ln(n)-2\ln(L)$, where $L$ refers to the likelihood value. Note that both criteria are scaled with $3k$ parameters for $k$ states. The BIC penalizes the number of parameters weighted by the ($\log$) number of observations $n$, 
+as $3k$, corresponding to $(\delta_i,\mu_i,\sigma^2_i)$ for each state, whereas AIC only penalizes by a factor 2.
+
+The goodness of fit for the GMM was assessed by calculating standardized residuals
 \begin{align}
-	\beta^w_i = \sum_{j=1}^k \delta_{ij}\beta_j, \quad i=1,\dots, n, j=1,\dots,k \label{eq: weighted beta}
+ 	\hat{\varepsilon}_i = \frac{y_i - \hat{\mu}^w_i}{(\hat{\sigma}^w_i)^2} = (y_i - \hat{\alpha}^w_i-\hat{\beta}^w_ix_i)/(\hat{\sigma}^w_i)^2 \label{eq: GMM residuals}
 \end{align}
-is the estimated influence of social information which we denote the \emph{persuadability score} of the $i$'th participant in the thread. It should be emphasized that the weighted $\beta^w_i$ is unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same $\beta$-effect. For the GMM, this can be interpreted as each participant being modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general dimensions. The goodness of fit for the GMM was assessed by visualizing the residuals (see SI-text). 
+and assessing the empirical distribution of $\hat{\varepsilon}_i, i=1,\dots,n$ against a standard $\mathcal{N}(0,1)$ distribution.
+
+After removing the 5\% most extreme observations, i.e. estimates below the 2.5\% and above the 97.5\% thresholds, Fig. \ref{fig: QQ plots AMT} in the SI-text shows the QQ-plots of the fitted models. Fig. \ref{fig: weighted beta distributions} in the SI-text shows the estimated $\hat{\beta}^w$ distributions, with 95\% confidence bounds provided by the models. Fig. \ref{fig: threads with social info and colored by beta weights} in the SI-text shows the observed threads, colored by the individual $\hat{\beta}^w$ values, and the available social information. Fig. \ref{fig: social info vs estimates} shows the observed estimates against the available social information, again colored by their individual $\hat{\beta}^w$ values.
+
+\subsection*{Modeled values}
+The observations in the model were transformed to achieve a better fit. The estimates were standardized with the relevant number of dots and then $\log$-transformed. Hence for an observed guess $g_i$ on $d$ dots 
+\begin{align*}
+	y_i = \log(g_i/d), \quad i=1,\dots,n.
+\end{align*}
+The available social information, $s_i$, available for participant $i$ in a given thread was modeled as an aggregated value of the available previous estimates. If we let $z_{i,\{1,\dots,v\}}$ denote these $v$, then for the un-manipulated threads $z^h_{i, \{1,\dots,v\}} = \{e_{i-1},\dots,e_{i-v}\}$ and for the manipulated threads $z^m_{i, \{1,\dots,v\}} = \{e^*_{(1)},\dots,e^*_{(v)} | e^*_j=e_j, j<i\}$, where $e^*_{(1)}\geq e^*_{(2)}\geq\dots\geq e^*_{(v)}\geq e^*_{(l)}$ denote the (decreasingly) ordered estimates $e^*_j$ among $e_1,\dots,e_j$, for $v<l\leq j<i$. The superscripts $h,m$ refer to the type of information available, either historical ($h$) or manipulated ($m$). Hence, the historical information are the preceding $v$ estimates, whereas the manipulated information are the $v$ largest estimates among all preceding estimates. \\
+Following \citep{jayles2017social} the aggregation of these estimates was a geometric mean. However, contrary to \citep{jayles2017social}, the actual estimates were available to the participants, hence in this context $s_i$ becomes a proxy for the available social information. Letting $z_{ij}$ denote the $j$'th visible estimate for the $i$'th participant in either type of threads, then
+\begin{align*}
+	s_i = \log\left(\frac{\prod_{j=1}^v z_{ij}^{w_j}}{d}\right) %= \sum_{j=1}^v w_j \log(g^\text{pre}_j)-\log(d) 
+	= \sum_{j=1}^v w_j \log\left(\frac{z_{ij}}{d}\right),
+\end{align*}
+where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled values (log-normalized estimates) are aggregated as a simple weighted mean. The weights $w_j, j=1,\dots,v$ were determined from density estimates based on the control threads of $v=0$. Hence, for $d$ dots, a density was estimated from the $v=0$ thread and then used as a proxy for how individuals in a thread with $v>0$ would estimate without any social information. Using this, an individual in a thread with $v>1$ is then assumed to assess the available previous estimates based on this density. This way extreme estimates are naturally filtered and a participants information is therefore almost exclusively weighted among sensible estimates. Practically this implied that estimates well within boundaries considered extreme, were almost equally weighted, however extreme inputs, either by deliberate efforts to mislead the thread or otherwise just to be considered nuisances were weighted almost at 0, yielding a more reasonable aggregated social information input $s_i$. For manipulated threads, or threads with $v=1$, the social information available show these extreme guesses. Since this is simply what a participant have seen and will thus be discarded by the parameter estimation, fitting a low $\beta^w$ value for this participant (assuming that the current participant submits a realistic estimate and not taking the extreme info into account). In the case of manipulated threads, due to the removal of most extreme estimates to filter out deliberate extremities, the social information available can be higher than the cutoff limit of the 97.5\% quantile. However, as in the case of $v=1$, this will simply be the available information that a participant can follow or disregard. The model will thus fit a suitable $\beta^w$ value based on the current participants use of the info available. The pair $(y_i,s_i), i=1,\dots,n$ were then used in the GMM framework. The R package \texttt{depmixS4} \cite{visser2010} was used to fit the model, using an EM algorithm to maximize the log-likelihood function of the model. 
+
+%\subsubsection*{Analysis of social influence}
+%The influence of social information was analyzed using a Gaussian Mixture Model (GMM) for each individual thread. The flexibility of these models allow for heavier tails and skewness present in the in the data. Individual estimates $e_i$ are transformed as the log-ratio relative to the true number of dots in order to compare threads of differing difficulty. Therefore, 
+%\begin{align}
+%	y_i = \log(e_i/d), i=1,\dots,n. \label{eq: y values for gmm}
+%\end{align}
+%The social influence variable $s_i, i=1,\dots, n$ was calculated as a weighted geometric mean of previous estimates, with the weighting derived from density estimates of the control groups with $v=0$. The geometric mean follows the idea of \citep{jayles2017social} where the authors argue that a multiplicative aggregation is more inline with human behavior. The relative social information was also log-transformed analogously with Eq. \ref{eq: y values for gmm}.  For a GMM with $k$ states, each state model then becomes
+%\begin{align}
+%	\mu_j = \alpha_j+\beta_j s_i \quad, i=1,\dots,n, j=1, \dots,k. \label{eq: mean models}
+%\end{align}
+%The number of states, $k$, was chosen by the associated Bayesian Information Criteria (BIC), but was capped at $k=5$. For each observation $y_i$, each state is assigned a weight $\delta_{ij}$, such that the $i$'th mean is a weighted sum
+%\begin{align}
+%	\mu^w_i = \sum_{j=1}^k\delta_{ij}\mu_j = \sum_{j=1}^k\delta_{ij}(\alpha_j +\beta_j s_i),
+%\end{align}
+%where 
+%\begin{align}
+%	\beta^w_i = \sum_{j=1}^k \delta_{ij}\beta_j, \quad i=1,\dots, n, j=1,\dots,k \label{eq: weighted beta}
+%\end{align}
+%is the estimated influence of social information which we denote the \emph{persuadability score} of the $i$'th participant in the thread. It should be emphasized that the weighted $\beta^w_i$ is unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same $\beta$-effect. For the GMM, this can be interpreted as each participant being modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general dimensions. The goodness of fit for the GMM was assessed by visualizing the residuals (see SI-text). 
 
 \subsection*{Reporting Summary.}\footnotesize Further information on research design is available in the Nature Research Reporting Summary linked to this article..
 
@@ -777,101 +916,7 @@ During our experiments, participants had easy access to our email for questions 
 %%For all reported aggregate measures, outliers are removed if they have an error rate above 10, so that $|x_r-truth|/truth <10$, where $x_r$ is the estimate by participant $r$. We also use a lower bound of $truth/10$, due some reports of not being able to see the form input on mobile devices or unanticipated timeouts (see SI Appendix, section “Mturk Settings”). With these trimming criteria in place, we count a the following number of outliers: In the dots-experiments, 62 participants have an error rate above 100, and 118 participants have an error rate above 10, while 33 participants have made an estimate below 10\% of the true value. In the ox-experiments, one participant has an error rate above 30 and 9 participants have an error rate above 10, while 94 participants have made an estimate less than 10\% of the true value. This give a total of 151 (1.8 \%) outliers in the dots-experiments and 103 (4.1 \%) outliers in the ox-experiments, giving a grand total of 254 (2.4 \%) outliers out of 10.808 estimates.
 
 
-\section*{Statistical methods}
-\subsection*{Analysis of thread medians}
-The medians were modeled as a linear normal models for the history and manipulated series separately, where the mean in each case was specified as
-\begin{align*}
-	\mu_{dv} = \alpha_v+\beta_v\log(d), \quad d=55, 148, 403, 1097, \enskip v=0,1,3,9 .
-\end{align*}
-The number of views was treated as categorical, since there were clearly an effect of different views, but it was hard to quantify the relationship between different number of views. The ($\log$) number of visible dots was modeled as a quantitative variable, since the distance between $\log(d)$ were deemed suitable scores for this variable, especially since the number of dots were chosen as $e^{\delta}, \delta=4,5,6,7$ rounded to nearest integer. The quantitative nature of $d$ was also chosen to lower the number of variables in the model, due to the low number of observations (medians) available. 
 
-The models were assessed by quantile-quantile (QQ) and residual plots, as shown in Figure~\ref{fig: qq plots median}. Although some deviation is present, with the available number of observations we do not discard the models based on these plots. The low number of observations also implies wide confidence bands, hence conclusions from the models can be viewed as conservative. 
-
-\subsection*{GMM model for social influence}
-A Gaussian Mixture Model (GMM) was used to cope with the heavy tails and skewness present in the data. The GMM employs a fixed number of states to fit a weighted sum of gaussian distributions to each observation, hence the \emph{mixture} labeling.
-
-Let $X_i=\{1,\dots,k\}$ denote the state variable and $Y_i$ the observation for participant $i=1,\dots,n$. Then, conditional on $X_i=j, j=1,\dots,k$, $Y_i$ follows a normal distribution
-\begin{align*}
-	Y_i|(X_i=j)  \sim \mathcal{N} (\mu_j,\sigma^2_j), j=1,\dots,k,
-\end{align*}
-hence the unconditional distribution of $Y_i$ is obtained by integrating (i.e. summing since $X_i$ is discrete) over $X_i$
-\begin{align*}
-	P(Y_i) = \sum_{j=1}^k P(X_i=j)P(Y_i|X_i=j).
-\end{align*}
-Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $S_i$, if $v>0$. Furthermore, if $v>0$, then $Y_i$ influences $S_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provided is the previous views).
-%Fig. \ref{fig: GMM dependencies} shows a graphical presentation of the model (with preceding views available).
-%\begin{figure}[!h]
-%\centering
-%	\begin{tikzpicture}[->,>=stealth',shorten >=5pt,auto,node distance=3cm, thick,main 	node/.style={circle,fill=gray!25,draw,font=\sffamily\bfseries, minimum size=1.25cm}]
-%
-%	\node[main node] (x1) {$X_{i}$};
-%	%\node[main node] (x2) [right of=x1] {$X_{i+1}$};
-%
-%	\node[main node] (y1) [below of=x1] {$Y_{i}$};
-%	%\node[main node] (y2) [below of=x2] {$Y_{i+1}$};
-%
-%	\node[main node] (m1) [below of=y1] {$M_{i}$};
-%	\node[main node] (m2) [right of=m1] {$M_{i+1}$};
-%
-%	\path[every node/.style={font=\sffamily\small}]
-%    		%(m1) edge [dashed, bend right=30] (m2) 
-%    		(m1) edge [dashed] (m2) edge [dashed] (y1)
-%		%(m2) edge [dashed] (y2)
-%		(y1) edge [dashed] (m2) 
-%		(x1) edge (y1)
-%		%(x2) edge (y2)
-%  		;
-%	\end{tikzpicture}
-%\caption{Gaussian Mixture Model dependencies with observed variables are $Y_i,M_i$, when the visible history $M_i$ consist of preceding estimates. The social influence $M_i$ points to the current estimate $Y_i$ and the next influence $M_{i+1}$. The $Y_i$ is furthermore influenced by the latent state variable $X_i$. Dashed lines are connections that depend on the number of views $v$. When $v=0$, $M_i$ is omitted from the model, when $v=1$ then $M_i\to Y_i$ and $Y_i\to M_{i+1}$. For $v>1$ then $M_i\to M_{i+1}$ is added.}\label{fig: GMM dependencies}
-%\end{figure}
-Thus, given $k$ independent states and using $\delta_{ij} = P(X_i=j)$, then $Y_i$ is normally distributed with parameters
-\begin{align}
-\begin{array}{l}
-	\mu^w_i = \sum_{j=1}^k \delta_{ij} \mu_j \\
-	(\sigma^w_i)^2 = \sum_{j=1}^k \left(\delta_{ij} \sigma_j\right)^2
-\end{array}
-\quad i=1,\dots,n \label{eq: weighted Gaussian parameters}
-\end{align}
-where the mean $\mu_j$ is modeled with social information $s_i$ as
-\begin{align}
-	\mu_j = \alpha_j+\beta_j s_i, \quad i=1,\dots,n, j=1,\dots,k.
-\end{align}
-Note that $\mu^w_i$ and $\sigma^w_i$ refer to the weighted estimates, unique to each observation $y_i, i=1, \dots, n$. This implies, that the effect of social information becomes a weighted sum of $\beta_j$ estimates
-\begin{align}
-	\beta^w_i = \sum_{j=1}^k \delta_{ij} \beta_{j}, \quad i=1,\dots, n. \label{eq: weighted beta}
-\end{align}
-Similarly for the $\alpha_i^w$ parameter, modeling the accompanying intercept.
-
-It should be emphasized that the weighted $\alpha_i^w,\beta_i^w$ are unique for each observation due to the weights $\delta_{ij}$, contrary to a standard regression model where all observations are assumed to adhere to the same effects. For the GMM this can be interpreted as each participant is modeled as a weighted average of $k$ strategies. Hence, the personal strategy is unique, due to $\delta_{ij}$, but weighted among $k$ general dimensions. 
-
-For each model, the number of states were set to $k=2,3,4,5$ and the model with the lowest Bayesian Information Criteria (BIC) was chosen as the preferable one. The BIC was used rather than the more usual Akaikes Information Criteria (AIC), since the BIC penalized the number of parameters more heavily. The aim was to settle with a decent model fit, with fewer parameters to avoid overfitting. Using objective criteria to choose a number of states/clusters is often prone to simply increase $k$ continuously \cite{hastie2009} and as such the AIC yielded much larger $k$ values ($k \gg 5$), practically implying that $k=5$ for all models, due to us capping this parameter at this value. This effect was not seen for the BIC measure for $2\leq k \leq 5$, further supporting this choice of objective measure.
-% Tibshirani, Elements of Statistical Learning section 14.3.11
-
-In our case AIC: $6k-2\ln(L)$ and BIC: $3k\ln(n)-2\ln(L)$, where $L$ refers to the likelihood value. Note that both criteria are scaled with $3k$ parameters for $k$ states. The BIC penalizes the number of parameters weighted by the ($\log$) number of observations $n$, 
-as $3k$, corresponding to $(\delta_i,\mu_i,\sigma^2_i)$ for each state, whereas AIC only penalizes by a factor 2.
-
-The goodness of fit for the GMM was assessed by calculating standardized residuals
-\begin{align}
- 	\hat{\varepsilon}_i = \frac{y_i - \hat{\mu}^w_i}{(\hat{\sigma}^w_i)^2} = (y_i - \hat{\alpha}^w_i-\hat{\beta}^w_ix_i)/(\hat{\sigma}^w_i)^2 \label{eq: GMM residuals}
-\end{align}
-and assessing the empirical distribution of $\hat{\varepsilon}_i, i=1,\dots,n$ against a standard $\mathcal{N}(0,1)$ distribution.
-
-After removing the 5\% most extreme observations, i.e. estimates below the 2.5\% and above the 97.5\% thresholds, Fig. \ref{fig: QQ plots AMT} shows the QQ-plots of the fitted models. Fig. \ref{fig: weighted beta distributions} shows the estimated $\hat{\beta}^w$ distributions, with 95\% confidence bounds provided by the models. Fig. \ref{fig: threads with social info and colored by beta weights} shows the observed threads, colored by the individual $\hat{\beta}^w$ values, and the available social information. Fig. \ref{fig: social info vs estimates} shows the observed estimates against the available social information, again colored by their individual $\hat{\beta}^w$ values.
-
-\subsection*{Modeled values}
-The observations in the model were transformed to achieve a better fit. The estimates were standardized with the relevant number of dots and then $\log$-transformed. Hence for an observed guess $g_i$ on $d$ dots 
-\begin{align*}
-	y_i = \log(g_i/d), \quad i=1,\dots,n.
-\end{align*}
-The available social information, $s_i$, available for participant $i$ in a given thread was modeled as an aggregated value of the available previous estimates. If we let $z_{i,\{1,\dots,v\}}$ denote these $v$, then for the un-manipulated threads $z^h_{i, \{1,\dots,v\}} = \{e_{i-1},\dots,e_{i-v}\}$ and for the manipulated threads $z^m_{i, \{1,\dots,v\}} = \{e^*_{(1)},\dots,e^*_{(v)} | e^*_j=e_j, j<i\}$, where $e^*_{(1)}\geq e^*_{(2)}\geq\dots\geq e^*_{(v)}\geq e^*_{(l)}$ denote the (decreasingly) ordered estimates $e^*_j$ among $e_1,\dots,e_j$, for $v<l\leq j<i$. The superscripts $h,m$ refer to the type of information available, either historical ($h$) or manipulated ($m$). Hence, the historical information are the preceding $v$ estimates, whereas the manipulated information are the $v$ largest estimates among all preceding estimates. \\
-Following \citep{jayles2017social} the aggregation of these estimates was a geometric mean. However, contrary to \citep{jayles2017social}, the actual estimates were available to the participants, hence in this context $s_i$ becomes a proxy for the available social information. Letting $z_{ij}$ denote the $j$'th visible estimate for the $i$'th participant in either type of threads, then
-\begin{align*}
-	s_i = \log\left(\frac{\prod_{j=1}^v z_{ij}^{w_j}}{d}\right) %= \sum_{j=1}^v w_j \log(g^\text{pre}_j)-\log(d) 
-	= \sum_{j=1}^v w_j \log\left(\frac{z_{ij}}{d}\right),
-\end{align*}
-where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled values (log-normalized estimates) are aggregated as a simple weighted mean. The weights $w_j, j=1,\dots,v$ were determined from density estimates based on the control threads of $v=0$. Hence, for $d$ dots, a density was estimated from the $v=0$ thread and then used as a proxy for how individuals in a thread with $v>0$ would estimate without any social information. Using this, an individual in a thread with $v>1$ is then assumed to assess the available previous estimates based on this density. This way extreme estimates are naturally filtered and a participants information is therefore almost exclusively weighted among sensible estimates. Practically this implied that estimates well within boundaries considered extreme, were almost equally weighted, however extreme inputs, either by deliberate efforts to mislead the thread or otherwise just to be considered nuisances were weighted almost at 0, yielding a more reasonable aggregated social information input $s_i$. For manipulated threads, or threads with $v=1$, the social information available show these extreme guesses. Since this is simply what a participant have seen and will thus be discarded by the parameter estimation, fitting a low $\beta^w$ value for this participant (assuming that the current participant submits a realistic estimate and not taking the extreme info into account). In the case of manipulated threads, due to the removal of most extreme estimates to filter out deliberate extremities, the social information available can be higher than the cutoff limit of the 97.5\% quantile. However, as in the case of $v=1$, this will simply be the available information that a participant can follow or disregard. The model will thus fit a suitable $\beta^w$ value based on the current participants use of the info available. The pair $(y_i,s_i), i=1,\dots,n$ were then used in the GMM framework, see Fig. \ref{fig:model}.
-
-The R package \texttt{depmixS4} \cite{visser2010} was used to fit the model, using an EM algorithm to maximize the log-likelihood function of the model. 
 
 \section*{Supplementary data analysis}
 %\subsection*{Summary Statistics}
@@ -879,12 +924,7 @@ The R package \texttt{depmixS4} \cite{visser2010} was used to fit the model, usi
 %
 %The right hand side of Figure~\ref{fig:sum_stats} shows the equivalent results for manipulated threads. While participants are relatively unaffected by social information when difficulty is low in the unmanipulated threads, participants in the manipulated threads quick start to overestimate, even with $v=1$. For higher $d$'s and $v$'s, estimates inflate ever more. Clearly, in the begining of a thread, only a few of the observed estimates are high numbers, making it not so probable for new participants to get influenced by them. But when threads become longer, still more of the observed estimates are very high numbers, making it more difficult to resist their influence. At a certain point, all visible estimates may be so improbably high, that participants may suspect foul play and start to ignore them. In some threads this effect can be observed by estimates branching off into two directions: those estimates showing herd behaviour by following the extremely high estimates seen, and those estimates ignoring them. This may contribute to the high variance of the manipulated threads. Also note that for $v=1$, the medians of the manipulated threads are often much closer to the true value than it is the case in the corresponding controls. This is so because the size of the manipulation (in this case showing only the single highest estimate in the thread) is just about enough to compensate for the naturally occuring underestimations in the controls.
 
-\subsection*{Results from GMM's}
-In the following, we dive deeper into the results from the GMM's. In the main text we established that when task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread. But as soon as $v$ increases, more people tend to follow – or at least compromise on what the see other participants have estimated, and what they believe themselves. 
 
-In Figure~\ref{fig:more} we compare typical historical threads (left) with their corresponding manipulated treatments (right). In the top row we have threads with $d=55$ and $v=1$. Both shown only in red colors, indicating that participants are not influenced by the single other estimate they can see, probably because it is easy for people to see that the actual number of dots in the image is in the range of 50-60. The next row shows the historical and manipulated threads with $d=55$ and $v=3$. Even though the task difficulty is held constant, green colors appear, implying that more people tend to follow – or at least to compromise – upon their own estimates. %This shows that there is a bandwagon effect at work, making it more likely for people to follow others the more people have done so already. 
-
-If we increase the difficulty of the task from 55 to 148 dots and keep $v$ constant at $v=3$, as shown in the third row of Figure~\ref{fig:more}, the dynamics between the historical thread on the left diverges strongly from the dynamics of the manipulated thread on the right. While the majority of participants in the historical thread are easier to persuade (green colors), people in the manipulated thread become more diverse and slowly start to split bewteen those, who are highly persuadable (blue) and those who are not (red). Increasing difficulty even further to $d=403$, and also increasing the amout of social information to $v=9$, as shown in the fourth row, makes this split in behaviour even more visible. For $d=1097$ and $v=9$, as shown in the bottom row, the difference is very clear: In the historical thread, a large majority of participants are medium to strongly influenced, having a persuadability score around .5, probably because most of the social information they see is regarded as more or less reasonable. However, as can be seen in the $\beta^w$-distribution, there is a high uncertainty in the scores, because we only model the weighted geometric mean of the nine preceding estimates, while people probably are much more diverse in the way they process these estimates. 
 
 \subsection*{Comparison across treatments}
 As mentioned in the main text, participants were allowed to participate in more than one of the treatments, but no participant was allowed to see the same image twice. We therefore have a substantial amount of participants who have seen either 2, 3 or 4 images. This makes it possible to compare individual persuadability scores across treatments. In Figure~\ref{compare} we have done so. The top plot shows the $\beta^w$-ordered result of comparisons across historical threads and the bottom plot shows the same for the manipulated threads. While the dot cloud in both plots is quite wide, there is a clear difference in the magnitude of persuadabilities and in the proportions of skeptics, compromisers, and persuadables. For the historical threads we can see, that almost all participants lie in the range between $0 < \beta^w < 0.5$, meaning that they keep their egocentric bias in line with \cite{rader2017advice}, but at the same time are highly flexible in their use of the social information provided. For the manipulated threads, we see a higher frequency of red colors and of $\beta^w$-values below zero, indicating that many participants did not agree with the social infomation they saw.  
@@ -1090,63 +1130,6 @@ As mentioned in the main text, participants were allowed to participate in more 
 %\end{figure}
 
 
-\begin{figure}
-	\centering
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{Thread with $d=55$ dots and $v=1$ estimates.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
-
-		\subcaptionbox{Thread with $d=55$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
-		
-		\subcaptionbox{Thread with $d=148$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
-		
-		\subcaptionbox{Thread with $d=403$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
-		
-		\subcaptionbox{Thread with $d=1097$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
-		
-		%\caption{ History threads with with increasing $d$ and $v$}
-		
-		\vspace{10px}
-		\hspace{10px}
-		History threads with with increasing $d$ and $v$
-		
-		\label{fig:supp hist}
-	\end{subfigure}
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{Thread with $d=55$ dots and $v=1$ estimates.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
-
-		\subcaptionbox{Thread with $d=55$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
-		
-		\subcaptionbox{Thread with $d=148$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
-		
-		\subcaptionbox{Thread with $d=403$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
-		
-		\subcaptionbox{Thread with $d=1097$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
-
-		%\caption{ Manipulated threads with with increasing $d$ and $v$}
-		\vspace{10px}
-		\hspace{10px}
-		Manipulated threads with with increasing $d$ and $v$
-
-		\label{fig:supp max}
-	\end{subfigure}
-	
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
-	
-	\caption{Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$. 
-	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
-\label{fig:more}
-\end{figure}
 
 
 
