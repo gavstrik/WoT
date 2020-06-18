@@ -118,64 +118,64 @@ In Fig. \ref{fig: social influence} two exemplary threads show how the GMM model
 
 The bottom right plots show the cumulative distribution of the persuadability scores with 95\% confidence intervals derived from the fitted model. They clearly show how people may be categorized into those ‘sleeping dogs’ or ‘lost causes’ \cite{devriendt2018literature} in red that do not take other peoples estimates into account, the `persuadables' that tend to follow others, and a large group of green `compromisers', who try to strike a balance between what they see others have guessed, and what they believe themselves. Of course, such labels are only proximate. Given a participant has a personal estimate much in line with the social information seen, this participant may be labelled as a persuadable or as a compromiser, when in fact this is only partially true. In general, however, the distributions are remarkable stable across threads, which suggests that people indeed may be partitioned into such overlapping response types.
 
-\subsubsection*{Thread dynamics}
-\begin{figure*}
-	\centering
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{History thread with $d=55$, $v=1$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
-
-		\subcaptionbox{History thread with $d=55$, $v=3$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
-
-		\subcaptionbox{History thread with $d=148$, $v=3$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
-
-		\subcaptionbox{History thread with $d=403$, $v=9$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}	\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
-
-		\subcaptionbox{History thread with $d=1097$, $v=9$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
-
-		%\caption{ History threads with with increasing $d$ and $v$}
-
-		\vspace{10px}
-		\hspace{10px}
-		\center History threads
-
-		\label{fig:supp hist}
-	\end{subfigure}
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{Manipulated thread with $d=55$, $v=1$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
-
-		\subcaptionbox{Manipulated thread with $d=55$, $v=3$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
-
-		\subcaptionbox{Manipulated thread with $d=148$, $v=3$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
-
-		\subcaptionbox{Manipulated thread with $d=403$, $v=9$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
-
-		\subcaptionbox{Manipulated thread with $d=1097$, $v=9$.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
-
-		%\caption{ Manipulated threads with with increasing $d$ and $v$}
-		\vspace{10px}
-		\hspace{10px}
-		\center Manipulated threads
-
-		\label{fig:supp max}
-	\end{subfigure}
-
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
-
-	\caption{\footnotesize \textbf{Thread comparison:} Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$.
-	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
-\label{fig:more}
-\end{figure*}
+%\subsubsection*{Thread dynamics}
+%\begin{figure*}
+%	\centering
+%	\begin{subfigure}{.49\linewidth}
+%		\subcaptionbox{History thread with $d=55$, $v=1$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
+%
+%		\subcaptionbox{History thread with $d=55$, $v=3$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
+%
+%		\subcaptionbox{History thread with $d=148$, $v=3$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
+%
+%		\subcaptionbox{History thread with $d=403$, $v=9$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}	\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
+%
+%		\subcaptionbox{History thread with $d=1097$, $v=9$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
+%
+%		%\caption{ History threads with with increasing $d$ and $v$}
+%
+%		\vspace{10px}
+%		\hspace{10px}
+%		\center History threads
+%
+%		\label{fig:supp hist}
+%	\end{subfigure}
+%	\begin{subfigure}{.49\linewidth}
+%		\subcaptionbox{Manipulated thread with $d=55$, $v=1$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
+%
+%		\subcaptionbox{Manipulated thread with $d=55$, $v=3$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
+%
+%		\subcaptionbox{Manipulated thread with $d=148$, $v=3$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
+%
+%		\subcaptionbox{Manipulated thread with $d=403$, $v=9$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
+%
+%		\subcaptionbox{Manipulated thread with $d=1097$, $v=9$.}
+%		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
+%
+%		%\caption{ Manipulated threads with with increasing $d$ and $v$}
+%		\vspace{10px}
+%		\hspace{10px}
+%		\center Manipulated threads
+%
+%		\label{fig:supp max}
+%	\end{subfigure}
+%
+%	\includegraphics[width=.5\linewidth]{betascale_horizontal}
+%
+%
+%	\caption{\footnotesize \textbf{Thread comparison:} Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$.
+%	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
+%\label{fig:more}
+%\end{figure*}
 
 What becomes abundantly clear when examining the results from the GMMs, is a sharp contrast between how people act in pristine historical threads, and how people act in manipulated, filtered threads. This is shown in Figure~\ref{fig:more}, where we compare typical historical threads (left) with their corresponding manipulated treatments (right). When task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread (Figure~\ref{fig:more}a,f). But as soon as the amount of social information increases (Figure~\ref{fig:more}b,g), more people tend to follow – or at least to compromise. This indicates that there is a bandwagon effect at work \cite{bikhchandani1992theory, nadeau1993new, lee2018understanding}, making it more likely for people to follow others, the more people have done so already.
 
