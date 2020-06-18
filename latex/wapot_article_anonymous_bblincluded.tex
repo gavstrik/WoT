@@ -109,18 +109,7 @@ The effects of social information on individual descision-making are analysed us
 
 \begin{figure*}[t]
 \centering
-	\begin{subfigure}[t]{.46\linewidth}
-		\centering
-		\includegraphics[width=1\linewidth]{med_confidence_h.pdf}	
-		\caption{\footnotesize Historical threads.}
-		\label{fig: median confidence bounds - historic}
-	\end{subfigure}
-	\begin{subfigure}[t]{.46\linewidth}
-		\centering
-		\includegraphics[width=1\linewidth]{med_confidence_m.pdf}		
-		\caption{\footnotesize Manipulated threads.}
-		\label{fig: median confidence bounds - manipulated}
-	\end{subfigure}
+	\includegraphics[width=1\linewidth]{medians.pdf}	
 	\caption{\footnotesize \textbf{Thread accuracy}. Relationship between median log-ratio $y_{dv}$ and $\log(d)$ with 95\% confidence bounds (shaded areas). Colors represent the number of visible estimates, $v$. There is a clear relation between $d$ and $v$ in both thread types showing that social information plays a dual role in difficult tasks: When $v$ is large, unmanipulated social information \textbf{(a)} counteracts underestimation bias and improves thread accuracy. When the social information is manipulated \textbf{(b)}, however, a strong overestimation bias emerges for large $v$. The red lines corresponding to the control groups with $v=0$ are identical in both plots.}
 	\label{fig: median confidence bounds}
 \end{figure*}
@@ -138,32 +127,8 @@ A GMM is fitted to all threads after removing estimates below the 2.5\% and abov
 
 \begin{figure*}[!h]
 	\centering
-	\begin{subfigure}{.44\linewidth}
-		\centering
-		%\includegraphics[width=1\linewidth]{h10971.pdf}
-		
-		\includegraphics[width=1\linewidth]{threads/thread_history_1097_1.pdf}
-		\includegraphics[width=.48\linewidth]{info/info_history_1097_1.pdf}
-		\includegraphics[width=.48\linewidth]{betas/beta_history_1097_1.pdf}
-		\caption{\footnotesize History thread with $d=1097$ and $v=1$.}
-		\label{fig: h=history d=1097, v=1}
-	\end{subfigure}
-	\begin{subfigure}{.44\linewidth}
-		\centering
-		%\includegraphics[width=1\linewidth]{m10979.pdf}
-		
-		\includegraphics[width=1\linewidth]{threads/thread_max_1097_9.pdf}
-		\includegraphics[width=.48\linewidth]{info/info_max_1097_9.pdf}
-		\includegraphics[width=.48\linewidth]{betas/beta_max_1097_9.pdf}
-		\caption{\footnotesize Manipulated thread with $d=1097$ and $v=9$.}
-		\label{fig: h=max d=1097, v=9}
-	\end{subfigure}
-	\begin{subfigure}{.1\linewidth}
-		\centering
-		\includegraphics[width=1.08\linewidth]{betascale_vertical.pdf}
-		\caption{\footnotesize $\beta^w$ scale.}
-	\end{subfigure}
-	\caption{\footnotesize The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
+		\includegraphics[width=1\linewidth]{threads.pdf}
+		\caption{\footnotesize The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
 \label{fig: social influence}
 \end{figure*}
 
@@ -901,12 +866,8 @@ As mentioned in the main text, participants were allowed to participate in more 
 
 
 \begin{figure}%[!h]
-	\begin{subfigure}[b]{.8\textwidth}
-		\includegraphics[width=\textwidth]{med_residual_h.pdf}
-	\end{subfigure}
-	\begin{subfigure}[b]{.8\textwidth}
-		\includegraphics[width=\textwidth]{med_residual_m.pdf}	
-	\end{subfigure}
+	\centering
+	\hspace{-20px}\includegraphics[width=.75\textwidth]{qqplots_median.pdf}
 	\caption{Model diagnostic plots for median analysis. Top left: QQ plot for the residuals from the historical thread medians analysis. Top right: the same residuals plottet against session groups. Bottom left: QQ plot for the residuals from the manipulated thread medians analysis. Bottom right: the same residuals plottet against session groups.}
 	\label{fig: qq plots median}
 \end{figure}
@@ -914,259 +875,38 @@ As mentioned in the main text, participants were allowed to participate in more 
 
 \begin{figure}%[!h]
 \centering
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_1}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_2}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_3}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_4}		
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_5}
-	
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_6}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_7}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_8}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_9}		
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_10}		
-
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_11}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_12}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_13}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_14}		
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_15}
-	
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_16}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_17}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_18}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_19}		
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_20}
-	
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_21}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_22}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_23}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_24}		
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_25}
-	
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_26}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_27}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_28}
-	\includegraphics[width=.195\linewidth]{qqplots/qqplot_29}	
+	\hspace{-30px}\includegraphics[width=1\linewidth]{qqplots}
 	\caption{QQ-plots for the 29 unique threads from Amazon Mechanical Turk experiments. With some exceptions, the models fit fairly well. Some series with very few observations are discarded in the analysis.}\label{fig: QQ plots AMT}
 \end{figure}
 
 \begin{figure}%[!h]
 \centering
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_1}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_2}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_3}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_4}		
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_5}
-	
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_6}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_7}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_8}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_9}		
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_10}		
-
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_11}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_12}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_13}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_14}		
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_15}
-	
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_16}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_17}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_18}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_19}		
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_20}
-	
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_21}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_22}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_23}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_24}		
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_25}
-	
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_26}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_27}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_28}
-	\includegraphics[width=.195\linewidth]{betas/beta_plot_29}	
-	
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
+	\hspace{-30px}\includegraphics[width=1\linewidth]{allbetas}
 	\caption{Distributions of estimated $\beta^w$'s for each thread. Color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: weighted beta distributions}
 \end{figure}
 
 \begin{figure}%[!h]
 \centering
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_1}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_2}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_3}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_4}		
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_5}
-	
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_6}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_7}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_8}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_9}		
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_10}		
-
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_11}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_12}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_13}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_14}		
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_15}
-	
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_16}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_17}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_18}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_19}		
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_20}
-	
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_21}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_22}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_23}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_24}		
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_25}
-	
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_26}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_27}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_28}
-	\includegraphics[width=.195\linewidth]{threads/thread_plot_29}	
-	
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
+	\hspace{-30px}\includegraphics[width=1\linewidth]{allthreads}
 	\caption{Individual guesses for each thread, colored by their estimated $\beta^w$ values. Social information available at each timepoint is shown as dashed black lines. The $\beta^w$ color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: threads with social info and colored by beta weights}
 \end{figure}
 
 \begin{figure}%[!h]
 \centering
-	\includegraphics[width=.195\linewidth]{info/info_plot_1}
-	\includegraphics[width=.195\linewidth]{info/info_plot_2}
-	\includegraphics[width=.195\linewidth]{info/info_plot_3}
-	\includegraphics[width=.195\linewidth]{info/info_plot_4}		
-	\includegraphics[width=.195\linewidth]{info/info_plot_5}
-	
-	\includegraphics[width=.195\linewidth]{info/info_plot_6}
-	\includegraphics[width=.195\linewidth]{info/info_plot_7}
-	\includegraphics[width=.195\linewidth]{info/info_plot_8}
-	\includegraphics[width=.195\linewidth]{info/info_plot_9}		
-	\includegraphics[width=.195\linewidth]{info/info_plot_10}		
-
-	\includegraphics[width=.195\linewidth]{info/info_plot_11}
-	\includegraphics[width=.195\linewidth]{info/info_plot_12}
-	\includegraphics[width=.195\linewidth]{info/info_plot_13}
-	\includegraphics[width=.195\linewidth]{info/info_plot_14}		
-	\includegraphics[width=.195\linewidth]{info/info_plot_15}
-	
-	\includegraphics[width=.195\linewidth]{info/info_plot_16}
-	\includegraphics[width=.195\linewidth]{info/info_plot_17}
-	\includegraphics[width=.195\linewidth]{info/info_plot_18}
-	\includegraphics[width=.195\linewidth]{info/info_plot_19}		
-	\includegraphics[width=.195\linewidth]{info/info_plot_20}
-	
-	\includegraphics[width=.195\linewidth]{info/info_plot_21}
-	\includegraphics[width=.195\linewidth]{info/info_plot_22}
-	\includegraphics[width=.195\linewidth]{info/info_plot_23}
-	\includegraphics[width=.195\linewidth]{info/info_plot_24}		
-	\includegraphics[width=.195\linewidth]{info/info_plot_25}
-	
-	\includegraphics[width=.195\linewidth]{info/info_plot_26}
-	\includegraphics[width=.195\linewidth]{info/info_plot_27}
-	\includegraphics[width=.195\linewidth]{info/info_plot_28}
-	\includegraphics[width=.195\linewidth]{info/info_plot_29}	
-	
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
+	\hspace{-30px}\includegraphics[width=1\linewidth]{allinfo}
 	\caption{Actual estimates by each participant against the given social information. Colored by the estimated $\beta^w$ values. Color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: social info vs estimates}
 \end{figure}
-
-%\begin{figure}%[!h]
-%\centering
-%	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-%	\caption{Color scale for $\beta^w$.}\label{fig: beta scale}
-%\end{figure}
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=1\linewidth]{summary_stats_plot.pdf}
-%\caption{\textbf{Left:} Summary statistics of $d \times v$ history treatments with a total of 7.814 magnitude estimates of the number of dots in an image, $d \in \{55,148,403,1097\}$, while participants are able to see $v \in \{0,1,3,9\}$ preceding estimates. Greys are the control treatments with $v=0$. Estimates are log-transformed. Large circles indicate medians, triangles indicate arithmetic means, thick lines show interquartile ranges, thin lines show interdecile ranges, vertical black lines show the true value, and stars indicate significance levels compared to the control treatment (two-sided Wilcoxon-Mann-Whitney test). No outliers were removed, making the arithmetic means strongly right skewed. \textbf{Right:} Summary statistics of $d \times v$ treatments with a total of 3.934 additional magnitude estimates, where participants do not see the preceding estimates but the $v \in \{1,3,9\}$ \textit{highest} estimates made so far. The controls, $v=0$, are the same as on the left hand side.}\label{fig:sum_stats}
-%\end{figure}
 
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{Thread with $d=55$ dots and $v=1$ estimates.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
-
-		\subcaptionbox{Thread with $d=55$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
-		
-		\subcaptionbox{Thread with $d=148$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
-		
-		\subcaptionbox{Thread with $d=403$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
-		
-		\subcaptionbox{Thread with $d=1097$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
-		
-		%\caption{ History threads with with increasing $d$ and $v$}
-		
-		\vspace{10px}
-		\hspace{10px}
-		History threads with with increasing $d$ and $v$
-		
-		\label{fig:supp hist}
-	\end{subfigure}
-	\begin{subfigure}{.49\linewidth}
-		\subcaptionbox{Thread with $d=55$ dots and $v=1$ estimates.}
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
-
-		\subcaptionbox{Thread with $d=55$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
-		
-		\subcaptionbox{Thread with $d=148$ dots and $v=3$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
-		
-		\subcaptionbox{Thread with $d=403$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
-		
-		\subcaptionbox{Thread with $d=1097$ dots and $v=9$ estimates.}		
-		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
-
-		%\caption{ Manipulated threads with with increasing $d$ and $v$}
-		\vspace{10px}
-		\hspace{10px}
-		Manipulated threads with with increasing $d$ and $v$
-
-		\label{fig:supp max}
-	\end{subfigure}
-	
-	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-
-	
-	\caption{Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$. 
+	\hspace{-30px}\includegraphics[width=1\linewidth]{thread_evolution}
+	\caption{Comparison of typical historical threads (left) and their corresponding manipulated versions (right).
 	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
 \label{fig:more}
 \end{figure}
 
 
-
-\begin{figure}
-	\centering
-	\begin{subfigure}{1\linewidth}
-		\centering
-		\includegraphics[width=1\linewidth]{beta_history}
-		\caption{\footnotesize History}
-		\label{fig: betaw history}
-	\end{subfigure}
-	\begin{subfigure}{1\linewidth}
-		\centering
-		\includegraphics[width=1\linewidth]{beta_max}
-		\caption{\footnotesize Manipulated}
-		\label{fig: betaw manipulated}
-	\end{subfigure}
-	\caption{Comparison of persuadability scores, $\beta^w$, for individuals participating in more than one study. For each participant on the x-axis there are 2-4 dots of the same color, which is determined by the average $\beta^w$ score, also shown by the solid line.}
-	\label{compare}
-\end{figure}
 
 \newpage
 
