@@ -52,7 +52,7 @@ connection/.style={thick, dotted},
     \begin{abstract}
 \noindent
 %Social decision-making is increasingly relying on digitized aggregates of people’s opinions and judgments. These aggregates are frequently maintained as threads, i.e. as sequences of posts on a website. While it has been shown that knowledge of thread aggregates can distort decision-making, it is unknown how seeing preceding posts in a thread may alter individual judgment and collective accuracy. We investigate experimentally the accuracy of threads in which people make magnitude estimations of varying difficulty while seeing a varying number of previous estimates. We find a significant increase in collective accuracy in difficult threads when the social information is pristine and  high levels social information in pristine threads, while collective accuracy declines quickly in manipulated threads. Using gaussian mixture models we assign a persuadability score to each participant, and show that persuadability generally increases with task difficulty and with the amount of social information. In the case of strong manipulation, we may see a split between a minority of persuadables and a majority of skeptics.
-Online discussion threads are important means for individual decision-making and for aggregating collective judgments, e.g. the 'wisdom of crowds’. Empirical investigations of the wisdom of crowds are currently ambivalent about the role played by social information. While some findings suggest that social information undermines crowd accuracy due to correlated judgment errors, others show that accuracy improves. We investigate experimentally the accuracy of threads in which participants make magnitude estimates of varying difficulty while seeing a varying number of previous estimates. We demonstrate that, for difficult tasks, seeing preceding estimates in a thread aids the wisdom of crowds. If, however, participants only see the most extreme estimates, wisdom quickly turns into folly. Using a Gaussian Mixture Model we assign a persuadability score to each participant and show that persuadability increases with task difficulty and with the amount of social information. In filtered threads, we see an increasing gap between highly persuadable participants and skeptics.
+Online discussion threads are important means for individual decision-making and for aggregating collective judgments, e.g. the 'wisdom of crowds’. Empirical investigations of the wisdom of crowds are currently ambivalent about the role played by social information. While some findings suggest that social information undermines crowd accuracy due to correlated judgment errors, others show that accuracy improves. We investigate experimentally the accuracy of threads in which participants make magnitude estimates of varying difficulty while seeing a varying number of previous estimates. We demonstrate that, for difficult tasks, seeing preceding estimates aids the wisdom of crowds. If, however, participants only see extreme estimates, wisdom quickly turns into folly. Using a Gaussian Mixture Model, we assign a persuadability score to each participant and show that persuadability increases with task difficulty and with the amount of social information provided. In filtered threads, we see an increasing gap between highly persuadable participants and skeptics.
 \\
 \end{abstract}
   \end{@twocolumnfalse}
@@ -76,8 +76,8 @@ We propose to use a probabilistic Gaussian Mixture Model (GMM) as it has propert
 \begin{figure*}[h]
 \centering
 	\includegraphics[width=1\linewidth]{medians.pdf}
-	\caption{\footnotesize \textbf{Thread accuracy}. Relationship between median log-ratio $y_{dv}$ and $\log(d)$ with 95\% confidence bounds (shaded areas). Colors represent the number of visible estimates, $v$. There is a clear relation between $d$ and $v$ in both thread types showing that social information plays a dual role in difficult tasks: When $v$ is large, unmanipulated social information \textbf{(a)} counteracts underestimation bias and improves thread accuracy. When the social information is manipulated \textbf{(b)}, however, a strong overestimation bias emerges for large $v$. The red lines corresponding to the control groups with $v=0$ are identical in both plots.}
-	\label{fig: median confidence bounds}
+	\caption{\footnotesize \textbf{Thread accuracy}. Relationship between median log-ratio and $\log(d)$ with 95\% confidence bounds (shaded areas) in pristine, historical threads \textbf{(left)} and manipulated threads \textbf{(right)}. Colors represent the number of visible estimates, $v$. There is a clear relation between $d$ and $v$ showing that social information plays a dual role in difficult tasks: When $v$ is large, pristine and unmanipulated social information \textbf{(left)} counteracts underestimation bias and improves thread accuracy. When the social information is manipulated \textbf{(right)}, however, a strong overestimation bias emerges for large $v$. The red lines corresponding to the control groups with $v=0$ are identical in both plots.}
+	\label{fig:medians}
 \end{figure*}
 
 
@@ -98,7 +98,7 @@ The model assigns a \textit{persuadability score}, $\beta^w$, to each participan
 \begin{figure*}[h]
 	\centering
 		\includegraphics[width=1\linewidth]{threads.pdf}
-		\caption{\footnotesize The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
+		\caption{\footnotesize \textbf{GMM results:} The left hand side shows three plots of a historical thread with $d=1097$ and $v=1$, and the right hand side shows three plots of a manipulated thread with $d=1097$ and $v=9$. Top plots show the log-ratio estimates over time (observation no.), with the weighted geometric mean of the social information shown by a dotted line. Bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently participants use their social information. Bottom right plots show the cumulative distribution of individual persuadability scores with 95\% intervals derived from the fitted models.}
 \label{fig: social influence}
 \end{figure*}
 
@@ -107,79 +107,28 @@ In accordance with previous findings, participants do well in tasks without soci
 \subsubsection*{Analysis of thread performance}
 The relationship between the observed median log-ratio $y_{dv}$ and the number of dots $d$ are found suitable, according to quantile-quantile plots (see SI-text), when modeling $y_{dv}$ against $\log{d}$. We thus quantify the overall differences between threads in terms of the log-ratio of their medians, $y_{dv}=\log(M_{(d,v)}/d)$, as a function of $\log(d)$ and $v$. Historical and manipulated threads are modelled separately to allow for differing error variances.
 
-Figure \ref{fig: median confidence bounds - historic} shows that the collective performance of historical threads declines significantly with increasing task difficulty $d$, but improves with the amount of social information. In contrast to \cite{lorenz2011social, king2011true, minson2012cost} and in concert with \cite{gurccay2015power, becker2017network, jayles2017social, farrell2011social} these findings support the claim that crowds indeed may become wise under (pristine) social influence. It should be noted, however, that the overlapping confidence intervals reveal where thread performances are comparable. Thus, the negative effects of task difficulty and the positive effects of social information are only discernible in situations where people have hard problems to solve and at the same time have social information in abundance. In fact, the median estimate of historical threads with $v=9$ is `wise' in the sense of being statistically indistinguishable from the true value for all $d$.
+Figure \ref{fig:medians} (left) shows that the collective performance of historical threads declines significantly with increasing task difficulty $d$, but improves with the amount of social information. In contrast to \cite{lorenz2011social, king2011true, minson2012cost} and in concert with \cite{gurccay2015power, becker2017network, jayles2017social, farrell2011social} these findings support the claim that crowds indeed may become wise under (pristine) social influence. It should be noted, however, that the overlapping confidence intervals reveal where thread performances are comparable. Thus, the negative effects of task difficulty and the positive effects of social information are only discernible in situations where people have hard problems to solve and at the same time have social information in abundance. In fact, the median estimate of historical threads with $v=9$ is `wise' in the sense of being statistically indistinguishable from the true value for all $d$.
 
-In manipulated threads, Fig.\ref{fig: median confidence bounds - manipulated}, the manipulation results in a large positive bias for $v=3,9$ which increases with $d$, implying that when a task becomes more demanding, the amount of (filtered) social information has a highly detrimental impact on thread performance. For $v=1$ there is still a small negative trend, implying that the manipulation is not very effective. This resonates well with the findings in \cite{jayles2017social} which shows that providing a moderate amount of incorrect information may counterbalance underestimation bias and improve collective performance.
+In manipulated threads, Fig.\ref{fig:medians} (right), the manipulation results in a large positive bias for $v=3,9$ which increases with $d$, implying that when a task becomes more demanding, the amount of (filtered) social information has a highly detrimental impact on thread performance. For $v=1$ there is still a small negative trend, implying that the manipulation is not very effective. This resonates well with the findings in \cite{jayles2017social} which shows that providing a moderate amount of incorrect information may counterbalance underestimation bias and improve collective performance.
 
 \subsubsection*{Analysis of Persuadability}
 % A GMM is fitted to all threads after removing estimates below the 2.5\% and above the 97.5\% quantiles. For each model, standardized residuals are evaluated visually using quantile-quantile plots against a standard normal $\mathcal{N}(0,1)$, see Supplementary Information. These plots reveal that models using $k=2,3,4$ states fit the data quite well, with only a few models displaying a less adequate fit.  (repetition from Methods)
 
 In Fig. \ref{fig: social influence} two exemplary threads show how the GMM model framework can reveal interesting features of the data. Each thread is presented by three figures. The top figures show the log-ratio of estimates as the thread evolves over time with the weighted geometric mean of the social information shown by a dotted line. Each estimate has an associated color, given by the persuadability score $\beta^w$, which measures the influence of social information on each participant. A high value ($\beta^w>0.6$) in drak green and blue colors implies a large social influence effect, a low value ($\beta^w\approx 0$) in red implies a small or no effect, and a medium value ($\beta^w \approx 0.4$) in brown and light green colors suggests a compromise between the two extremes. The RGB color scale (right) is the same for all threads and plots. The bottom left plots show the log-ratio of the estimates as a function of the log-ratio of the social information, indicating how differently people use their social information: The more they align with the identity line, the more they tend to follow the social information.
 
+\begin{figure*}[!h]
+	\centering
+	\hspace{-30px}\includegraphics[width=1\linewidth]{thread_evolution}
+	\caption{\footnotesize \textbf{Thread dynamics:} Comparison of typical historical threads (left) and their corresponding manipulated versions (right).
+	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
+\label{fig:more}
+\end{figure*}
+
 The bottom right plots show the cumulative distribution of the persuadability scores with 95\% confidence intervals derived from the fitted model. They clearly show how people may be categorized into those ‘sleeping dogs’ or ‘lost causes’ \cite{devriendt2018literature} in red that do not take other peoples estimates into account, the `persuadables' that tend to follow others, and a large group of green `compromisers', who try to strike a balance between what they see others have guessed, and what they believe themselves. Of course, such labels are only proximate. Given a participant has a personal estimate much in line with the social information seen, this participant may be labelled as a persuadable or as a compromiser, when in fact this is only partially true. In general, however, the distributions are remarkable stable across threads, which suggests that people indeed may be partitioned into such overlapping response types.
 
-%\subsubsection*{Thread dynamics}
-%\begin{figure*}
-%	\centering
-%	\begin{subfigure}{.49\linewidth}
-%		\subcaptionbox{History thread with $d=55$, $v=1$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_1}\includegraphics[width=.33\linewidth]{betas/beta_history_55_1}	}
-%
-%		\subcaptionbox{History thread with $d=55$, $v=3$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_history_55_3}\includegraphics[width=.33\linewidth]{betas/beta_history_55_3}}
-%
-%		\subcaptionbox{History thread with $d=148$, $v=3$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_history_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_history_148_3}}
-%
-%		\subcaptionbox{History thread with $d=403$, $v=9$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_history_403_9}	\includegraphics[width=.33\linewidth]{betas/beta_history_403_9}}
-%
-%		\subcaptionbox{History thread with $d=1097$, $v=9$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_history_1097_9}\includegraphics[width=.33\linewidth]{betas/beta_history_1097_9}}
-%
-%		%\caption{ History threads with with increasing $d$ and $v$}
-%
-%		\vspace{10px}
-%		\hspace{10px}
-%		\center History threads
-%
-%		\label{fig:supp hist}
-%	\end{subfigure}
-%	\begin{subfigure}{.49\linewidth}
-%		\subcaptionbox{Manipulated thread with $d=55$, $v=1$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_1}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_1}	}
-%
-%		\subcaptionbox{Manipulated thread with $d=55$, $v=3$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_max_55_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_55_3}}
-%
-%		\subcaptionbox{Manipulated thread with $d=148$, $v=3$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_max_148_3}	\includegraphics[width=.33\linewidth]{betas/beta_max_148_3}}
-%
-%		\subcaptionbox{Manipulated thread with $d=403$, $v=9$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_max_403_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_403_9}}
-%
-%		\subcaptionbox{Manipulated thread with $d=1097$, $v=9$.}
-%		{\includegraphics[width=.65\linewidth]{threads/thread_max_1097_9}			\includegraphics[width=.33\linewidth]{betas/beta_max_1097_9}}
-%
-%		%\caption{ Manipulated threads with with increasing $d$ and $v$}
-%		\vspace{10px}
-%		\hspace{10px}
-%		\center Manipulated threads
-%
-%		\label{fig:supp max}
-%	\end{subfigure}
-%
-%	\includegraphics[width=.5\linewidth]{betascale_horizontal}
-%
-%
-%	\caption{\footnotesize \textbf{Thread comparison:} Comparison of typical historical threads (left) and their corresponding manipulated versions (right). %First row has $d=55$ and $v=1$. Second row has $d=55$ and $v=3$. Third row has $d=148$ and $v=3$. Fourth row has $d=403$ and $v=9$. Fifth row has $d=1097$ and $v=9$.
-%	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
-%\label{fig:more}
-%\end{figure*}
 
-What becomes abundantly clear when examining the results from the GMMs, is a sharp contrast between how people act in pristine historical threads, and how people act in manipulated, filtered threads. This is shown in Figure~\ref{fig:more}, where we compare typical historical threads (left) with their corresponding manipulated treatments (right). When task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread (Figure~\ref{fig:more}a,f). But as soon as the amount of social information increases (Figure~\ref{fig:more}b,g), more people tend to follow – or at least to compromise. This indicates that there is a bandwagon effect at work \cite{bikhchandani1992theory, nadeau1993new, lee2018understanding}, making it more likely for people to follow others, the more people have done so already.
-
-%If $d$ is increased as well (Figure~\ref{more}c,h), the number of persuadables increases. This general pattern of correlations between high $(d,v)$ and persuadability continues, and in the thread with the highest difficulty and highest visibility (Figure~\ref{more}e,j), we see huge errors in a majority of estimates. In the beginning, the manipulation may not be as pronounced, and participants go along for quite a while. However, as the thread evolves, the red group of skeptics increases, and a prototypical polarization emerges between enthusiastic persuadables on the one side and compromisers/skeptics on the other. This split is also visible in the transistional `kink' in the $\beta^w$-distribution around the 65\% quantile in the bottom right plot of Figure~\ref{fig: h=max d=1097, v=9}. It shows that at least 30\% of the participants in this thread are medium to strongly influenced by the filtered information given to them.
+\subsubsection*{Thread dynamics}
+What becomes abundantly clear when examining the results from the GMMs, is a sharp contrast between how people act in pristine historical threads, and how people act in manipulated, filtered threads. This is shown in Figure~\ref{fig:more}, where we compare typical historical threads (left) with their corresponding manipulated treatments (right). When task difficulty is low and $v=1$, participants are not significantly influenced, no matter whether they see the preceding or highest estimate in their thread (top row in Figure~\ref{fig:more}). But as soon as the amount of social information increases (second row), more people tend to follow – or at least to compromise. This indicates that there is a bandwagon effect at work \cite{bikhchandani1992theory, lee2018understanding}, making it more likely for people to follow others, the more people have done so already. 
 
 If we increase the difficulty of the task from $d=55$ to $d=148$ and keep $v$ constant at $v=3$, as shown in the third row of Figure~\ref{fig:more}, the dynamics between the historical thread on the left diverges strongly from the dynamics of the manipulated thread on the right. While the majority of participants in the historical thread are easier to persuade (green colors), people in the manipulated thread become more diverse and slowly start to split bewteen those, who are highly persuadable (blue) and those who are not (red). Increasing difficulty even further to $d=403$, and also increasing the amout of social information to $v=9$, as shown in the fourth row of Figure~\ref{fig:more}, makes this split in behaviour even more visible. For $d=1097$ and $v=9$, as shown in the bottom row, the difference is very clear: In the historical thread, a large majority of participants are medium to strongly influenced, having a persuadability score around $.5$, probably because most of the social information they see is regarded as more or less reasonable. However, as can be seen in the $\beta^w$-distribution, there is a high uncertainty in the scores, because we only model the weighted geometric mean of the nine preceding estimates, while people presumably are much more diverse in the way they process these estimates.
 
@@ -221,7 +170,7 @@ hence the unconditional distribution of $Y_i$ is obtained by integrating (i.e. s
 \begin{align*}
 	P(Y_i) = \sum_{j=1}^k P(X_i=j)P(Y_i|X_i=j).
 \end{align*}
-Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $S_i$, if $v>0$. Furthermore, if $v>0$, then $Y_i$ influences $S_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provided is the previous views). Fig. \ref{fig:model} shows a graphical presentation of the model (with preceding views available).
+Including social information as an observed variable in the model, $Y_i$ depends on both $X_i$ and $S_i$, if $v>0$. Furthermore, if $v>0$, then $Y_i$ influences $S_{i+1}$ as the next participant $Y_{i+1}$ will see the estimate of $Y_i$ (assuming the history provided is the previous views). A graphical presentation of model dependencies (with preceding views available) are shown in Figure~\ref{fig:model}.
 
 \begin{figure}[!h]
 \centering
@@ -242,9 +191,7 @@ node/.style={circle,fill=gray!25,draw,font=\sffamily\bfseries, minimum size=1cm}
 		%(x2) edge (y2)
   		;
 	\end{tikzpicture}
-	\\
-	%\caption{
-	\justify \tiny Figure 4: Gaussian Mixture Model dependencies with the observed estimate $Y_i$ by participant $i$, the latent state variable $X_i$, and the social information $S_i$ when consisting of preceding estimates. Dashed lines are connections that depend on the number of views $v$. When $v=0$, $S_i$ is omitted from the model, when $v=1$ then $S_i\to Y_i$ and $Y_i\to S_{i+1}$. For $v>1$ then $S_i\to S_{i+1}$ is added.%}
+	\caption{\tiny Gaussian Mixture Model dependencies with the observed estimate $Y_i$ by participant $i$, the latent state variable $X_i$, and the social information $S_i$ when consisting of preceding estimates. Dashed lines are connections that depend on the number of views $v$. When $v=0$, $S_i$ is omitted from the model, when $v=1$ then $S_i\to Y_i$ and $Y_i\to S_{i+1}$. For $v>1$ then $S_i\to S_{i+1}$ is added.}
 \label{fig:model}
 \end{figure}
 
@@ -282,7 +229,7 @@ and assessing the empirical distribution of $\hat{\varepsilon}_i, i=1,\dots,n$ a
 
 After removing the 5\% most extreme observations, i.e. estimates below the 2.5\% and above the 97.5\% thresholds, Fig. \ref{fig: QQ plots AMT} in the SI-text shows the QQ-plots of the fitted models. Fig. \ref{fig: weighted beta distributions} in the SI-text shows the estimated $\hat{\beta}^w$ distributions, with 95\% confidence bounds provided by the models. Fig. \ref{fig: threads with social info and colored by beta weights} in the SI-text shows the observed threads, colored by the individual $\hat{\beta}^w$ values, and the available social information. Fig. \ref{fig: social info vs estimates} shows the observed estimates against the available social information, again colored by their individual $\hat{\beta}^w$ values.
 
-\subsection*{Modeled values}
+\subsubsection*{Modeled values}
 The observations in the model were transformed to achieve a better fit. The estimates were standardized with the relevant number of dots and then $\log$-transformed. Hence for an observed guess $g_i$ on $d$ dots
 \begin{align*}
 	y_i = \log(g_i/d), \quad i=1,\dots,n.
@@ -322,9 +269,13 @@ where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled v
 
 
 
-% Bibliography
+% Bibliography (hand made)
+
 \setlength{\bibsep}{0.0pt}
-\begin{thebibliography}{10}\scriptsize
+%\bibliographystyle{naturemag}
+%\bibliography{wamot}
+
+\begin{thebibliography}{10}
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
 \expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
@@ -693,15 +644,6 @@ where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled v
 \newblock \emph{\bibinfo{journal}{Big data}} \textbf{\bibinfo{volume}{6}},
   \bibinfo{pages}{13--41} (\bibinfo{year}{2018}).
 
-\bibitem{nadeau1993new}
-\bibinfo{author}{Nadeau, R.}, \bibinfo{author}{Cloutier, E.} \&
-  \bibinfo{author}{Guay, J.-H.}
-\newblock \bibinfo{title}{New evidence about the existence of a bandwagon
-  effect in the opinion formation process}.
-\newblock \emph{\bibinfo{journal}{International Political Science Review}}
-  \textbf{\bibinfo{volume}{14}}, \bibinfo{pages}{203--213}
-  (\bibinfo{year}{1993}).
-
 \bibitem{lee2018understanding}
 \bibinfo{author}{Lee, S.}, \bibinfo{author}{Ha, T.}, \bibinfo{author}{Lee, D.}
   \& \bibinfo{author}{Kim, J.~H.}
@@ -718,6 +660,110 @@ where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled v
   online, and field experiments}.
 \newblock \emph{\bibinfo{journal}{J Behav Exp Financ}}
   \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{88--97} (\bibinfo{year}{2016}).
+
+\bibitem{hastie2009}
+\bibinfo{author}{Hastie, T.}, \bibinfo{author}{Tibshirani, R.} \&
+  \bibinfo{author}{Friedman, J.}
+\newblock \emph{\bibinfo{title}{The Elements of Statistical Learning}}.
+\newblock Springer Series in Statistics (\bibinfo{publisher}{Springer New York
+  Inc.}, \bibinfo{address}{New York, NY, USA}, \bibinfo{year}{2009}),
+  \bibinfo{edition}{second} edn.
+
+\bibitem{visser2010}
+\bibinfo{author}{Visser, I.} \& \bibinfo{author}{Speekenbrink, M.}
+\newblock \bibinfo{title}{{depmixS4}: An {R} package for hidden markov models}.
+\newblock \emph{\bibinfo{journal}{Journal of Statistical Software}}
+  \textbf{\bibinfo{volume}{36}}, \bibinfo{pages}{1--21} (\bibinfo{year}{2010}).
+\newblock \urlprefix\url{http://www.jstatsoft.org/v36/i07/}.
+
+\end{thebibliography}
+
+\subsection*{Acknowledgments}  \small (blinded)%The experiments were implemented by Robin Engelhardt and Mikkel Birkegaard Andersen. Server infrastructure and devops was handled by Mikkel Birkegaard Andersen. The authors wish to thank Philipp Chapkovski for help with the cascade design, Rasmus Rendsvig for modeling discussions, Ulrik Nash and Peter Norman Sørensen for their comments on an earlier draft of this paper, and bertrand Jayles and Guy Theraulaz for sharing their data with us. This research was approved by the Institutional Review Board at the University of Copenhagen and included informed consent by all participants in the study. The authors gratefully acknowledge the support provided by The Carlsberg Foundation under grant number CF 15-0212.
+
+\subsection*{Author contributions}
+(blinded)
+
+\subsection*{Competing interests}
+The authors declare no competing interests.
+
+\subsection*{Additional information}
+\subsubsection*{Supplementary information} is available for this paper at xxx.
+%\subsubsection*{Reprints and permissions information} is available at www.nature.com/reprints.
+\subsubsection*{Correspondence and requests for materials} should be addressed to (blinded).
+%\subsubsection*{Publisher’s note:} %Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliation.
+
+
+
+
+\newpage
+\appendix
+\onecolumn
+
+\title{\Huge \center Supplementary Information}
+
+
+\section*{Experimental setup}
+Controlled lab experiments of thread dynamics are rare in the research literature due to the difficulties in keeping a large number of participants in a queue. We designed our experiment along the same lines as the classical information cascade laboratory experiments by Anderson and Holt \cite{anderson1997information}. While this is a design is not feasible in normal laboratory conditions, it is well suited for online labor markets and crowdsourcing platforms such as Amazon Mechanical Turk (Mturk), an online labor markets and crowdsourcing platform that has become a highly valued tool for social scientists who wish to conduct experimental research on the real time dynamics of large groups. Mturk has repeatedly been shown to meet or exceed the standards set by data collection methods using other means \cite{berinsky2012evaluating, buhrmester2018evaluation}. The platform provides an integrated participant compensation system, has a large participant pool, and has been shown to be reliable, replicable, and significantly more diverse than typical American college samples \cite{mason2009financial, buhrmester2011amazon, crump2013evaluating, rand2012promise, horton2011online}.
+
+\begin{figure}[!b]
+\centering
+\includegraphics[width=.8\textwidth]{../Screenshots/FigS1.png}
+\caption{Screendump of the choice-page in the dot-experiment with $d=403$ and $v=9$.}
+\label{fig:S1}
+\end{figure}
+
+Our experimental setup on Mturk is simple. After accepting our ‘HIT’ (Mturk acronym for a ‘human intelligence task’) and providing informed consent, participants are asked to wait in a ‘waiting room’ until the ‘choice room’ becomes available. After entering the choice room, participants are asked to take a look at the image and make an estimate (see screenshot in Figure~\ref{fig:S1}). Depending on the view condition, participants can see $v\in\{0,1,3,9\}$ preceding estimates. We chose to present the ‘oldest’ previous estimate on the top of the list and the last estimate made on the bottom. When dealing with news, or financial data, users typically want to see the most recent activity first (think tweets, online banking transactions, news updates). With conversations it is different because there is a context to consider of whatever message came before and after the one you are looking at (think blogs or Facebook comments). We have chosen to use the conversation thread design (oldest on top) because there is no particular news criteria when guessing the weight of an ox or estimating the number of dots on a screen. Participants have one minute to think about the image and make their estimate. This might sound as a severe time constraint, but exploratory trials had shown that participants in general use less than a minute when performing this task. After submission, participants are thanked for their participation and the experiment ends. Waiting times are compensated with \$0.20 per minute (maximally 5 minutes), participation fee is \$0.10, and a bonus of \$1 is paid if an estimate is within 10\% of the true number.
+
+\subsection*{Mturk settings and data quality}
+When working with Mturk it is important to consider the right settings in order to obtain the best data quality possible \cite{chandler2016conducting}. Fair wage, attrition rates, removal of duplicate participants and informative feedback are some of the most important issues to address.
+
+Average wage for participants in our experiments was $\sim$ \$12 per hour, which is considered good according to Mturk guidelines and certainly above the estimated average of \$6 per hour when excluding un-submitted and rejected work \cite{hara2018data}.
+
+Quitting a study before completing it is prevalent on Mturk, and varies systemically across experimental conditions \cite{zhou2016pitfall}. On average 20 participants accepted our HITs within the first minute; after 10 minutes the average acceptance rate had dropped to 2-3 participants per minute and after an hour to less than one participant per minute. Our scripts were coded in such a way that participants were automatically assigned to a ‘waiting room’ in which they were asked to wait for maximally five minutes before entering the choice room. This meant that a lot of participants waited in vain. Due to such a high attrition rate in the first couple of experiments we changed the script slightly later on: Now the waiting room could contain a maximum of five participants, and when the waiting room was full, participants were told to come back and finish the HIT at a later point in time. This reduced the attrition rate to 6.5\% on average.
+
+All participants automatically received an image-specific qualification when accepting a HIT. This qualification ensured that participants could not accept any other HITs that use the same image. Further data inspection showed that 32 participants somehow managed to accept two HITs with the same image anyway. The reason may be that the time interval between accepting two HITs with the same image was too short for the qualification to register in the Mturk interface. All 32 duplicate participants were removed before data analysis. In addition, we set the qualification that participants should have completed at least 100 HITs and have an accepted HIT rate of 98\% or above. This ensured that we would get only experienced and qualified participants.
+
+Mturk participant attention was expected to be equal to or better than undergraduate participant’s attention \cite{hauser2016attentive}, while various forms of dishonesty (practical joking or telling others about the true value offline or on an Mturk participants web page) was expected to be rare. Our screening of data files before data analyses revealed that a small fraction of participants submitted ridiculously high estimates across images seen, thereby skewing thread averages substantially. These estimates were included in the calculations of the geometric mean of the social information. However, they were given a low weight determined from density estimates based on the control threads with $v=0$ (see section Modeled values below).
+
+During our experiments, participants had easy access to our email for questions and possible bug reports. Apart from some minor difficulties when typing from a mobile device (less than 1\%) participants had few comments or complaints.
+
+%\subsection*{Code and Software}
+%All experiments are coded in the experimental software otree 2.1 \cite{chen2016otree} which is based on python and django. The code itself is designed along the same lines as the classical information cascade experiments by Anderson and Holt \cite{anderson1997information}. The main feature of any cascade game is that decisions are taken sequentially. A player makes an estimate, and the next one receives the information about the estimate of the previous player (or all or some previous players). Thus, the main technical issue is that only one person at a time can make a decision while others wait. As soon as a player finishes and leaves the choice page, the next player enters while all subsequent players still have to wait. Scripts for the analysis of data and for the plotting of all figures in the main text as well as in the Supplementary Information are available on \href{https://github.com/gavstrik/WoT}{github}.
+
+%\subsection*{Data Collection}
+%\label{dc}
+%We obtained a total of 11748 estimates from 6196 unique participants. Any dot-image was only seen once by a participant, i.e. we had a total of 3157 participants seeing only one image, 1259 participants seeing two images, 1047 participants seeing three images, and 733 participants seeing all four images (either in the unmanipulated or manipulated conditions and with $v\in\{0,1,3,9\}$). A few of the manipulated threads were stopped prematurely (containing less than 100 participants) because early outlier estimates turned the social information available to the succeeding participants into unbelievably high numbers. In those threads, the transition period from compromizing to not at all believing the social information became very short, making the thread dynamics relative uninteresting. Instead of running a highly manipulated thread for a long time, we opted for restarting the thread with new participants. See Table~\ref{table:S1} for a full list of threads and their summary statistics.
+
+%\subsection*{Outliers}
+%Previous work has shown that distributions of independent estimates are approximately log-normal. Consequently, the arithmetic mean is usually much larger than most estimates and often larger than the true value. Testing our data we find distributions to be only approximately log-normal (see QQ-plots in Figure~\ref{fig: qq plots median}). In addition, Table~\ref{table:S1} shows highly variable distributions of estimates. Skewnesses and kurtoses, describing the lack of symmetry and the size of the tail of the distributions, span values from close to zero to above 100. These asymmetries are reflected by the presence of outliers.
+%
+%We did not remove any outlier, because the aggregate analysis and linear regression of thread medians is unaffected by the presence of outliers, except for possible larger confidence intervals. We
+%%For all reported aggregate measures, outliers are removed if they have an error rate above 10, so that $|x_r-truth|/truth <10$, where $x_r$ is the estimate by participant $r$. We also use a lower bound of $truth/10$, due some reports of not being able to see the form input on mobile devices or unanticipated timeouts (see SI Appendix, section “Mturk Settings”). With these trimming criteria in place, we count a the following number of outliers: In the dots-experiments, 62 participants have an error rate above 100, and 118 participants have an error rate above 10, while 33 participants have made an estimate below 10\% of the true value. In the ox-experiments, one participant has an error rate above 30 and 9 participants have an error rate above 10, while 94 participants have made an estimate less than 10\% of the true value. This give a total of 151 (1.8 \%) outliers in the dots-experiments and 103 (4.1 \%) outliers in the ox-experiments, giving a grand total of 254 (2.4 \%) outliers out of 10.808 estimates.
+
+
+
+%
+%\section*{Supplementary data analysis}
+%\subsection*{Summary Statistics}
+%Figure~\ref{fig:sum_stats} shows the summary statistics of all historical (left) and manipulated (rigth) threads. As can be seen, as soon as participants can see preceding estimates, accuracy improves substantially in difficult tasks. Increasing the view count $v$ does not significantly improve collective accuracy in images with 55 and 148 dots. But as soon as the number of dots increases, social information starts to improve thread accuracy. And the larger the view count $v$, the more accurate the median (circles) becomes. Arithmetic means (triangles) quickly tend to overestimate the true value because free response elicitation of absolute values creates right-skewed, approximately log-normal distributions with a long tail, which inflate the means. Due to the outliers, means become highly uninformative. Galton disliked the use of the mean for this very reason as it “would give a voting power to ‘cranks’ in proportion to their crankiness” \cite{galton1907vox}. The interquartile and interdecile ranges show how high difficulty, $d$, leads to higher diversity (i.e. variation) in the dots-experiments, while a higher view-count tends to reduce variation when $d$ is fixed, although not always.
+%
+%The right hand side of Figure~\ref{fig:sum_stats} shows the equivalent results for manipulated threads. While participants are relatively unaffected by social information when difficulty is low in the unmanipulated threads, participants in the manipulated threads quick start to overestimate, even with $v=1$. For higher $d$'s and $v$'s, estimates inflate ever more. Clearly, in the begining of a thread, only a few of the observed estimates are high numbers, making it not so probable for new participants to get influenced by them. But when threads become longer, still more of the observed estimates are very high numbers, making it more difficult to resist their influence. At a certain point, all visible estimates may be so improbably high, that participants may suspect foul play and start to ignore them. In some threads this effect can be observed by estimates branching off into two directions: those estimates showing herd behaviour by following the extremely high estimates seen, and those estimates ignoring them. This may contribute to the high variance of the manipulated threads. Also note that for $v=1$, the medians of the manipulated threads are often much closer to the true value than it is the case in the corresponding controls. This is so because the size of the manipulation (in this case showing only the single highest estimate in the thread) is just about enough to compensate for the naturally occuring underestimations in the controls.
+
+
+%
+%\subsection*{Comparison across treatments}
+%As mentioned in the main text, participants were allowed to participate in more than one of the treatments, but no participant was allowed to see the same image twice. We therefore have a substantial amount of participants who have seen either 2, 3 or 4 images. This makes it possible to compare individual persuadability scores across treatments. In Figure~\ref{compare} we have done so. The top plot shows the $\beta^w$-ordered result of comparisons across historical threads and the bottom plot shows the same for the manipulated threads. While the dot cloud in both plots is quite wide, there is a clear difference in the magnitude of persuadabilities and in the proportions of skeptics, compromisers, and persuadables. For the historical threads we can see, that almost all participants lie in the range between $0 < \beta^w < 0.5$, meaning that they keep their egocentric bias in line with \cite{rader2017advice}, but at the same time are highly flexible in their use of the social information provided. For the manipulated threads, we see a higher frequency of red colors and of $\beta^w$-values below zero, indicating that many participants did not agree with the social infomation they saw.
+
+
+%references for the supp
+
+\begin{thebibliography}{10}\scriptsize
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
 
 \bibitem{berinsky2012evaluating}
 \bibinfo{author}{Berinsky, A.~J.}, \bibinfo{author}{Huber, G.~A.} \&
@@ -806,105 +852,12 @@ where $\sum_{j=1}^v w_j = 1$. Thus, the log-transform implies that the modeled v
 \newblock \emph{\bibinfo{journal}{Behavior research methods}}
   \textbf{\bibinfo{volume}{48}}, \bibinfo{pages}{400--407}
   (\bibinfo{year}{2016}).
+ 
+ \end{thebibliography}
+  
 
-\bibitem{hastie2009}
-\bibinfo{author}{Hastie, T.}, \bibinfo{author}{Tibshirani, R.} \& \bibinfo{author}{Friedman, J.}
-\newblock \bibinfo{title}{The Elements of Statistical Learning, Second Edition}.
-  \bibinfo{organization}{Springer}, (\bibinfo{year}{2009}).
 
-\bibitem{visser2010}
-\bibinfo{author}{Visser, I.} \& \bibinfo{author}{Speekenbrink, M.}
-\newblock \bibinfo{title}{ depmixS4: An R
-  Package for Hidden Markov Models.}
-  \bibinfo{organization}{Journal of Statistical
-  Software, 36(7), 1-21.}, (\bibinfo{year}{2010}).
-
-\bibitem{rader2017advice}
-\bibinfo{author}{Rader, C.~A.}, \bibinfo{author}{Larrick, R.~P.} \&
-  \bibinfo{author}{Soll, J.~B.}
-\newblock \bibinfo{title}{Advice as a form of social influence: Informational
-  motives and the consequences for accuracy}.
-\newblock \emph{\bibinfo{journal}{Soc Personal Psychol Compass}}
-  \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{e12329}
-  (\bibinfo{year}{2017}).
-
-\end{thebibliography}
-
-\subsection*{Acknowledgments}  \small (blinded)%The experiments were implemented by Robin Engelhardt and Mikkel Birkegaard Andersen. Server infrastructure and devops was handled by Mikkel Birkegaard Andersen. The authors wish to thank Philipp Chapkovski for help with the cascade design, Rasmus Rendsvig for modeling discussions, Ulrik Nash and Peter Norman Sørensen for their comments on an earlier draft of this paper, and bertrand Jayles and Guy Theraulaz for sharing their data with us. This research was approved by the Institutional Review Board at the University of Copenhagen and included informed consent by all participants in the study. The authors gratefully acknowledge the support provided by The Carlsberg Foundation under grant number CF 15-0212.
-
-\subsection*{Author contributions}
-(blinded)
-
-\subsection*{Competing interests}
-The authors declare no competing interests.
-
-\subsection*{Additional information}
-\subsubsection*{Supplementary information} is available for this paper at xxx.
-\subsubsection*{Reprints and permissions information} is available at www.nature.com/reprints.
-\subsubsection*{Correspondence and requests for materials} should be addressed to (blinded).
-\subsubsection*{Publisher’s note:} %Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliation.
 \newpage
-\appendix
-\onecolumn
-
-\title{\Huge \center Supplementary Information}
-
-
-\section*{Experimental setup}
-Controlled lab experiments of thread dynamics are rare in the research literature due to the difficulties in keeping a large number of participants in a queue. We designed our experiment along the same lines as the classical information cascade laboratory experiments by Anderson and Holt \cite{anderson1997information}. While this is a design is not feasible in normal laboratory conditions, it is well suited for online labor markets and crowdsourcing platforms such as Amazon Mechanical Turk (Mturk), an online labor markets and crowdsourcing platform that has become a highly valued tool for social scientists who wish to conduct experimental research on the real time dynamics of large groups. Mturk has repeatedly been shown to meet or exceed the standards set by data collection methods using other means \cite{berinsky2012evaluating, buhrmester2018evaluation}. The platform provides an integrated participant compensation system, has a large participant pool, and has been shown to be reliable, replicable, and significantly more diverse than typical American college samples \cite{mason2009financial, buhrmester2011amazon, crump2013evaluating, rand2012promise, horton2011online}.
-
-Our experimental setup on Mturk is simple. After accepting our ‘HIT’ (Mturk acronym for a ‘human intelligence task’) and providing informed consent, participants are asked to wait in a ‘waiting room’ until the ‘choice room’ becomes available. After entering the choice room, participants are asked to take a look at the image and make an estimate (see screenshot in Figure~\ref{fig:S1}). Depending on the view condition, participants can see $v\in\{0,1,3,9\}$ preceding estimates. We chose to present the ‘oldest’ previous estimate on the top of the list and the last estimate made on the bottom. When dealing with news, or financial data, users typically want to see the most recent activity first (think tweets, online banking transactions, news updates). With conversations it is different because there is a context to consider of whatever message came before and after the one you are looking at (think blogs or Facebook comments). We have chosen to use the conversation thread design (oldest on top) because there is no particular news criteria when guessing the weight of an ox or estimating the number of dots on a screen. Participants have one minute to think about the image and make their estimate. This might sound as a severe time constraint, but exploratory trials had shown that participants in general use less than a minute when performing this task. After submission, participants are thanked for their participation and the experiment ends. Waiting times are compensated with \$0.20 per minute (maximally 5 minutes), participation fee is \$0.10, and a bonus of \$1 is paid if an estimate is within 10\% of the true number.
-
-\subsection*{Mturk settings and data quality}
-When working with Mturk it is important to consider the right settings in order to obtain the best data quality possible \cite{chandler2016conducting}. Fair wage, attrition rates, removal of duplicate participants and informative feedback are some of the most important issues to address.
-
-Average wage for participants in our experiments was $\sim$ \$12 per hour, which is considered good according to Mturk guidelines and certainly above the estimated average of \$6 per hour when excluding un-submitted and rejected work \cite{hara2018data}.
-
-Quitting a study before completing it is prevalent on Mturk, and varies systemically across experimental conditions \cite{zhou2016pitfall}. On average 20 participants accepted our HITs within the first minute; after 10 minutes the average acceptance rate had dropped to 2-3 participants per minute and after an hour to less than one participant per minute. Our scripts were coded in such a way that participants were automatically assigned to a ‘waiting room’ in which they were asked to wait for maximally five minutes before entering the choice room. This meant that a lot of participants waited in vain. Due to such a high attrition rate in the first couple of experiments we changed the script slightly later on: Now the waiting room could contain a maximum of five participants, and when the waiting room was full, participants were told to come back and finish the HIT at a later point in time. This reduced the attrition rate to 6.5\% on average.
-
-All participants automatically received an image-specific qualification when accepting a HIT. This qualification ensured that participants could not accept any other HITs that use the same image. Further data inspection showed that 32 participants somehow managed to accept two HITs with the same image anyway. The reason may be that the time interval between accepting two HITs with the same image was too short for the qualification to register in the Mturk interface. All 32 duplicate participants were removed before data analysis. In addition, we set the qualification that participants should have completed at least 100 HITs and have an accepted HIT rate of 98\% or above. This ensured that we would get only experienced and qualified participants.
-
-Mturk participant attention was expected to be equal to or better than undergraduate participant’s attention \cite{hauser2016attentive}, while various forms of dishonesty (practical joking or telling others about the true value offline or on an Mturk participants web page) was expected to be rare. Our screening of data files before data analyses revealed that a small fraction of participants submitted ridiculously high estimates across images seen, thereby skewing thread averages substantially. These estimates were included in the calculations of the geometric mean of the social information. However, they were given a low weight determined from density estimates based on the control threads with $v=0$ (see section Modeled values below).
-
-During our experiments, participants had easy access to our email for questions and possible bug reports. Apart from some minor difficulties when typing from a mobile device (less than 1\%) participants had few comments or complaints.
-
-%\subsection*{Code and Software}
-%All experiments are coded in the experimental software otree 2.1 \cite{chen2016otree} which is based on python and django. The code itself is designed along the same lines as the classical information cascade experiments by Anderson and Holt \cite{anderson1997information}. The main feature of any cascade game is that decisions are taken sequentially. A player makes an estimate, and the next one receives the information about the estimate of the previous player (or all or some previous players). Thus, the main technical issue is that only one person at a time can make a decision while others wait. As soon as a player finishes and leaves the choice page, the next player enters while all subsequent players still have to wait. Scripts for the analysis of data and for the plotting of all figures in the main text as well as in the Supplementary Information are available on \href{https://github.com/gavstrik/WoT}{github}.
-
-%\subsection*{Data Collection}
-%\label{dc}
-%We obtained a total of 11748 estimates from 6196 unique participants. Any dot-image was only seen once by a participant, i.e. we had a total of 3157 participants seeing only one image, 1259 participants seeing two images, 1047 participants seeing three images, and 733 participants seeing all four images (either in the unmanipulated or manipulated conditions and with $v\in\{0,1,3,9\}$). A few of the manipulated threads were stopped prematurely (containing less than 100 participants) because early outlier estimates turned the social information available to the succeeding participants into unbelievably high numbers. In those threads, the transition period from compromizing to not at all believing the social information became very short, making the thread dynamics relative uninteresting. Instead of running a highly manipulated thread for a long time, we opted for restarting the thread with new participants. See Table~\ref{table:S1} for a full list of threads and their summary statistics.
-
-%\subsection*{Outliers}
-%Previous work has shown that distributions of independent estimates are approximately log-normal. Consequently, the arithmetic mean is usually much larger than most estimates and often larger than the true value. Testing our data we find distributions to be only approximately log-normal (see QQ-plots in Figure~\ref{fig: qq plots median}). In addition, Table~\ref{table:S1} shows highly variable distributions of estimates. Skewnesses and kurtoses, describing the lack of symmetry and the size of the tail of the distributions, span values from close to zero to above 100. These asymmetries are reflected by the presence of outliers.
-%
-%We did not remove any outlier, because the aggregate analysis and linear regression of thread medians is unaffected by the presence of outliers, except for possible larger confidence intervals. We
-%%For all reported aggregate measures, outliers are removed if they have an error rate above 10, so that $|x_r-truth|/truth <10$, where $x_r$ is the estimate by participant $r$. We also use a lower bound of $truth/10$, due some reports of not being able to see the form input on mobile devices or unanticipated timeouts (see SI Appendix, section “Mturk Settings”). With these trimming criteria in place, we count a the following number of outliers: In the dots-experiments, 62 participants have an error rate above 100, and 118 participants have an error rate above 10, while 33 participants have made an estimate below 10\% of the true value. In the ox-experiments, one participant has an error rate above 30 and 9 participants have an error rate above 10, while 94 participants have made an estimate less than 10\% of the true value. This give a total of 151 (1.8 \%) outliers in the dots-experiments and 103 (4.1 \%) outliers in the ox-experiments, giving a grand total of 254 (2.4 \%) outliers out of 10.808 estimates.
-
-
-
-
-\section*{Supplementary data analysis}
-%\subsection*{Summary Statistics}
-%Figure~\ref{fig:sum_stats} shows the summary statistics of all historical (left) and manipulated (rigth) threads. As can be seen, as soon as participants can see preceding estimates, accuracy improves substantially in difficult tasks. Increasing the view count $v$ does not significantly improve collective accuracy in images with 55 and 148 dots. But as soon as the number of dots increases, social information starts to improve thread accuracy. And the larger the view count $v$, the more accurate the median (circles) becomes. Arithmetic means (triangles) quickly tend to overestimate the true value because free response elicitation of absolute values creates right-skewed, approximately log-normal distributions with a long tail, which inflate the means. Due to the outliers, means become highly uninformative. Galton disliked the use of the mean for this very reason as it “would give a voting power to ‘cranks’ in proportion to their crankiness” \cite{galton1907vox}. The interquartile and interdecile ranges show how high difficulty, $d$, leads to higher diversity (i.e. variation) in the dots-experiments, while a higher view-count tends to reduce variation when $d$ is fixed, although not always.
-%
-%The right hand side of Figure~\ref{fig:sum_stats} shows the equivalent results for manipulated threads. While participants are relatively unaffected by social information when difficulty is low in the unmanipulated threads, participants in the manipulated threads quick start to overestimate, even with $v=1$. For higher $d$'s and $v$'s, estimates inflate ever more. Clearly, in the begining of a thread, only a few of the observed estimates are high numbers, making it not so probable for new participants to get influenced by them. But when threads become longer, still more of the observed estimates are very high numbers, making it more difficult to resist their influence. At a certain point, all visible estimates may be so improbably high, that participants may suspect foul play and start to ignore them. In some threads this effect can be observed by estimates branching off into two directions: those estimates showing herd behaviour by following the extremely high estimates seen, and those estimates ignoring them. This may contribute to the high variance of the manipulated threads. Also note that for $v=1$, the medians of the manipulated threads are often much closer to the true value than it is the case in the corresponding controls. This is so because the size of the manipulation (in this case showing only the single highest estimate in the thread) is just about enough to compensate for the naturally occuring underestimations in the controls.
-
-
-
-\subsection*{Comparison across treatments}
-As mentioned in the main text, participants were allowed to participate in more than one of the treatments, but no participant was allowed to see the same image twice. We therefore have a substantial amount of participants who have seen either 2, 3 or 4 images. This makes it possible to compare individual persuadability scores across treatments. In Figure~\ref{compare} we have done so. The top plot shows the $\beta^w$-ordered result of comparisons across historical threads and the bottom plot shows the same for the manipulated threads. While the dot cloud in both plots is quite wide, there is a clear difference in the magnitude of persuadabilities and in the proportions of skeptics, compromisers, and persuadables. For the historical threads we can see, that almost all participants lie in the range between $0 < \beta^w < 0.5$, meaning that they keep their egocentric bias in line with \cite{rader2017advice}, but at the same time are highly flexible in their use of the social information provided. For the manipulated threads, we see a higher frequency of red colors and of $\beta^w$-values below zero, indicating that many participants did not agree with the social infomation they saw.
-
-%%% Each figure should be on its own page
-\newpage
-
-\begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{../Screenshots/FigS1.png}
-\caption{Screendump of the choice-page in the dot-experiment with $d=403$ and $v=9$.}
-\label{fig:S1}
-\end{figure}
-
 
 \begin{figure}%[!h]
 	\centering
@@ -912,51 +865,42 @@ As mentioned in the main text, participants were allowed to participate in more 
 	\caption{Model diagnostic plots for median analysis. Top left: QQ plot for the residuals from the historical thread medians analysis. Top right: the same residuals plottet against session groups. Bottom left: QQ plot for the residuals from the manipulated thread medians analysis. Bottom right: the same residuals plottet against session groups.}
 	\label{fig: qq plots median}
 \end{figure}
-
+\newpage
 
 \begin{figure}%[!h]
 \centering
 	\hspace{-30px}\includegraphics[width=1\linewidth]{qqplots}
 	\caption{QQ-plots for the 29 unique threads from Amazon Mechanical Turk experiments. With some exceptions, the models fit fairly well. Some series with very few observations are discarded in the analysis.}\label{fig: QQ plots AMT}
 \end{figure}
+\newpage
 
 \begin{figure}%[!h]
 \centering
 	\hspace{-30px}\includegraphics[width=1\linewidth]{allbetas}
 	\caption{Distributions of estimated $\beta^w$'s for each thread. Color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: weighted beta distributions}
 \end{figure}
+\newpage
 
 \begin{figure}%[!h]
 \centering
 	\hspace{-30px}\includegraphics[width=1\linewidth]{allthreads}
 	\caption{Individual guesses for each thread, colored by their estimated $\beta^w$ values. Social information available at each timepoint is shown as dashed black lines. The $\beta^w$ color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: threads with social info and colored by beta weights}
 \end{figure}
+\newpage
 
 \begin{figure}%[!h]
 \centering
 	\hspace{-30px}\includegraphics[width=1\linewidth]{allinfo}
 	\caption{Actual estimates by each participant against the given social information. Colored by the estimated $\beta^w$ values. Color scale is fixed across all threads. Red colors indicate skeptics, blue colors indicate persuadables and green colors indicate compromisers.}\label{fig: social info vs estimates}
 \end{figure}
-
-
-\begin{figure}
-	\centering
-	\hspace{-30px}\includegraphics[width=1\linewidth]{thread_evolution}
-	\caption{Comparison of typical historical threads (left) and their corresponding manipulated versions (right).
-	Colors correspond to estimated $\beta^w$ values. The color scale is fixed across threads.}
-\label{fig:more}
-\end{figure}
-
-
-
 \newpage
 
 \begin{table}\centering
-\caption{Data Table of all threads. Legend: $d \in \{55, 148, 403, 1097\}$; $v$ = view count; method: \'history\'-threads show the preceding estimates as they have been recorded in the thread; N = thread length; median = median of thread; mean = mean of thread; SD = standard deviation; CV = coefficient of variation; skew = skewness; kurt = kurtosis; bonus = percentage of estimates within 10 \% of the true value, $d$.}
+\caption{\textbf{Data Table of threads:}  method: type of thread - `history' are pristine threads where participants see the $v$ preceding estimates and `max' are manipulated threads where participants see the $v$ highest estimates made so far in the thread; $d$: number of dots in image; $v$ = number of visible previous estimates; $N$ = thread length; median = median of thread; mean = mean of thread; SD = standard deviation; CV = coefficient of variation; skew = skewness; kurt = kurtosis; bonus = percentage of estimates within 10 \% of the true value.}
 
 \begin{tabular}{lrrlrrrrrrrr}
 \hline
- method   &    d &   v & thread id  &   N &   median &     mean &       SD &    CV &   skew &   kurt &   bonus (\%) \\
+ method   &    $d$ &   $v$ & thread id  &   $N$ &   median &     mean &       SD &    CV &   skew &   kurt &   bonus (\%) \\
 \hline
  history  &   55 &   0 & fscmakcz & 464 &     55   &  2360.57 & 42038.6  & 17.81 &  21.01 & 445.08 &        60.99 \\
  history  &   55 &   1 & hs6bovtz & 477 &     57   &  1682.13 & 29381.7  & 17.47 &  21.18 & 453.74 &        57.02 \\
@@ -997,5 +941,7 @@ As mentioned in the main text, participants were allowed to participate in more 
 %\bottomrule
 \end{tabular}
 \end{table}\label{table:S1}
+
+
 
 \end{document}
