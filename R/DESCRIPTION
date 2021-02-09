@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2019-12-06
 Authors@R: person("Jacob", "Ostergaard", email = "ostergaard@hum.ku.dk", role = c("aut", "cre"))
 Description: 
-Depends: R(>= 3.5.0)
-Imports: depmixS4, parallel, quantreg
+Depends: R(>= 3.5.0), depmixS4, quantreg
+Imports: parallel
 License: MIT
 LazyData: true

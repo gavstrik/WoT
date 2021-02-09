@@ -42,7 +42,7 @@ getParameters <- function(model, se.fit=TRUE){
            })
 
   if(se.fit & covmat){
-    tmp = as.data.frame(suppressWarnings(confint(model)[,-2]))
+    tmp = as.data.frame(suppressWarnings(depmixS4::confint(model)[,-2]))
     colnames(tmp) = c("par","ci.lo","ci.hi")
   }
   tmp$approx=FALSE

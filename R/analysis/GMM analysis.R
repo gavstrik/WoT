@@ -14,18 +14,6 @@ library(WoT)
 #     1. Load data and create variables
 #########################################################################################################################
 
-# Make a function to weigh previous estimates according to the control groups (v=0)
-v0_df <- function(s){
-  tmp = subset(dots, session == s)
-  d   = unique(tmp$d)
-  out = approxfun(density(tmp$guess,from=0, to=100*d, bw = 10*d) ) # wide bandwidth ensures almost equal weights to "reasonable" estimates
-}
-
-f = list(d55   = v0_df("fscmakcz"), # v=0 d=55 session
-         d148  = v0_df("dwnjf9mb"), # v=0 d=148 session
-         d403  = v0_df("hqx0v7t5"), # v=0 d=403 session
-         d1097 = v0_df("hal5jdl0")) # v=0 d=1097 session
-
 # Find the geometric (including weighted) mean of available social information
 dots <- read.csv("data/dots.csv", colClasses = c("character",
                                                  "numeric",
@@ -38,13 +26,32 @@ dots <- read.csv("data/dots.csv", colClasses = c("character",
 dots$hist = substr(dots$hist, 2, nchar(dots$hist)-1)
 tmp = lapply(strsplit(dots$hist,", "), as.numeric)
 names(tmp) = dots$d
-class(tmp)
+
+# Make a function to weigh previous estimates according to the control groups (v=0)
+v0_df <- function(s){
+  tmp = subset(dots, session == s)
+  d   = unique(tmp$d)
+  out = approxfun(density(tmp$guess,from=0, to=100*d, bw = 10*d) ) # wide bandwidth ensures almost equal weights to "reasonable" estimates
+}
+
+f = list(d55   = v0_df("fscmakcz"), # v=0 d=55 session
+         d148  = v0_df("dwnjf9mb"), # v=0 d=148 session
+         d403  = v0_df("hqx0v7t5"), # v=0 d=403 session
+         d1097 = v0_df("hal5jdl0")) # v=0 d=1097 session
+
+
 w = list()
 for(i in 1:length(tmp)){
   d = as.numeric(names(tmp[i]))
   h = tmp[[i]]
   g = f[[which(d == c(55,148,403,1097))]]
   w[[i]] = g(h)/sum(g(h), na.rm=TRUE)
+  # k = g(h)
+  # if(any(is.na(k))){
+  #   k[which(is.na(k))] = 1e-9
+  # }
+  # w[[i]] = k/sum(k)
+
   dots$gmean[i] = gmean(h)
   dots$wgmean[i] = gmean(h,w[[i]])
 }
@@ -132,7 +139,7 @@ save(dots, file=fn)
         dots$x1 = log(dots$wgmean/dots$d)
 
 
-        f <- function(i){
+        h <- function(i){
           fit.dat = subset(dots, session==fitsessions$session[i])
           full = fit_gmm(y~x0, fit.dat, opt = 'bic', trystates = 2:5, maxiter = 10)
           weighted = fit_gmm(y~x1, fit.dat, opt = 'bic', trystates = 2:5, maxiter = 10)
@@ -140,14 +147,19 @@ save(dots, file=fn)
           return(M.out)
         }
 
-        set.seed(1234)
-        depmixS4::em.control(maxit=5e3)
+        set.seed(12)
+        # depmixS4::em.control(maxit=5e3)
 
-        # Fit using parallel threads fo speed up (takes approx 30 seconds).
+        # Fit using parallel threads fo speed up (takes approx 100 seconds, 30 seconds with paralell).
 
         system.time({
-          model = parallel::mclapply(1:nrow(fitsessions),f,mc.cores = parallel::detectCores())
+          model = lapply(1:nrow(fitsessions),h)
         })
+        # If parallel is installed:
+        # system.time({
+        #   model = parallel::mclapply(1:nrow(fitsessions),f,mc.cores = parallel::detectCores())
+        # })
+
         names(model) = unlist(lapply(model, function(x) x$session))
 
 

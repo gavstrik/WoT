@@ -15,16 +15,16 @@ fit_gmm <- function(formula, in.dat, opt=NULL,trystates=2:3, maxiter=10){
   # Fitting models with number of states given in 'trystates' and formula as input.
   for(i in 1:length(trystates)){
 
-    M = mix(formula, data = in.dat, nstates = trystates[i], family = gaussian())
+    M = depmixS4::mix(formula, data = in.dat, nstates = trystates[i], family = gaussian())
 
     iter=0
     ok = FALSE
     while(iter<maxiter & !ok){
       tryCatch( expr    = {
-        capture.output({tmp.fit  = fit(M)})
+        capture.output({tmp.fit  = depmixS4::fit(M)})
         aic      = AIC(tmp.fit,k=2)
         bic      = AIC(tmp.fit,k=log(nrow(in.dat)))
-        tmp.crit = c(aic,bic, logLik(tmp.fit))
+        tmp.crit = c(aic,bic, depmixS4::logLik(tmp.fit))
       },
       warning = function(w) {
         tmp.crit <<- c(NA,NA,NA)
